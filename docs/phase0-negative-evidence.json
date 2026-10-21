@@ -1,0 +1,65 @@
+{
+  "verifiedAt": "2026-10-21T08:34:28.856Z",
+  "billId": "demo-bill-1",
+  "charges": [
+    {
+      "id": "service-search-1",
+      "cents": 125,
+      "verified": true
+    },
+    {
+      "id": "service-summary-1",
+      "cents": 250,
+      "verified": true
+    },
+    {
+      "id": "service-validation-1",
+      "cents": 375,
+      "verified": true
+    }
+  ],
+  "total": "7.50",
+  "currency": "USD",
+  "receipt": {
+    "orderId": "0LX18082EW768591D",
+    "captureId": "3V026169LS895662F",
+    "total": "7.50",
+    "currency": "USD",
+    "verifiedAt": "2026-10-21T08:27:47.652Z"
+  },
+  "orderStatus": "COMPLETED",
+  "merchantMatches": true,
+  "billMatchesCustomId": true,
+  "captureCountBefore": 1,
+  "captureCountAfter": 1,
+  "ledgerUnchanged": true,
+  "repeats": [
+    {
+      "action": "create",
+      "http": 200,
+      "sameReceipt": true
+    },
+    {
+      "action": "capture",
+      "http": 200,
+      "sameReceipt": true
+    },
+    {
+      "action": "capture",
+      "http": 200,
+      "sameReceipt": true
+    },
+    {
+      "action": "verify",
+      "http": 200,
+      "sameReceipt": true
+    }
+  ],
+  "negative": {
+    "http": 422,
+    "issues": [
+      "INSTRUMENT_DECLINED"
+    ],
+    "kind": "PayPal Sandbox injected response; not a real funding decline"
+  }
+}
