@@ -43,7 +43,7 @@ flowchart LR
 
 ## Stack
 
-Current: Node **20.19+**, TypeScript strict mode, ESM/NodeNext, native `node:http` and `fetch`, pnpm **10.33.4**, `tsx`, and `node:test`. No framework, database, AI SDK or frontend dependency is installed. Planned additions are SQLite with `better-sqlite3` for atomic financial operations, and Vite with vanilla TypeScript for the console; see [technical decisions](docs/spec.md). No production hosting is configured.
+Current: Node **20.19+**, TypeScript strict mode, ESM/NodeNext, native `node:http` and `fetch`, pnpm **10.33.4**, `tsx`, and `node:test`. No framework, database, AI SDK or frontend dependency is installed. Planned additions are SQLite with `better-sqlite3` for atomic financial operations, and Vite with vanilla TypeScript for the console; see [technical decisions](docs/spec.md). Render deployment files are prepared, but no hosted resource or deployment has been created. See the [Render guide](docs/deployment-render.md).
 
 ## Quick start: current P0
 
@@ -60,7 +60,7 @@ Fill `.env` locally. Do not overwrite an already configured `.env`, commit secre
 | `PAYPAL_CLIENT_SECRET` | Yes | Server-only Sandbox app secret |
 | `PAYPAL_MERCHANT_ID` | Yes | Same app's receiving Sandbox Business merchant ID |
 | `OWNER_TOKEN` | Yes | At least 32 random characters; local owner API credential |
-| `PUBLIC_URL` | Default supplied | Must be `http://localhost:3000` in P0 |
+| `PUBLIC_URL` | Optional | Local default http://localhost:3000; trusted HTTPS origin for hosted callbacks |
 
 The development command loads `.env` natively. Existing shell variables take precedence. No `LLM_*` variables are consumed yet; future configuration is specified separately.
 
@@ -70,7 +70,7 @@ pnpm test
 pnpm dev
 ```
 
-The server listens only on `127.0.0.1:3000`. The current package name remains `a2a-paypal-spike`; its scripts are authoritative. There is no `build`, `lint`, migration, or frontend command yet.
+Local development defaults to `127.0.0.1:3000`; hosted binding reads HOST and PORT. The current package name remains `a2a-paypal-spike`; its scripts are authoritative. `pnpm build` emits backend JavaScript to dist; `pnpm start` runs it using environment configuration. There is no lint, migration or frontend command yet.
 
 ## Sandbox setup and walkthrough
 
@@ -91,7 +91,7 @@ P0 intentionally supports one fixed bill. If it is already settled, these reques
 
 ## Tests and recorded evidence
 
-`pnpm test` runs 18 local mocked tests as of the documentation audit. `pnpm check` checks source, tests and verification scripts. For an existing completed bill with the server running:
+`pnpm test` runs 25 tests including local HTTP/configuration checks; PayPal responses are mocked. `pnpm check` checks source, tests and verification scripts. For an existing completed bill with the server running:
 
 ```sh
 pnpm verify:phase0
@@ -106,10 +106,16 @@ The first command checks three-charge/order association, repeats owner API reque
 
 [P1](docs/roadmap.md): real local service procurement, atomic Credit, accepted deliveries and append-only ledger, without PayPal. P2: multi-charge frozen batches connected to the existing Sandbox transport. P3: observable Agent Economy Console and five consecutive complete demonstrations. P4: public, reproducible submission and English video under three minutes. These phases require explicit implementation approval.
 
-Start with [product requirements](docs/product.md), [authoritative specification](docs/spec.md), [accounting and settlement](docs/settlement.md), [execution roadmap](docs/roadmap.md), [demo storyboard](docs/demo-script.md), and [ADRs](docs/decisions/README.md).
+Start with [product requirements](docs/product.md), [authoritative specification](docs/spec.md), [accounting and settlement](docs/settlement.md), [execution roadmap](docs/roadmap.md), [demo storyboard](docs/demo-script.md), [sponsor resource decisions](docs/sponsor-resources.md), and [ADRs](docs/decisions/README.md).
 
 No provider receives a separate payment in this single-merchant experiment. No lending, interest, automatic account debit, production PayPal, marketplace payouts, external A2A network, or Alipay integration is implemented.
 
 ## License and submission readiness
 
 **No license file exists yet.** Source publication, an owner-selected open-source license, and repository/video URLs are P4 tasks; this repository must not be represented as submission-ready or licensed open source today. Review the [official competition rules](https://paypalaihackathon.devpost.com/rules) before publication. Do not publish credentials for reproducibility: reviewers configure their own Sandbox app and AI key.
+
+## Render preparation (not deployed)
+
+[Deployment guide](docs/deployment-render.md) maps every environment variable and manual approval step. `render.yaml` declares one native Node Web Service plus a 1 GB persistent disk; no Dockerfile, Static Site, PostgreSQL or LLM configuration is required for the current P0 API. Set the three Sandbox PayPal credentials manually; Render generates OWNER_TOKEN and supplies PORT/RENDER_EXTERNAL_URL. The Blueprint sets HOST, DATA_DIR and Sandbox-only PAYPAL_BASE_URL. PUBLIC_URL normally stays unset on Render. `.env.render.example` contains no secrets.
+
+Run `pnpm check`, `pnpm build`, `pnpm test` and `pnpm test:production` before release. Public `/health` exposes only readiness and Sandbox mode; all settlement operations remain owner-protected and same-origin. The application has no frontend bundle or homepage. Review state continuity of the single fixed bill before any hosted payment. Configuration must be reviewed, committed and pushed before Render can read it; no cloud resource/deploy is authorized by preparation alone.

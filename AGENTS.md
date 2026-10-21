@@ -4,7 +4,7 @@
 
 Read README.md, docs/spec.md, docs/settlement.md and docs/roadmap.md before implementation. Product scope is in docs/product.md; ADRs explain decisions. The payment compatibility report and evidence JSON describe P0 history, not implemented Agent Runtime capabilities. Document status must distinguish implemented, locally tested, live verified, planned, unsupported and deferred.
 
-The current task is documentation only. Do not implement P1–P4 until the owner explicitly approves. Once authorized, complete one vertical slice and its acceptance checks before the next. Do not add optional AUTHORIZE, distributed infrastructure, Alipay or marketplace behavior while core invariants are incomplete.
+Documentation/planning does not authorize phase implementation; explicit deployment-preparation requests may add only the configuration and minimal server adaptations they require. Cloud resource creation/deployment needs owner approval. Do not implement P1–P4 until the owner explicitly approves. Once authorized, complete one vertical slice and its acceptance checks before the next. Do not add optional AUTHORIZE, distributed infrastructure, Alipay or marketplace behavior while core invariants are incomplete.
 
 ## Coding conventions
 
@@ -12,7 +12,7 @@ Prefer TypeScript, ESM, explicit public types, functional patterns, native APIs 
 
 ## Modules and trust
 
-Current modules are src/server.ts, src/settlement.ts and src/paypal.ts. The planned module map is in docs/spec.md; do not pretend those directories exist. Preserve the verified P0 transport and evidence. New economic modules must not import raw PayPal types. Only application services own financial transactions; providers and LLM tools may not write the ledger or invoke capture. Keep future HTTP handlers thin. SQLite transactions contain no remote API or LLM calls.
+Current modules include src/server.ts, src/config.ts, src/http.ts, src/settlement.ts and src/paypal.ts. The planned module map is in docs/spec.md; do not pretend those directories exist. Preserve the verified P0 transport and evidence. New economic modules must not import raw PayPal types. Only application services own financial transactions; providers and LLM tools may not write the ledger or invoke capture. Keep future HTTP handlers thin. SQLite transactions contain no remote API or LLM calls.
 
 No microservices, Kubernetes, blockchain, generalized plugin framework or compatibility facade without a concrete requirement. P1's SQLite repository and append-only ledger are justified by reservation correctness. P0 remains an isolated spike until the documented P2 cutover; it must never process the same obligations as the new runtime.
 
@@ -25,7 +25,7 @@ No microservices, Kubernetes, blockchain, generalized plugin framework or compat
 - `pnpm verify:phase0`: live read/repeat verification, requires settled local bill and running server.
 - `pnpm verify:phase0 --negative`: official Sandbox decline injection against the completed order.
 
-No build, lint, migration or browser-test command exists yet. Introduce and document commands only with their implementation. Never run a fresh payment to validate documentation changes.
+`pnpm build` compiles the backend, `pnpm start` starts dist/server.js from environment variables, and `pnpm test:production` checks the compiled process using fake credentials and temporary state. No lint, migration or browser-test command exists yet. Introduce and document commands only with their implementation. Never run a fresh payment to validate documentation changes.
 
 ## Economic invariants
 

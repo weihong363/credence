@@ -1,6 +1,6 @@
 # Credence execution roadmap
 
-Authority: [spec](spec.md), [settlement](settlement.md), [product](product.md). Status audited 2026-10-21. **This task produces documentation only. P1 implementation needs explicit owner approval.** Dates below are planning windows, not completed work or promises. Effort assumes one developer with AI assistance and excludes waiting for owner/payment approvals.
+Authority: [spec](spec.md), [settlement](settlement.md), [product](product.md). Status audited 2026-10-21. **P1 implementation needs explicit owner approval. P0 deployment preparation is separately authorized; cloud creation/deployment is not.** Dates below are planning windows, not completed work or promises. Effort assumes one developer with AI assistance and excludes waiting for owner/payment approvals.
 
 ## Verified baseline and gaps
 
@@ -81,7 +81,7 @@ Gate guarantees: no rejected deliveries in payable batches; no allowance restore
 - [ ] P3.4 (0.75–1.5 days): final result and honest failure states, English copy, accessibility, loading/error recovery and controlled run harness.
 - [ ] Gate: **five consecutive complete missions** with three real accepted purchases each, separate batches, real AI work and real Sandbox payments; same persistent DB, no manual financial edits or developer-console intervention. Human Sandbox approval remains part of each run. Record task/batch IDs, source revisions, totals, order/capture IDs, timestamps and negative/corrected-delivery observations.
 
-A fixture-only UI replay may support rehearsal but cannot count among the five real runs. Failed run resets the consecutive counter after fixing the cause; preserve all prior audit history. Public hosted deployment is not required for the local MVP.
+A fixture-only UI replay may support rehearsal but cannot count among the five real runs. Failed run resets the consecutive counter after fixing the cause; preserve all prior audit history. The local reproduction path remains mandatory. Per the sponsor strategy, prioritize a Render public demo in P3/P4 after hosted security and persistent-state acceptance; hosting is not a substitute for the five-run gate.
 
 ## P4 — Hackathon Submission
 
@@ -92,6 +92,26 @@ A fixture-only UI replay may support rehearsal but cannot count among the five r
 - [ ] Gate: reviewer can reproduce core behavior without developer personal credentials; all placeholder links replaced; successful public link checks, complete setup, license and actual submitted materials recorded.
 
 Source license and published URLs are currently absent. Do not label submission done because the files were drafted. Credentials required for reviewers must be obtained through their own Sandbox app/AI provider or a separately approved controlled demo arrangement; never embed developer secrets.
+
+## Sponsor delivery and evaluation work (planned, not installed)
+
+Authority: [sponsor resources](sponsor-resources.md). Prioritize Render hosting and Postman API tooling. Optional candidate count is capped at **two: APIMatic and AG Studio**. Astropods, Elastic, KERNEL, Bryntum, Channel3 and Zapier have no scheduled work unless an actual unmet requirement is demonstrated. No additional sponsor should be selected just for prize breadth.
+
+| Phase | Sponsor work / gate | Incremental effort |
+| --- | --- | --- |
+| P1 | Specify Postman environment/collection shape alongside actual HTTP contracts; keep Node/SQLite tests authoritative. Optional APIMatic read-only development-context evaluation can start after P1.1; inspect source/version and actual Codex support before later installation. | Part of 0.5–1 day Postman total; 2–4 hours APIMatic evaluation |
+| P2 | Export actual procurement/settlement collections and assertions, official PayPal reference links, manual buyer pause and same-ID retries. Use APIMatic only if useful and verified; do not rewrite P0/native fetch or claim historical usage. | Remainder of Postman total; no new API SDK required |
+| P3 | Render single-instance paid service/persistent disk; HTTPS/session/callback configuration, runtime migrations, durable jobs and restart/replay checks. AG Studio evaluation only for credit/activity/settlement read views; resolve hosted trial license and preserve vanilla TypeScript/native fallback. | 1–2 days deployment; AG evaluation <=4 hours, optional adoption another 1–2 days |
+| P4 | Fresh import of sanitized Postman exports; validate hosted access through judging, credit expiry/budget and no embedded secrets; record actual sponsor usage and recheck prize rules. | Included in prioritized totals; owner approvals/wait time extra |
+
+- [ ] S1: Postman collections/environment template import and assert real contracts; shared exports contain no secrets or saved payer responses.
+- [ ] S2: Render offer eligibility, expiry, budget and paid persistent-state plan confirmed before provisioning.
+- [ ] S3: Hosted runtime passes auth/CSRF, callback approval, storage/restart and no-duplicate-payment checks; local setup retained.
+- [ ] S4: APIMatic optional evaluation accepted with evidence or rejected without blocking core delivery.
+- [ ] S5: AG Studio optional evaluation accepted with applicable public-demo/judging license terms or rejected in favor of native UI.
+- [ ] S6: P4 claim/reproducibility review reflects only integrations actually used. No eligibility or award guaranteed.
+
+These items are not completed by documentation. Add **1.5–3 developer-days** prioritized tooling/deployment to the original 12–18-day core estimate: **13.5–21 days** before optional evaluations. APIMatic+AG evaluation adds up to one day total; adopting AG adds another 1–2 days. Do not silently fit these into the existing dates. If schedule pressure rises, reject optional integrations first and simplify presentation; never weaken accounting/verification. Check credit/trial coverage through judging, not just submission; retain a working local path if the hosted plan is blocked.
 
 ## Blockers, risks and controls
 
@@ -115,3 +135,19 @@ For every authorized slice: read current authority → confirm prerequisites →
 ## Documentation audit result
 
 On 2026-10-21 this documentation-only task inspected the current source, package scripts, tests, verification runner and existing evidence JSON. `pnpm check` passed; `pnpm test` passed all 18 local mocked tests. Local Markdown link targets and balanced code fences were checked. No new Sandbox request, credential inspection, database migration, dependency installation or P1–P4 source implementation was performed. Official competition schedule/rules were read separately; they do not establish completion of any publication task.
+
+## P0 Render preparation follow-up
+
+See [deployment-render.md](deployment-render.md). This is an owner-authorized hosting preparation slice, not P1/P2 or a claim that the complete console exists.
+
+- [x] Actual stack mapped: native Node API, no Java/frontend/SQL/LLM components.
+- [x] Native Node Blueprint, one paid single instance plus persistent JSON disk; auto-deploy/previews off.
+- [x] Backend build/start, trusted HTTPS origin, assigned PORT/HOST, DATA_DIR, Sandbox-only base URL and public health endpoint.
+- [x] Bearer auth retained; foreign Host/Origin rejected; callback binding/capture verification retained; graceful drain/restart tests.
+- [x] Empty production configuration template and Docker ignore rules; no runtime dependency added.
+- [ ] Review/commit/push prepared files; verify intended existing resources to avoid duplicates.
+- [ ] Approve Render billing/region/resources and deployment; connect private GitHub repository and enter secrets.
+- [ ] Resolve safe fixed-bill state transfer before hosted financial mutations.
+- [ ] Verify real hosted health/auth/PayPal approval/capture/persistence and record new evidence. Local tests do not count as hosted verification.
+
+The prepared resources cover only P0 API hosting. P3 frontend/owner sessions/mission controls and full runtime deployment remain planned. No Static Site, PostgreSQL, workflow worker or LLM account should be provisioned for nonexistent components. Schema validation does not validate account entitlement or perform a deployment.

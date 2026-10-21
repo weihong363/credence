@@ -6,3 +6,6 @@ node_modules/
 !.env.example
 .DS_Store
 .idea/
+dist/
+
+!.env.render.example

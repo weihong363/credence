@@ -6,11 +6,11 @@ Version 1, 2026-10-21. **Planned P1–P4; not implemented.** Current behavior is
 
 | Surface | Observed implementation | Boundary |
 | --- | --- | --- |
-| src/server.ts | Native Node HTTP, owner Bearer token, loopback port 3000, state-bound return/cancel routes | No sessions, frontend, request body parser, multi-owner routing or webhook endpoint |
+| src/server.ts / src/config.ts / src/http.ts | Native Node HTTP, owner Bearer token, configurable HOST/PORT/DATA_DIR, HTTPS origin validation, health, state-bound return/cancel routes | No sessions, frontend, request body parser, multi-owner routing or webhook endpoint |
 | src/paypal.ts | Sandbox-only OAuth, Orders create/get/capture, token cache, three-attempt transport retry, sanitized issue codes | `Gateway` and `Order` expose PayPal shapes; not a provider-neutral economic interface |
 | src/settlement.ts | Fixed three-charge bill, 1,000-unit fixture bound, one JSON snapshot, exclusive process lock, terminal receipt, explicit resume | No dynamic purchases, atomic credit accounts, append-only ledger, database, multiple batches or real service verification |
 | scripts/verify-phase0.ts | Checks real order/charge association, repeats local requests, official negative header probe | Requires an already-settled local bill; negative probe targets the completed order, not a new real funding decline |
-| test/settlement.test.ts | 18 mocked local tests | Not proof of real service execution, real network loss or concurrent multi-process accounting |
+| test/settlement.test.ts / test/deployment.test.ts | 25 local settlement/config/HTTP tests with mocked PayPal | Not proof of real service execution, real network loss or concurrent multi-process accounting |
 | docs/phase0-*.json | Sanitized recorded live USD 7.50 order/capture, unchanged receipt, one capture, injected HTTP 422 | Historical evidence, not an append-only audit system or a new live check on every docs run |
 
 P0 is complete within those limits. `.data` is mutable trusted local state and Object.freeze is not tamper-proof storage. The in-process gate and lifetime file lock do not replace database transactions. Settled `verify` short-circuits locally; independent script GET is the fresh remote check. Normal SIGINT/SIGTERM cleans the lock; a hard crash requires checked manual recovery. Capture and order IDs are bound in the receipt but individual P0 charges have no real purchase/delivery IDs.
@@ -49,6 +49,14 @@ flowchart TB
 ```
 
 Planned modules (none exist yet): `src/domain/{money,policy,purchase,ledger,settlement}.ts`; `src/application/{missions,procurement,deliveries,settlements,reconcile}.ts`; `src/registry/`; `src/providers/`; `src/llm/`; `src/persistence/{migrations,repositories,transactions}.ts`; `src/jobs/`; `src/payments/{port,paypal-adapter}.ts`; `src/http/`; `web/`; `test/{unit,integration,e2e}/`. Domain code is pure. Application services own transactions and authorization. Repositories accept transaction handles; providers cannot import persistence/payments. Payment transport reuse comes in P2, not during P1.
+
+## 2a. Sponsor integration boundaries (planned)
+
+See [sponsor resource decisions](sponsor-resources.md) for dated offers, licensing, evaluation gates and effort. No sponsor integration is installed. Preserve native HTTP/fetch, SQLite, monolith jobs and Vite/vanilla TypeScript. Postman is external testing/reproduction tooling; APIMatic is optional developer context. Neither is economic authority. Optional AG Studio consumes sanitized read models only; no client-side ledger writes or unrestricted payment tools, and no framework change.
+
+Prioritize Render public demo deployment in P3/P4 while retaining the reproducible local path. Minimal P0 hosting preparation is now implemented in [deployment-render.md](deployment-render.md), without creating cloud resources. The full runtime still needs its own hosted acceptance. Its profile includes: bind `0.0.0.0` on Render's PORT, configured trusted HTTPS PUBLIC_URL with exact host/origin/callback validation, Secure sessions and CSRF, authorized mutations, rate limits and non-sensitive health checks. Public visitors default to sanitized read-only views; owner-controlled execution/spending is never open anonymously. PayPal and LLM secrets remain server-managed environment values, never frontend build variables.
+
+Plan one paid instance with a mounted persistent directory for SQLite (including WAL/SHM), artifacts and recoverable state. Apply migrations at runtime before serving, under exclusive database ownership. Persist jobs and drain/finish or checkpoint before shutdown; reconcile uncertain payments after restart. Do not run disk-dependent migrations in build/pre-deploy jobs. No autoscaling/shared SQLite, free ephemeral financial state or distributed Workflows SDK. Use consistent database backups and provider reconciliation before resuming after restore. Verify native SQLite build, restart/deploy durability, owner approval/callbacks, HTTPS auth and replay against the deployed instance before declaring it ready. Confirm credits/budget and availability through judging; hosting has an incremental cost and is not yet configured.
 
 ## 3. Identity, data types and configuration
 
@@ -268,3 +276,7 @@ Full settlement transitions, idempotency, refunds and webhook policy are in [set
 Task SUCCEEDED requires all capabilities marked required by the task plan to have accepted deliveries and a schema-valid final result. On unrecoverable required-service failure, task is FAILED with optional partial findings; accepted charges remain payable. ACTION_REQUIRED pauses automatic work after a policy/model/operator blockage; the MVP owner can inspect and cancel or start a new task, not extend its original budget/deadline through an undocumented resume. Task CANCELLED stops future purchases and cancels nonterminal ones but does not reverse accepted work.
 
 Use fake clocks, controlled fixture servers and temporary DBs. Live API/model tests are opt-in and never called by default unit tests. Do not send any new payment during this documentation task. Test jobs/transport separately from quality assertions. Log IDs, concise decision reasons, timestamps and safe error codes, not credentials or raw source/payer payloads. Owner-facing event order follows committed sequence numbers, not network arrival order. Module tests and link checks must pass before acceptance; a phase checkbox needs its explicit evidence, not only generated files.
+
+## P0 deployment preparation boundary
+
+`render.yaml`, `.node-version`, `.env.render.example`, `tsconfig.build.json` and backend configuration are prepared for one native Node service and durable JSON state. `pnpm build` emits dist/server.js; `pnpm start` consumes platform environment without tsx/.env. HOST/PORT/DATA_DIR and strict PAYPAL_BASE_URL are now implemented; PUBLIC_URL falls back to Render's documented external URL. Same-origin Bearer APIs remain the current control plane; no planned browser sessions, UI, database or LLM functionality is introduced. Refer to the deployment guide for cloud approvals, state continuity and verification; historical P0 evidence is unchanged.

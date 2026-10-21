@@ -1,0 +1,39 @@
+# Preparation only. Review existing services before applying; no resources have been created.
+# Native Node runtime: no Dockerfile, Static Site, PostgreSQL, LLM or workflow service needed.
+previews:
+  generation: "off"
+services:
+  - type: web
+    name: credence-sandbox
+    runtime: node
+    branch: main
+    plan: 0.5c-512mb
+    numInstances: 1
+    autoDeployTrigger: "off"
+    buildCommand: corepack enable && pnpm install --frozen-lockfile --prod=false && pnpm build
+    startCommand: node dist/server.js
+    healthCheckPath: /health
+    maxShutdownDelaySeconds: 300
+    disk:
+      name: credence-sandbox-state
+      mountPath: /var/data/credence
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: DATA_DIR
+        value: /var/data/credence
+      - key: PAYPAL_BASE_URL
+        value: https://api-m.sandbox.paypal.com
+      - key: PAYPAL_CLIENT_ID
+        sync: false
+      - key: PAYPAL_CLIENT_SECRET
+        sync: false
+      - key: PAYPAL_MERCHANT_ID
+        sync: false
+      - key: OWNER_TOKEN
+        generateValue: true
+# PORT and RENDER_EXTERNAL_URL are supplied by Render. PUBLIC_URL may override the latter
+# for an explicitly configured custom HTTPS origin; never copy localhost PUBLIC_URL into Render.

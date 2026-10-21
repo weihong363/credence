@@ -1,3 +1,4 @@
+import { SANDBOX_URL } from './config.js';
 export interface Order {
   id: string; status: string;
   links?: { rel: string; href: string }[];
@@ -15,10 +16,13 @@ export interface Gateway {
 }
 export class PayPal implements Gateway {
   private token = ''; private expires = 0;
-  constructor(private client: string, private secret: string, private transport: typeof fetch = fetch) {}
+  constructor(private client: string, private secret: string, private transport: typeof fetch = fetch,
+    private baseUrl: string = SANDBOX_URL) {
+    if (baseUrl !== SANDBOX_URL) throw new Error('Only PayPal Sandbox is supported');
+  }
   private async access(): Promise<string> {
     if (Date.now() < this.expires) return this.token;
-    const response = await this.transport('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
+    const response = await this.transport(`${this.baseUrl}/v1/oauth2/token`, {
       method: 'POST', signal: AbortSignal.timeout(15000),
       headers: { Authorization: `Basic ${Buffer.from(`${this.client}:${this.secret}`).toString('base64')}`,
         'Content-Type': 'application/x-www-form-urlencoded' }, body: 'grant_type=client_credentials' });
@@ -31,7 +35,7 @@ export class PayPal implements Gateway {
   private async request(path: string, method = 'GET', key?: string, body?: unknown): Promise<Order> {
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
-        const response = await this.transport(`https://api-m.sandbox.paypal.com${path}`, {
+        const response = await this.transport(`${this.baseUrl}${path}`, {
           method, signal: AbortSignal.timeout(15000), headers: {
             Authorization: `Bearer ${await this.access()}`, 'Content-Type': 'application/json',
             Prefer: 'return=representation', ...(key ? { 'PayPal-Request-Id': key } : {}) },
