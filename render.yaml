@@ -13,7 +13,6 @@ services:
     buildCommand: corepack enable && pnpm install --frozen-lockfile --prod=false && pnpm build
     startCommand: node dist/server.js
     healthCheckPath: /health
-    maxShutdownDelaySeconds: 300
     disk:
       name: credence-sandbox-state
       mountPath: /var/data/credence

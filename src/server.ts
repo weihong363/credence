@@ -18,7 +18,7 @@ function stop(): void {
   stopping = true;
   // Finish in-flight requests before releasing the process lock. Persisted keys cover forced-exit ambiguity.
   server.close(() => process.exit(0));
-  setTimeout(() => process.exit(1), 290000).unref();
+  setTimeout(() => process.exit(1), 25000).unref();
 }
 for (const signal of ['SIGINT', 'SIGTERM'] as const) process.on(signal, stop);
 server.on('error', () => { console.error('Server could not listen; check host, port and process ownership.'); process.exit(1); });
