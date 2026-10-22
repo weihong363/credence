@@ -10,7 +10,7 @@ Repository: [weihong363/credence](https://github.com/weihong363/credence) (priva
 
 ## What works today
 
-**P0 PayPal Sandbox** and the **P1 local economic core** are implemented. P1 tests, real source inventory and the minimum DeepSeek procurement/report gate pass; a single successful three-service mission is not yet established. Dynamic PayPal settlement and the console remain planned.
+**P0 PayPal Sandbox** and the **P1 local economic core** are implemented. P1 tests and the real same-task three-service DeepSeek procurement/report gate pass; one architecture correction was verified within five model calls. Dynamic PayPal settlement and the console remain planned.
 
 | Capability | Current status |
 | --- | --- |
@@ -141,4 +141,10 @@ pnpm economy status
 
 The source check makes only public GitHub requests. The mission makes real model requests, starts a new task and may create accepted internal obligations within the 1,000-unit allowance; it never calls PayPal. Source is pinned and persisted in SQLite; providers never execute repository code. Only verified accepted deliveries become charges, and the final report cites those deliveries. Failure retains accepted charges and releases unfinished holds. Do not delete state to reset spending. Public deployment remains deferred.
 
-`pnpm economy recover`, `pnpm economy cancel PURCHASE_UUID` and `pnpm economy resume TASK_UUID` support local operation. Resume an interrupted task rather than starting it again; original deadlines, invocation IDs and the eight-call budget are preserved. A completed-task resume returns its saved report. The minimum real AI gate passes; see [live evidence](docs/p1-live-evidence.json). Current local allowance is exhausted by 1,000 units of retained accepted work; no PayPal payment occurred. No frontend or procurement HTTP API is added in P1.
+`pnpm economy recover`, `pnpm economy cancel PURCHASE_UUID` and `pnpm economy resume TASK_UUID` support local operation. Resume an interrupted task rather than starting it again; original deadlines, invocation IDs and the eight-call budget are preserved. A completed-task resume returns its saved report. The full-review live gate passes; see [current evidence](docs/p1-full-review-live-evidence.json). The original ledger remains at 1,000 outstanding / zero available; the authorized independent verification ledger has limit 1,500, outstanding 750 and available 750. No PayPal payment occurred. No frontend or procurement HTTP API is added in P1.
+
+## Full-review completion follow-up
+
+`pnpm mission` now explicitly requests `full-review`: inventory, architecture and independent risk must all be accepted on the same task, and the final report must cite all three deliveries. New missions use one persisted registry-backed plan; restart reuses that plan. Limited programmatic objectives use `scoped`, which is also shown in result/status metadata.
+
+Production-code tests with mocked HTTP now complete in 4 requests normally, 6 with both provider corrections, or 8 with both corrections and both HTTP retries. Synthesis retains one reserved request. The full 66-test suite and production smoke pass. [Current implementation and open live gate](docs/p1-three-service-follow-up.md) records one real full-review success after explicit 1,500-unit allowance authorization, plus retained historical single-service evidence. The original exhausted allowance is unchanged.

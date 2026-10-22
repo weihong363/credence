@@ -28,6 +28,11 @@ export async function runNext(db:Database.Database,provider:Provider,clock:()=>n
   const result=await Promise.race([provider(purchase,loadSnapshot(db,purchase.task_id),abort.signal,prior?JSON.parse(prior.reasons_json):[]),timeout]);
   return completeDelivery(db,job,result,clock());
  }catch(error){
+  const code=error instanceof Error?error.message:'';
+  if(['INVALID_SCHEMA','EVIDENCE_RANGE','MODEL_JSON_INVALID','MODEL_OUTPUT_LIMIT'].includes(code)){
+   // Persist a rejected marker for unreadable output; it can never pass verification.
+   return completeDelivery(db,job,{output:null,evidence:[]},clock());
+  }
   db.transaction(()=>{
    const current=db.prepare("SELECT 1 FROM invocations WHERE id=? AND lease_token=? AND state='RUNNING'").get(job.id,job.lease_token);
    if(current){

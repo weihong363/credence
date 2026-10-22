@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type Database from 'better-sqlite3';
+import type {ReviewProfile} from '../domain/review.js';
 import { usd } from '../domain/money.js';
 
 export const catalog = [
@@ -27,14 +28,15 @@ export function seedDemo(db: Database.Database, now = Date.now()): DemoIdentity 
   }).immediate();
 }
 
-export function createTask(db: Database.Database, identity: DemoIdentity, objective: string, input: unknown, now = Date.now(), budget = 1000): string {
+export function createTask(db: Database.Database, identity: DemoIdentity, objective: string, input: unknown, now = Date.now(), budget = 1000, profile:ReviewProfile='scoped'): string {
   usd(budget);
+  if(!['scoped','full-review'].includes(profile))throw new Error('INVALID_REVIEW_PROFILE');
   if (!objective.trim() || objective.length > 4000) throw new Error('INVALID_OBJECTIVE');
   const account = db.prepare('SELECT 1 FROM accounts WHERE id=? AND owner_id=? AND buyer_id=?')
     .get(identity.accountId, identity.ownerId, identity.buyerId);
   if (!account) throw new Error('ACCOUNT_FORBIDDEN');
   const id = randomUUID();
-  db.prepare('INSERT INTO tasks(id,account_id,budget_minor,deadline_at,objective,input_json) VALUES(?,?,?,?,?,?)')
-    .run(id, identity.accountId, budget, now + 300_000, objective, JSON.stringify(input));
+  db.prepare('INSERT INTO tasks(id,account_id,budget_minor,deadline_at,objective,input_json,review_profile) VALUES(?,?,?,?,?,?,?)')
+    .run(id, identity.accountId, budget, now + 300_000, objective, JSON.stringify(input),profile);
   return id;
 }

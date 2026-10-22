@@ -1,6 +1,6 @@
 # Credence execution roadmap
 
-Authority: [spec](spec.md), [settlement](settlement.md), [product](product.md). Status audited 2026-10-21. **Owner authorized P1 implementation. P1 local core and minimum real DeepSeek gate pass; full three-service/five-run demonstrations remain later gates. Cloud creation/deployment is not authorized.** Dates below are planning windows, not completed work or promises. Effort assumes one developer with AI assistance and excludes waiting for owner/payment approvals.
+Authority: [spec](spec.md), [settlement](settlement.md), [product](product.md). Status audited 2026-10-21. **Owner authorized P1 implementation. P1 local core and minimum real DeepSeek gate pass; the same-task three-service gate also passes; the five-run demonstration remains P3. Cloud creation/deployment is not authorized.** Dates below are planning windows, not completed work or promises. Effort assumes one developer with AI assistance and excludes waiting for owner/payment approvals.
 
 ## Verified baseline and gaps
 
@@ -32,7 +32,7 @@ Official [schedule](https://paypalaihackathon.devpost.com/details/dates) and [ru
 
 ## P1 — Agent Economic Core
 
-P1.1–P1.4 pass local acceptance; P1.5–P1.6 pass the minimum real-AI gate; all capabilities were exercised across retained missions, with a completed risk-only procurement/report task. Keep PayPal disabled for P1 acceptance.
+P1.1–P1.4 pass local acceptance; P1.5–P1.6 now also pass a real same-task full-review gate in an owner-authorized independent 1,500-unit account; the earlier risk-only evidence remains historical. Keep PayPal disabled for P1 acceptance.
 
 | ID | Ordered vertical slice | Effort | Depends on | Acceptance evidence |
 | --- | --- | --- | --- | --- |
@@ -53,14 +53,16 @@ P1.1–P1.4 pass local acceptance; P1.5–P1.6 pass the minimum real-AI gate; al
 
 Mandatory negative cases: insufficient Credit; per-transaction policy limit; unknown service; expired quote; duplicate purchase; two-connection overspending; service exception/timeout; invalid schema/evidence; attempt correction deadline; revoked account; late delivery/cancel race. Run type/unit/real-DB integration tests and one opt-in live AI run. Do not mark P1 accepted using canned provider conclusions or fixture verified flags.
 
-**P1 minimum gate completed:** see [P1 verification](p1-verification.md) and [live evidence](p1-live-evidence.json). One real risk-only procurement/report task completed; a single successful three-service mission is not established. P2 is the next phase and was not started.
+**P1 full-review gate completed:** see [full-review evidence](p1-full-review-live-evidence.json) and [follow-up](p1-three-service-follow-up.md). All three services plus cited synthesis completed on one task in five model calls, including one correction. P2 is the next phase and was not started.
 
 ## Priority P1 follow-up — complete three-service mission
 
-- [ ] Same task: inventory + architecture + risk all accepted, final report covers all three, 750 units, eight-call/deadline bounds, restart/replay and reconciliation pass in a real model run. **Required before P2**, per owner priority on 2026-10-22.
-- [x] Reproduced correction-budget bottleneck with production adapters and mocked HTTP: no correction requires 7 calls, one requires 8, two leave no synthesis budget.
+- [x] Same task: inventory + architecture + risk all accepted, final report covers all three, 750 units, five real model requests, restart/replay and reconciliation pass. Evidence task `6a131fa3-6968-40a6-9896-441b7f22d22e`, 2026-10-22.
+- [x] Reproduced the previous correction-budget bottleneck; implemented persisted planning, strict full-review completion and protected synthesis capacity. Production-code mock-HTTP tests now use 4/5/6 calls for zero/one/two corrections, or 8 with both provider retries.
+- [x] Local regression: 66 tests, type checks, production smoke, durable plan/resume and complete final citation coverage pass.
+- [x] Owner authorized independent verification with 1,500 Credit; 750 accepted / 750 available. Original exhausted ledger remains unchanged.
 
-See [focused analysis and exit criteria](p1-three-service-follow-up.md). Current COMPLETED does not assert three-service coverage. Do not combine cross-task evidence or reset the exhausted account to claim this gate.
+See [focused analysis and exit criteria](p1-three-service-follow-up.md). Current full-review COMPLETED enforces all three services and complete citation coverage; scoped completion is distinct. No cross-task evidence was combined and no ledger was reset.
 
 ## P2 — Aggregated PayPal Settlement
 

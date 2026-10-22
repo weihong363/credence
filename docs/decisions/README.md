@@ -12,3 +12,4 @@ These records select the planned architecture; they do not claim implementation.
 | [0006](0006-sqlite-and-phase0-cutover.md) | SQLite core with explicit P0 integration boundary | Planned P1/P2 |
 | [0007](0007-reservation-foundation.md) | Staged internal reserve-only foundation, no public spending API | P1.1 locally tested |
 | [0008](0008-p1-local-procurement.md) | Isolated local procurement CLI, durable jobs/model budgets and source-backed verification | Offline checks and minimum live AI gate pass |
+| [0009](0009-bounded-review-plans.md) | One durable plan, explicit review profiles, reserved synthesis capacity | Local tests and owner-authorized full-review live gate pass |

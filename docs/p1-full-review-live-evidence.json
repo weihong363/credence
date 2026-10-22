@@ -1,0 +1,188 @@
+{
+  "recordedAt": "2026-10-22T02:53:24.568Z",
+  "phase": "P1 full-review",
+  "database": ".data/p1-full-review-verification.sqlite",
+  "task": {
+    "id": "6a131fa3-6968-40a6-9896-441b7f22d22e",
+    "profile": "full-review",
+    "status": "COMPLETED",
+    "spentMinor": 750,
+    "deadlineAt": "2026-10-22T02:56:38.388Z"
+  },
+  "repository": {
+    "owner": "expressjs",
+    "name": "cors",
+    "commitSha": "5317ebe670db2aaebc1d496eb5d33493deefb3ed"
+  },
+  "source": {
+    "fileCount": 16,
+    "sourceBytes": 59570
+  },
+  "model": "deepseek-v4-pro",
+  "modelRequests": 5,
+  "requestPurposes": [
+    "PLANNING",
+    "PROVIDER",
+    "PROVIDER",
+    "PROVIDER",
+    "SYNTHESIS"
+  ],
+  "plan": {
+    "purchases": [
+      {
+        "capabilityId": "repo.inventory",
+        "reason": "Full review requires repository inventory.",
+        "version": 1
+      },
+      {
+        "capabilityId": "repo.architecture",
+        "reason": "Assessing architecture is the core objective.",
+        "version": 1
+      },
+      {
+        "capabilityId": "repo.risk-review",
+        "reason": "Adoption risks require independent source-backed review.",
+        "version": 1
+      }
+    ]
+  },
+  "account": {
+    "id": "71977bd8-9c31-4b71-b2e4-e600ca470888",
+    "limit_minor": 1500,
+    "reserved_minor": 0,
+    "outstanding_minor": 750,
+    "available_minor": 750
+  },
+  "policyAudit": [
+    {
+      "action": "POLICY:LIMIT:1000->1500",
+      "created_at": 1792637495876
+    }
+  ],
+  "charges": [
+    {
+      "id": "5cfe83f3-88bb-4395-9ebe-e673776a12f9",
+      "purchase_id": "7724cbd1-67c7-4bc0-ac6f-3404066bceb5",
+      "delivery_id": "5ec80f33-2684-4537-b73c-a3d837869d2b",
+      "amount_minor": 125,
+      "currency": "USD",
+      "capability_id": "repo.inventory"
+    },
+    {
+      "id": "5880d013-f0eb-4a77-9353-431a5ee33a6f",
+      "purchase_id": "bd2c4e0a-a9c9-4726-b9be-d0e008ce777c",
+      "delivery_id": "e6b183e8-a486-48a0-aae2-64f0787cd2ec",
+      "amount_minor": 250,
+      "currency": "USD",
+      "capability_id": "repo.architecture"
+    },
+    {
+      "id": "5c7c2dfc-a4d3-4e1a-ad0b-5f3e867c54ff",
+      "purchase_id": "91623b7f-5675-40b0-9c37-025f13a513ff",
+      "delivery_id": "34406ef3-400f-4786-aa78-1e970b2a3c88",
+      "amount_minor": 375,
+      "currency": "USD",
+      "capability_id": "repo.risk-review"
+    }
+  ],
+  "verification": [
+    {
+      "capability_id": "repo.inventory",
+      "attempt": 1,
+      "result": "PASS",
+      "reasons": []
+    },
+    {
+      "capability_id": "repo.architecture",
+      "attempt": 1,
+      "result": "FAIL",
+      "reasons": [
+        "INVALID_SCHEMA"
+      ]
+    },
+    {
+      "capability_id": "repo.architecture",
+      "attempt": 2,
+      "result": "PASS",
+      "reasons": []
+    },
+    {
+      "capability_id": "repo.risk-review",
+      "attempt": 1,
+      "result": "PASS",
+      "reasons": []
+    }
+  ],
+  "execution": [
+    {
+      "capability_id": "repo.architecture",
+      "id": "470ff52b-e062-4494-8c08-5ffc2e762d81",
+      "state": "DONE",
+      "execution_attempts": 2,
+      "delivery_attempt": 2
+    },
+    {
+      "capability_id": "repo.inventory",
+      "id": "9f664c0b-2b32-4962-9e3d-d9dfa097fdbe",
+      "state": "DONE",
+      "execution_attempts": 1,
+      "delivery_attempt": 1
+    },
+    {
+      "capability_id": "repo.risk-review",
+      "id": "46cb4097-0f8a-4b4b-9943-c2e908443551",
+      "state": "DONE",
+      "execution_attempts": 1,
+      "delivery_attempt": 1
+    }
+  ],
+  "report": {
+    "commitSha": "5317ebe670db2aaebc1d496eb5d33493deefb3ed",
+    "findings": [
+      {
+        "acceptedDeliveryIds": [
+          "5ec80f33-2684-4537-b73c-a3d837869d2b"
+        ],
+        "claim": "Repository inventory is complete, listing package.json with license MIT, minimal dependencies (object-assign, vary), and entry point lib/index.js."
+      },
+      {
+        "acceptedDeliveryIds": [
+          "e6b183e8-a486-48a0-aae2-64f0787cd2ec"
+        ],
+        "claim": "Architecture consists of a CORS Middleware component that sets headers and an Express Application that integrates it via app.use(cors())."
+      },
+      {
+        "acceptedDeliveryIds": [
+          "34406ef3-400f-4786-aa78-1e970b2a3c88"
+        ],
+        "claim": "Default origin '*' allows any origin to read responses unless configured, CI matrix includes end-of-life Node.js versions, and no major dependency update policy."
+      }
+    ],
+    "limitations": [
+      "CORS is not access control and should not be used as such.",
+      "No runtime code vulnerabilities were identified; only conditional adoption risks are reported.",
+      "The analysis is limited to the repository at commit 5317ebe670db2aaebc1d496eb5d33493deefb3ed and the files provided."
+    ],
+    "recommendation": "ADOPT_WITH_CONDITIONS",
+    "repository": {
+      "commitSha": "5317ebe670db2aaebc1d496eb5d33493deefb3ed",
+      "name": "cors",
+      "owner": "expressjs"
+    },
+    "summary": "CORS middleware with clear architecture and minimal dependencies. Main risks: permissive default origin '*' and outdated CI test matrix. Adopt with configuration for production origins and dependency policy updates."
+  },
+  "reconciliation": "PASS",
+  "restartReplay": {
+    "unchangedReport": true,
+    "additionalModelRequests": 0,
+    "additionalCharges": 0,
+    "additionalLedgerEvents": 0
+  },
+  "originalLedgerUnchanged": true,
+  "paypalRequests": 0,
+  "semanticLimitations": [
+    "Exact source provenance is not proof of claim truth.",
+    "Express Application refers to example/test integration, not a separate production service.",
+    "Permissive CORS defaults, legacy Node CI and major-update policy are conditional adoption caveats, not confirmed exploitable vulnerabilities."
+  ]
+}

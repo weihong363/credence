@@ -25,6 +25,25 @@ test('version-one history survives migration exactly, replay and integrity trigg
  assert.deepEqual(db.prepare('SELECT * FROM ledger_events').all(),history);
  assert.deepEqual(reserve(db,request),reservation);assert.equal(db.prepare('PRAGMA foreign_key_check').all().length,0);
  assert.throws(()=>db.exec('DELETE FROM ledger_events'),/APPEND_ONLY/);
- assert.equal(db.pragma('user_version',{simple:true}),4);
+ assert.equal(db.pragma('user_version',{simple:true}),5);
+ }finally{db.close();rmSync(directory,{recursive:true,force:true});}
+});
+
+test('version-four completed tasks and model-call history retain their identity during planning migration',()=>{
+ const directory=mkdtempSync(join(tmpdir(),'credence-v4-'));const path=join(directory,'db.sqlite');
+ const old=new Database(path);old.pragma('foreign_keys=ON');
+ for(const migration of migrations.filter(item=>item.version<=4))old.exec(migration.sql);
+ old.pragma('user_version=4');
+ const owner=randomUUID(),buyer=randomUUID(),account=randomUUID(),task=randomUUID(),call=randomUUID();
+ old.prepare('INSERT INTO owners VALUES(?,0)').run(owner);
+ old.prepare("INSERT INTO agents VALUES(?,?,'BUYER','Historical',1)").run(buyer,owner);
+ old.prepare("INSERT INTO accounts(id,owner_id,buyer_id,currency,limit_minor,per_purchase_minor) VALUES(?,?,?,'USD',1000,400)").run(account,owner,buyer);
+ old.prepare("INSERT INTO tasks(id,account_id,budget_minor,deadline_at,status,result_json) VALUES(?,?,1000,100,'COMPLETED','{\"historical\":true}')").run(task,account);
+ old.prepare('INSERT INTO model_calls VALUES(?,?,?,1,50)').run(call,task,'historic-model');old.close();
+ const db=openDatabase(path);
+ try{
+  assert.deepEqual(db.prepare('SELECT id,status,result_json,review_profile FROM tasks').get(),{id:task,status:'COMPLETED',result_json:'{"historical":true}',review_profile:'scoped'});
+  assert.deepEqual(db.prepare('SELECT * FROM model_calls').get(),{id:call,task_id:task,model:'historic-model',ordinal:1,created_at:50,purpose:'LEGACY'});
+  assert.equal(db.prepare('PRAGMA foreign_key_check').all().length,0);
  }finally{db.close();rmSync(directory,{recursive:true,force:true});}
 });

@@ -125,3 +125,9 @@ Webhook ingestion is **deferred**, not a requirement for the local MVP: polling 
 Required tests: reserve/accept/reject balance deltas; parallel reservation overspend; two batches allocate one charge; repeated confirmation transaction; amount/currency/merchant mismatch; accepted versus rejected charge selection; unknown order blocks reallocating; expired mutation windows; callback/owner cancel race; duplicate/delayed events; rollback at every finalization write; crash around remote checkpoints; projection replay equals persisted balances. Opt-in live P2 evidence must include three **real accepted** service charges and one completed payment, separately from P0 fixtures.
 
 One merchant-of-record Sandbox account receives the gross aggregate test payment. There are no real payouts to independent agents/providers; the ledger expresses internal service economics only. Commercial use, real merchant onboarding, legal obligations and regulated financing are outside this prototype's claims. Do not promise settlement of real provider balances or automatic recovery from insufficient buyer funds.
+
+## Full-review planning boundary
+
+New mission planning/profile and model-budget reservation follow ADR 0009. A plan is permission to attempt individually checked quotes, not a charge or a promise of settlement. A full-review failure retains already accepted charges, releases unfinished holds, and never resets task/model spending on restart. Final synthesis capacity does not restore Credit or imply a payable delivery. No P2 settlement behavior is added by this change.
+
+Owner-authorized allowance updates use a policy transaction, not a charge/settlement event. The application validates owner, checked USD minor units, existing reserved/outstanding amounts and the per-purchase bound; limit mutation and audit commit together. The explicitly authorized 1,500-unit independent verification account does not alter or settle the original account.

@@ -24,7 +24,7 @@ test('model request budget survives connection restart and rejects the ninth req
  const f=setupRuntime('repo.architecture',path);
  for(let i=0;i<4;i++)claimModelCall(f.db,f.context.taskId,'test-model',101);
  f.db.close();const db=openDatabase(path);
- try{for(let i=0;i<4;i++)claimModelCall(db,f.context.taskId,'test-model',102);
+ try{db.prepare("UPDATE tasks SET model_phase='SYNTHESIS' WHERE id=?").run(f.context.taskId);for(let i=0;i<4;i++)claimModelCall(db,f.context.taskId,'test-model',102);
  assert.throws(()=>claimModelCall(db,f.context.taskId,'test-model',103),/MODEL_CALL_BUDGET/);
  assert.equal((db.prepare('SELECT count(*) n FROM model_calls').get() as {n:number}).n,8);
  }finally{db.close();rmSync(directory,{recursive:true,force:true});}

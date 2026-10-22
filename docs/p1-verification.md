@@ -1,6 +1,6 @@
 # P1 economic core: local verification and live gate
 
-Status, 2026-10-21: **P1 minimum live gate passed** with `deepseek-v4-pro`. A real risk-review procurement-to-ledger-to-cited-report mission completed; inventory and architecture were also independently accepted in retained earlier missions. This does **not** establish one successful three-service mission. P2 payments, P3 UI and Render deployment remain outside this change. Evidence: [sanitized live record](p1-live-evidence.json).
+Status, 2026-10-21: **P1 minimum live gate passed** with `deepseek-v4-pro`. A real risk-review procurement-to-ledger-to-cited-report mission completed; inventory and architecture were also independently accepted in retained earlier missions. This historical record was later followed by a real successful three-service task; see [full-review evidence](p1-full-review-live-evidence.json). P2 payments, P3 UI and Render deployment remain outside this change. Evidence: [sanitized live record](p1-live-evidence.json).
 
 ## Configuration and commands
 
@@ -78,3 +78,7 @@ The provider now selects `{path,line}` from numbered source. The server extracts
 Account after all retained live attempts: limit **1,000**, reserved **0**, outstanding **1,000**, available **0**. This comprises inventory 125×3, architecture 250 and risk review 375. Earlier accepted inventory remains payable even when its enclosing mission failed. These are internal accounting obligations; **zero PayPal requests** occurred in P1. Do not start more paid work or clear state to reset allowance. P2 settlement/explicit owner policy work remains separate.
 
 Quality limitations matter: exact evidence proves source provenance, not claim truth. The report infers project inactivity from the latest HISTORY.md release entry; current maintenance activity was not independently established. Broad CORS defaults and legacy Node compatibility are conditional adoption caveats, not proven vulnerabilities. The report is useful as a bounded review with these caveats, not a security certification. A successful single-task three-service review and five consecutive full settlement demos remain later acceptance work, not claimed here.
+
+## Planning change after this historical live record (2026-10-22)
+
+The live records above predate the new plan/profile implementation and are not rewritten. CLI missions now request full-review and require all three accepted services plus complete final report coverage. New planning uses one immutable plan, reserves the final request and exposes request purpose in SQLite. Limited programmatic objectives remain scoped. See [ADR 0009](decisions/0009-bounded-review-plans.md) and [current follow-up status](p1-three-service-follow-up.md): 66 local tests pass; the owner then authorized a 1,500-unit independent account and a real full review passed in five requests. See [current live evidence](p1-full-review-live-evidence.json). Original ledger/history remains unchanged and no PayPal requests occurred.
