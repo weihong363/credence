@@ -55,6 +55,13 @@ Mandatory negative cases: insufficient Credit; per-transaction policy limit; unk
 
 **P1 minimum gate completed:** see [P1 verification](p1-verification.md) and [live evidence](p1-live-evidence.json). One real risk-only procurement/report task completed; a single successful three-service mission is not established. P2 is the next phase and was not started.
 
+## Priority P1 follow-up — complete three-service mission
+
+- [ ] Same task: inventory + architecture + risk all accepted, final report covers all three, 750 units, eight-call/deadline bounds, restart/replay and reconciliation pass in a real model run. **Required before P2**, per owner priority on 2026-10-22.
+- [x] Reproduced correction-budget bottleneck with production adapters and mocked HTTP: no correction requires 7 calls, one requires 8, two leave no synthesis budget.
+
+See [focused analysis and exit criteria](p1-three-service-follow-up.md). Current COMPLETED does not assert three-service coverage. Do not combine cross-task evidence or reset the exhausted account to claim this gate.
+
 ## P2 — Aggregated PayPal Settlement
 
 | ID | Slice | Effort | Depends on | Acceptance evidence |

@@ -1,6 +1,8 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
+import {LlmClient} from '../src/llm/client.js';
+import {claimModelCall} from '../src/application/model-budget.js';
 import {runMission} from '../src/application/missions.js';
 import {openDatabase} from '../src/persistence/database.js';
 import {reconcile} from '../src/application/lifecycle.js';
@@ -66,4 +68,39 @@ test('separate missions on one account do not collide on coordinator idempotency
  }
  assert.equal((db.prepare('SELECT outstanding_minor FROM accounts').get() as {outstanding_minor:number}).outstanding_minor,250);reconcile(db);
  }finally{db.close();}
+});
+
+test('production adapters with mocked HTTP: correction headroom under the durable eight-call budget',async()=>{
+ for(const corrections of [0,1,2]){
+  const db=openDatabase(':memory:');let decisionIndex=0;const attempts=new Map<string,number>();let taskId='';
+  const transport=(async(_url,options)=>{
+   const body=JSON.parse(options?.body as string);
+   const system=body.messages[0].content as string;const input=JSON.parse(body.messages[1].content);
+   let response:unknown;
+   if(system.startsWith('Choose')){
+    const capabilityId=['repo.inventory','repo.architecture','repo.risk-review'][decisionIndex++];
+    response=capabilityId?{action:'purchase',capabilityId,version:1,reason:'Required review'}:{action:'finish',reason:'All services accepted'};
+   }else if(system.startsWith('Perform')){
+    const architecture=system.includes('architecture analysis');const key=architecture?'architecture':'risk';
+    const attempt=(attempts.get(key)??0)+1;attempts.set(key,attempt);
+    const shouldCorrect=attempt===1&&(architecture?corrections>=1:corrections>=2);
+    const common={repository:input.source.repository,commitSha:input.source.repository.commitSha};
+    const output=architecture?{...common,components:[{name:'Manifest',responsibility:'Declares tests',evidenceIndexes:[0]},{name:'Parser',responsibility:'Parses input',evidenceIndexes:[1]}],dependencies:[],limitations:[]}
+     :{...common,risks:[0,1,2].map(index=>({category:'RELIABILITY',severity:'LOW',claim:`Mock claim ${index}`,mitigation:'Review source',evidenceIndexes:[index%2]})),limitations:['Mock output, not live risk evidence']};
+    response={output,evidenceLines:shouldCorrect?[]:[{path:'package.json',line:1},{path:'index.ts',line:2}]};
+   }else{
+    response={repository:input.repository,commitSha:input.commitSha,recommendation:'ADOPT_WITH_CONDITIONS',summary:'Mock three-service report',findings:input.deliveries.map((delivery:{id:string})=>({claim:'Accepted mock service',acceptedDeliveryIds:[delivery.id]})),limitations:['Offline transport fixture']};
+   }
+   return Response.json({choices:[{finish_reason:'stop',message:{content:JSON.stringify(response)}}]});
+  }) as Fetcher;
+  try{
+   const result=await runMission(db,id=>{taskId=id;return new LlmClient({baseUrl:'https://model.example',model:'fixture',apiKey:'fake-key'},transport,()=>claimModelCall(db,id,'fixture'));},'Review all three capabilities',{repository:{owner:'example',name:'repo'}},fetcher);
+   assert.equal(result.acceptedDeliveryIds.length,3);
+   assert.equal(result.status,corrections<2?'COMPLETED':'ACTION_REQUIRED');
+   if(corrections===2)assert.deepEqual(result.result,{reason:'MODEL_CALL_BUDGET'});
+   assert.equal((db.prepare('SELECT count(*) n FROM model_calls WHERE task_id=?').get(taskId) as {n:number}).n,corrections===0?7:8);
+   assert.equal((db.prepare('SELECT outstanding_minor FROM accounts').get() as {outstanding_minor:number}).outstanding_minor,750);
+   reconcile(db);
+  }finally{db.close();}
+ }
 });
