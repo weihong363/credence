@@ -1,6 +1,6 @@
 # Credence execution roadmap
 
-Authority: [spec](spec.md), [settlement](settlement.md), [product](product.md). Status audited 2026-10-21. **P1 implementation needs explicit owner approval. P0 deployment preparation is separately authorized; cloud creation/deployment is not.** Dates below are planning windows, not completed work or promises. Effort assumes one developer with AI assistance and excludes waiting for owner/payment approvals.
+Authority: [spec](spec.md), [settlement](settlement.md), [product](product.md). Status audited 2026-10-21. **Owner authorized P1 implementation. P1 local core and minimum real DeepSeek gate pass; full three-service/five-run demonstrations remain later gates. Cloud creation/deployment is not authorized.** Dates below are planning windows, not completed work or promises. Effort assumes one developer with AI assistance and excludes waiting for owner/payment approvals.
 
 ## Verified baseline and gaps
 
@@ -32,7 +32,7 @@ Official [schedule](https://paypalaihackathon.devpost.com/details/dates) and [ru
 
 ## P1 — Agent Economic Core
 
-All tasks below are **planned** and unchecked. Keep PayPal disabled for P1 acceptance.
+P1.1–P1.4 pass local acceptance; P1.5–P1.6 pass the minimum real-AI gate; all capabilities were exercised across retained missions, with a completed risk-only procurement/report task. Keep PayPal disabled for P1 acceptance.
 
 | ID | Ordered vertical slice | Effort | Depends on | Acceptance evidence |
 | --- | --- | --- | --- | --- |
@@ -43,17 +43,17 @@ All tasks below are **planned** and unchecked. Keep PayPal disabled for P1 accep
 | P1.5 | LLM adapter, structured coordinator procurement, architecture + independent risk providers | 1–1.5 days | P1.4, chosen LLM endpoint/model/key and successful capability probe | Live model makes registry-backed purchases and uses actual source; no price/ID hallucination can bypass policy; record sanitized model/run metadata |
 | P1.6 | Delivery verification, one correction, accepted charges, task synthesis and negative matrix | 1 day | P1.5 | Invalid attempt cannot charge; corrected result or final release; all accepted artifacts trace to source; final answer consumes purchased work |
 
-- [ ] P1.1 foundation and concurrency oracle.
-- [ ] P1.2 registry, quotes and policy.
-- [ ] P1.3 lifecycle and durable execution.
-- [ ] P1.4 useful real source inventory.
-- [ ] P1.5 real AI-supported procurement and services.
-- [ ] P1.6 accepted delivery and ledger, negative tests, useful final task result.
-- [ ] P1 gate: one original objective → coordinator identifies a capability → authoritative quote → atomic reservation → real provider execution → verified delivery → one accepted payable → coordinator continuation, **without PayPal**.
+- [x] P1.1 foundation and concurrency oracle (real local SQLite; two independent processes, replay, rollback, audit immutability).
+- [x] P1.2 registry, quotes and policy (local tests).
+- [x] P1.3 lifecycle and durable execution (real DB restart, lease fencing, two-process cancel/accept race).
+- [x] P1.4 useful real source inventory (pinned expressjs/cors, 16 files / 59,570 bytes; live GitHub read, no code execution).
+- [x] P1.5 real AI-supported procurement and services — deepseek-v4-pro live exercised; inventory/architecture/risk independently accepted.
+- [x] P1.6 accepted delivery and ledger, negative tests, useful final task result — real risk-review task completed with source-backed delivery and cited synthesis; semantic caveats recorded.
+- [x] P1 gate: one original objective → coordinator identifies a capability → authoritative quote → atomic reservation → real provider execution → verified delivery → one accepted payable → coordinator continuation, **without PayPal**.
 
 Mandatory negative cases: insufficient Credit; per-transaction policy limit; unknown service; expired quote; duplicate purchase; two-connection overspending; service exception/timeout; invalid schema/evidence; attempt correction deadline; revoked account; late delivery/cancel race. Run type/unit/real-DB integration tests and one opt-in live AI run. Do not mark P1 accepted using canned provider conclusions or fixture verified flags.
 
-**Exact first development task after explicit approval: P1.1.** Add the USD integer value object and a real SQLite migration/transaction harness for accounts, reservations and append-only ledger events, then implement and test the single reserve command with two-connection overspending and rollback tests. No LLM, frontend or PayPal changes in this first slice. This proves the financial foundation before procurement complexity.
+**P1 minimum gate completed:** see [P1 verification](p1-verification.md) and [live evidence](p1-live-evidence.json). One real risk-only procurement/report task completed; a single successful three-service mission is not established. P2 is the next phase and was not started.
 
 ## P2 — Aggregated PayPal Settlement
 
@@ -117,9 +117,9 @@ These items are not completed by documentation. Add **1.5–3 developer-days** p
 
 | Risk or dependency | Current status / mitigation | Owner / gate |
 | --- | --- | --- |
-| Implementation authorization | Not granted by the documentation request | Owner, before P1.1 |
-| AI endpoint/model and costs | Not configured or verified; select provider-compatible JSON text endpoint and test output bounds | Developer + owner, before P1.5 |
-| SQLite native package support | Planned dependency; prove install and two-connection transactions before expanding schema | Developer, P1.1 |
+| Implementation authorization | Owner explicitly authorized completing P1; implementation and minimum live model gate complete; P2 not started | Developer, P1 gate |
+| AI endpoint/model and costs | Owner configured model/key; deepseek-v4-pro live verified, eight-call task bound retained | Owner configuration + developer live verification |
+| SQLite native package support | better-sqlite3 12.4.1 native binding tested on local Node 20.19.2; Render/Linux remains unverified | Developer, hosted gate |
 | Semantic service quality | Schema/anchors are limited objective evidence; independent review is not truth proof | Developer, P1.6; expose limitations |
 | Financial concurrency / crashes | JSON P0 insufficient; SQL constraints, append-only events and durable intents required | Developer, P1/P2 |
 | Payment retention / unknown create | Stable operation IDs, five-hour cutoff, manual investigation instead of new order | Developer, P2 |
@@ -130,7 +130,7 @@ These items are not completed by documentation. Add **1.5–3 developer-days** p
 
 ## Workflow and reporting
 
-For every authorized slice: read current authority → confirm prerequisites → implement smallest vertical change → meaningful tests/type checks → phase acceptance → update checkboxes/evidence/limitations. Continue within an authorized phase only after its slice passes. Do not proceed to a later phase with a failed financial invariant. Report live versus mocked evidence separately. Stop after this documentation package; the next action is approval of P1.1, not generation of runtime code.
+For every authorized slice: read current authority → confirm prerequisites → implement smallest vertical change → meaningful tests/type checks → phase acceptance → update checkboxes/evidence/limitations. Continue within an authorized phase only after its slice passes. Do not proceed to a later phase with a failed financial invariant. Report live versus mocked evidence separately. P1 local implementation and offline checks are complete; minimum live gate also passes in [p1-verification.md](p1-verification.md). P2 remains a separate next phase. Render deployment remains deferred pending billing setup.
 
 ## Documentation audit result
 
@@ -151,3 +151,11 @@ See [deployment-render.md](deployment-render.md). This is an owner-authorized ho
 - [ ] Verify real hosted health/auth/PayPal approval/capture/persistence and record new evidence. Local tests do not count as hosted verification.
 
 The prepared resources cover only P0 API hosting. P3 frontend/owner sessions/mission controls and full runtime deployment remain planned. No Static Site, PostgreSQL, workflow worker or LLM account should be provisioned for nonexistent components. Schema validation does not validate account entitlement or perform a deployment.
+
+## P1.1 implementation evidence
+
+Local automated evidence: integer USD bounds/formatting, WAL/FULL/foreign-key configuration, migration replay, two independent processes competing for limit 100 with reserves 70/40, unchanged replay, changed-payload conflict, purchase uniqueness, immutable ledger/audit triggers, owner/policy/deadline/budget denial, and injected audit failure with complete rollback. Checks: `pnpm check`, `pnpm test`, `pnpm test:production`. No live PayPal/LLM request or Render deployment. This is an internal foundation, not full procurement or accepted service charges; staged schema limits are in ADR 0007.
+
+## P1 implementation evidence (current)
+
+See [P1 verification](p1-verification.md) and [ADR 0008](decisions/0008-p1-local-procurement.md). Registry/quote policy, durable execution, source snapshots, bounded model adapter, correction/verification, reserve/release/accepted-charge transactions and cited mission synthesis are implemented. Native model transport and complete procurement are tested offline with explicit mocks; final suite 56/56 passes, type/build/production smoke checks pass. GitHub source inventory is live verified; DeepSeek minimum live procurement/report is also verified. `pnpm mission`, `pnpm economy` and `pnpm verify:source` are implemented commands. No P2 payment integration, Render resource or frontend was added.

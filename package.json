@@ -9,9 +9,13 @@
     "verify:phase0": "node --env-file=.env --import tsx scripts/verify-phase0.ts",
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/server.js",
-    "test:production": "pnpm build && node --import tsx scripts/smoke-production.ts"
+    "test:production": "pnpm build && node --import tsx scripts/smoke-production.ts",
+    "mission": "node --env-file=.env --import tsx scripts/run-mission.ts",
+    "economy": "node --env-file=.env --import tsx scripts/economy.ts",
+    "verify:source": "node --import tsx scripts/verify-source.ts"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
     "@types/node": "^20.19.0",
     "tsx": "^4.20.0",
     "typescript": "^5.9.0"
@@ -19,5 +23,13 @@
   "packageManager": "pnpm@10.33.4+sha512.1c67b3b359b2d408119ba1ed289f34b8fc3c6873412bec6fd264fbdc82489e510fcbecb9ce9d22dae7f3b76269d8441046014bdca53b9979cd7a561ad631b800",
   "engines": {
     "node": ">=20.19.0 <21"
+  },
+  "dependencies": {
+    "better-sqlite3": "12.4.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
   }
 }

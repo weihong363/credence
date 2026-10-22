@@ -1,0 +1,116 @@
+{
+  "recordedAt": "2026-10-21T15:33:40.710Z",
+  "phase": "P1",
+  "model": "deepseek-v4-pro",
+  "scope": "Risk-only mission completed; all three capabilities independently exercised across retained missions. No single successful three-service mission yet.",
+  "successfulMission": {
+    "taskId": "8891b9e3-2820-4524-a787-f8c09a94904a",
+    "status": "COMPLETED",
+    "acceptedDeliveryIds": [
+      "16810fe0-e9e9-4ee1-91cd-d1436c8ceb33"
+    ],
+    "modelRequests": 4,
+    "repository": {
+      "owner": "expressjs",
+      "name": "cors",
+      "commitSha": "5317ebe670db2aaebc1d496eb5d33493deefb3ed"
+    }
+  },
+  "account": {
+    "id": "897ca3b1-002f-4e5a-a013-555b67f3b7a1",
+    "limit_minor": 1000,
+    "reserved_minor": 0,
+    "outstanding_minor": 1000,
+    "available_minor": 0
+  },
+  "charges": [
+    {
+      "id": "c8be8346-53ce-4891-9865-be8ac5f86ec0",
+      "task_id": "d6c30493-cf06-41e7-a844-8232e36d2c4e",
+      "purchase_id": "a74e124d-0ff5-47e8-9ba1-9553748967d9",
+      "delivery_id": "601fbbd8-5d8c-420d-9f3f-ffdc4a21e7a0",
+      "amount_minor": 125,
+      "capability_id": "repo.inventory"
+    },
+    {
+      "id": "cd532c8b-0560-4301-a216-418ff2bceef4",
+      "task_id": "718ed964-ac69-4bfc-b893-cb7026681e84",
+      "purchase_id": "a0a31953-336b-494f-b092-0b0e8a56ac1f",
+      "delivery_id": "7c992cb5-a038-4c03-8853-0df9f75e82f2",
+      "amount_minor": 125,
+      "capability_id": "repo.inventory"
+    },
+    {
+      "id": "3facea79-bd03-48fe-8069-dedd8889d333",
+      "task_id": "baf26f38-8d67-4a9b-b83c-af0ebbf5927a",
+      "purchase_id": "595a5ac9-e30d-46bc-aea6-29dd0ef746d6",
+      "delivery_id": "da42a03c-c245-486e-98cc-4ec7bf62015f",
+      "amount_minor": 125,
+      "capability_id": "repo.inventory"
+    },
+    {
+      "id": "7e475552-c1b2-4460-9f04-11b7c60ba8c5",
+      "task_id": "baf26f38-8d67-4a9b-b83c-af0ebbf5927a",
+      "purchase_id": "1a48751e-0847-47da-9a21-5b83de582892",
+      "delivery_id": "415d1c17-31ee-42e6-9da1-eaeb77e07947",
+      "amount_minor": 250,
+      "capability_id": "repo.architecture"
+    },
+    {
+      "id": "d4b0a814-8f8a-4628-90f4-356e373af786",
+      "task_id": "8891b9e3-2820-4524-a787-f8c09a94904a",
+      "purchase_id": "af541d1d-5b0b-4608-8f61-87ab5484c78e",
+      "delivery_id": "16810fe0-e9e9-4ee1-91cd-d1436c8ceb33",
+      "amount_minor": 375,
+      "capability_id": "repo.risk-review"
+    }
+  ],
+  "runs": [
+    {
+      "id": "e2d858d7-ef06-4e2e-a886-660cab0b3e2c",
+      "status": "ACTION_REQUIRED",
+      "reason": "SOURCE_HTTP_403"
+    },
+    {
+      "id": "d6c30493-cf06-41e7-a844-8232e36d2c4e",
+      "status": "ACTION_REQUIRED",
+      "reason": "FINAL_SOURCE_MISMATCH"
+    },
+    {
+      "id": "e36ac2bc-c606-414e-af03-c91033c18957",
+      "status": "ACTION_REQUIRED",
+      "reason": "IDEMPOTENCY_CONFLICT"
+    },
+    {
+      "id": "718ed964-ac69-4bfc-b893-cb7026681e84",
+      "status": "ACTION_REQUIRED",
+      "reason": "MISSION_FAILED"
+    },
+    {
+      "id": "391ee7eb-2060-4b45-bde0-4bf1855e2a93",
+      "status": "ACTION_REQUIRED",
+      "reason": "NO_ACCEPTED_DELIVERIES"
+    },
+    {
+      "id": "baf26f38-8d67-4a9b-b83c-af0ebbf5927a",
+      "status": "ACTION_REQUIRED",
+      "reason": "MISSION_FAILED"
+    },
+    {
+      "id": "8891b9e3-2820-4524-a787-f8c09a94904a",
+      "status": "COMPLETED"
+    }
+  ],
+  "revalidation": "All five accepted charges PASS current schema/evidence checks",
+  "reconciliation": "PASS",
+  "restartReplay": {
+    "unchangedReport": true,
+    "additionalModelRequests": 0
+  },
+  "paypalRequests": 0,
+  "semanticLimitations": [
+    "Exact source anchors do not prove semantic correctness.",
+    "The risk report infers project inactivity from HISTORY.md; current maintenance activity was not independently established.",
+    "Legacy Node support and permissive CORS defaults are context-dependent adoption caveats, not proven vulnerabilities."
+  ]
+}

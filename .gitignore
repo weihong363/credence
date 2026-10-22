@@ -9,3 +9,9 @@ node_modules/
 dist/
 
 !.env.render.example
+
+# Local economic state, including SQLite sidecars at custom paths
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*

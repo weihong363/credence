@@ -1,6 +1,6 @@
 # Economic accounting and settlement specification
 
-Status: planned P1/P2 authority, 2026-10-21. Current P0 behavior and its narrower guarantees remain documented in the [compatibility report](paypal-sandbox-compatibility.md). Schema and contracts: [spec](spec.md). No accounting code is implemented by this document.
+Status: planned P1/P2 authority, 2026-10-21. Current P0 behavior and its narrower guarantees remain documented in the [compatibility report](paypal-sandbox-compatibility.md). Schema and contracts: [spec](spec.md). P1 implements reserve/release/accepted-charge accounting and reconciliation with local SQLite tests (ADR 0008). The minimum real AI procurement/report gate passes; dynamic settlement is P2 and not implemented.
 
 ## Definitions and money
 

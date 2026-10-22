@@ -1,6 +1,6 @@
 # Architecture decisions
 
-These records select the planned architecture; they do not claim implementation. P0 behavior is preserved in its [compatibility report](../paypal-sandbox-compatibility.md). Implementation approval for P1–P4 remains pending. Change a decision by adding a superseding ADR and updating [spec](../spec.md), [settlement](../settlement.md) and [roadmap](../roadmap.md).
+These records select the planned architecture; they do not claim implementation. P0 behavior is preserved in its [compatibility report](../paypal-sandbox-compatibility.md). P1 local core is implemented following owner authorization; the minimum live gate passes; later phases remain. Change a decision by adding a superseding ADR and updating [spec](../spec.md), [settlement](../settlement.md) and [roadmap](../roadmap.md).
 
 | ADR | Decision | Implementation |
 | --- | --- | --- |
@@ -10,3 +10,5 @@ These records select the planned architecture; they do not claim implementation.
 | [0004](0004-append-only-ledger.md) | Append-only financial events, transactional projections | Planned P1/P2 |
 | [0005](0005-single-merchant-sandbox.md) | One Sandbox receiver, no provider payouts | P0 live verified; maintain in P2 |
 | [0006](0006-sqlite-and-phase0-cutover.md) | SQLite core with explicit P0 integration boundary | Planned P1/P2 |
+| [0007](0007-reservation-foundation.md) | Staged internal reserve-only foundation, no public spending API | P1.1 locally tested |
+| [0008](0008-p1-local-procurement.md) | Isolated local procurement CLI, durable jobs/model budgets and source-backed verification | Offline checks and minimum live AI gate pass |
