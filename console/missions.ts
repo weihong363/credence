@@ -15,7 +15,7 @@ export class MissionForm {
   const button=document.getElementById('start-mission') as HTMLButtonElement;
   button.disabled=this.busy||!config.enabled;document.getElementById('mission-config')!.textContent=config.enabled?'Model endpoint configured. Starting requires your explicit authorization below.':'Mission execution disabled: configure the server LLM endpoint/model/key and deploy first.';
   const select=document.getElementById('mission-account') as HTMLSelectElement;
-  if(!this.loaded){for(const account of finance.accounts.filter(a=>a.status==='OPEN')){const option=document.createElement('option');option.value=account.id;option.textContent=account.id;select.append(option);}this.loaded=true;}
+  if(!this.loaded){select.replaceChildren();for(const account of finance.accounts.filter(a=>a.status==='OPEN')){const option=document.createElement('option');option.value=account.id;option.textContent=account.id;select.append(option);}this.loaded=true;}
   if(!this.checked){this.checked=true;await this.recover();}
  }
  private pending():Draft|null{

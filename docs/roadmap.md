@@ -84,16 +84,20 @@ Gate guarantees: no rejected deliveries in payable batches; no allowance restore
 
 ## P3 — Product Experience and Demonstration
 
-Owner authorized starting P3 on 2026-10-23. P3.1 passes local acceptance; the console and five-run live gate remain pending.
+Owner authorized starting P3 on 2026-10-23. The hosted console and five consecutive browser-only real procurement/Sandbox settlements now pass; broader mobile/accessibility acceptance remains pending.
 
 - [x] P3.1: same-origin one-hour session/CSRF, logout/restart revocation, sanitized task/audit/ledger reads and monotonic cursor API; 105 offline tests and compiled session smoke pass. [Verification](p3-verification.md). Console polling UI remains P3.2.
 - [x] P3.2: read-only same-origin login console, mission/agent activity, saved purchase reasons and quoted prices, reservation/execution/delivery state, verified source-anchor inspection. 110 offline tests and mock-only browser acceptance pass; cloud UI and real mission/browser gates remain unverified. No task-start or payment controls in this slice.
 - [x] P3.3: account allowance/purchase-cap view, paged ledger with allocation-to-batch lineage, accepted-charge selection/freeze, batch breakdown and explicit owner order/approval-link/capture/reconcile/cancel/resume controls. 115 offline tests and mock-only browser capture/ledger acceptance pass; no new live payment or cloud UI deployment.
-- [ ] P3.4: final result and honest failure states, English copy, accessibility, loading/error recovery and controlled run harness. Result/read/rehearsal and owner task start/recovery locally pass 124 offline tests and mock browser checks; real controlled-run acceptance remains pending.
+- [ ] P3.4: final result and honest failure states, English copy, accessibility, loading/error recovery and controlled run harness. Result/read/rehearsal and owner task start/recovery locally pass 124 offline tests and mock browser checks; five real controlled-run acceptances pass; broader device/accessibility checks remain pending.
   - [x] Validated final report/citations, explicit pending/failed/unavailable states, session-expiry focus/loading/error feedback, six-scenario isolated mock rehearsal command.
   - [x] Owner task-start and explicit same-task recovery controls; durable replay, lease fencing, bounded model execution and v7 history-preserving migration locally verified.
-  - [ ] Live hosted task/payment flow, broader mobile/accessibility acceptance and five-run gate.
-- [ ] Gate: **five consecutive complete missions** with three real accepted purchases each, separate batches, real AI work and real Sandbox payments; same persistent DB, no manual financial edits or developer-console intervention. Human Sandbox approval remains part of each run. Record task/batch IDs, source revisions, totals, order/capture IDs, timestamps and negative/corrected-delivery observations.
+  - [x] Hosted real task API acceptance: three services accepted, four DeepSeek calls, unique USD 7.50 order and independent provider GET; subsequently approved and captured as recorded below.
+  - [x] Hosted API payment completed: human approval, one server Capture, independent COMPLETED verification, settled replay and same-commit redeploy persistence all pass.
+  - [x] Five browser-only consecutive real procurement/Sandbox settlement runs; [evidence](p3-ui-live-evidence.json).
+  - [x] Basic responsive/keyboard acceptance: local mock desktop 1265px and narrow 360px without horizontal overflow; keyboard login, disclosure and mission selection; re-login option duplication fixed locally.
+  - [ ] Broader physical-device/assistive-technology acceptance; no formal accessibility audit claimed.
+- [x] Gate: **five consecutive complete missions** with three real accepted purchases each, separate batches, real AI work and real Sandbox payments; same persistent DB, no manual financial edits or developer-console intervention. Human Sandbox approval remains part of each run. Record task/batch IDs, source revisions, totals, order/capture IDs, timestamps and negative/corrected-delivery observations.
 
 A fixture-only UI replay may support rehearsal but cannot count among the five real runs. Failed run resets the consecutive counter after fixing the cause; preserve all prior audit history. The local reproduction path remains mandatory. Per the sponsor strategy, prioritize a Render public demo in P3/P4 after hosted security and persistent-state acceptance; hosting is not a substitute for the five-run gate.
 

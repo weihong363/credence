@@ -1,0 +1,135 @@
+{
+  "phase": "P3 first hosted real API flow",
+  "status": "VERIFIED_SETTLED_AND_REDEPLOY_PASSED",
+  "applicationCommit": "074a7892f95082ede5e203997a328b645c5086d9",
+  "deployment": {
+    "id": "dep-dbdfve1srm7s73bkc95g",
+    "status": "live",
+    "finishedAt": "2026-10-23T06:34:14.104799Z",
+    "url": "https://credence-sandbox.onrender.com"
+  },
+  "repository": {
+    "owner": "expressjs",
+    "name": "cors",
+    "commitSha": "5317ebe670db2aaebc1d496eb5d33493deefb3ed"
+  },
+  "task": {
+    "id": "db6f7792-78ae-433f-80f9-b50a3c4e4ff5",
+    "status": "COMPLETED",
+    "profile": "full-review",
+    "budgetMinor": 1000,
+    "spentMinor": 750,
+    "purchaseCount": 3,
+    "acceptedCount": 3,
+    "model": "deepseek-v4-pro",
+    "modelRequests": 4,
+    "reportRecommendation": "ADOPT_WITH_CONDITIONS",
+    "reportFindings": 3,
+    "verifiedAcceptedDeliveryCount": 3
+  },
+  "services": [
+    {
+      "capabilityId": "repo.inventory",
+      "amountMinor": 125,
+      "status": "ACCEPTED",
+      "deliveryAttempt": 1,
+      "evidenceAnchors": 1
+    },
+    {
+      "capabilityId": "repo.architecture",
+      "amountMinor": 250,
+      "status": "ACCEPTED",
+      "deliveryAttempt": 1,
+      "evidenceAnchors": 3
+    },
+    {
+      "capabilityId": "repo.risk-review",
+      "amountMinor": 375,
+      "status": "ACCEPTED",
+      "deliveryAttempt": 1,
+      "evidenceAnchors": 7
+    }
+  ],
+  "batch": {
+    "id": "3d256de7-f9e6-4f98-825c-d993a9260474",
+    "currency": "USD",
+    "totalMinor": 750,
+    "state": "SETTLED",
+    "orderId": "5KC26856DG778392J",
+    "captureId": "89W32382PM698405E",
+    "captureAttempts": 1,
+    "settlementReceiptCount": 1,
+    "captureExpectedVersion": 2
+  },
+  "checks": {
+    "startFreezeOrderReplaySameIds": true,
+    "modelRequestsBeforeReplay": 4,
+    "modelRequestsAfterReplay": 4,
+    "paymentAttemptCount": 1,
+    "independentPayPalGet": true,
+    "providerStatus": "COMPLETED",
+    "providerOrderStatus": "COMPLETED",
+    "amountMatches": true,
+    "receiverMatches": true,
+    "captureObserved": true,
+    "independentCompletedCaptureGet": true,
+    "settledCaptureOrderReplay": true,
+    "paymentConfirmedEvents": 1,
+    "chargeSettledEvents": 3,
+    "availableMinorAfterSettlement": 1500,
+    "reservedMinorAfterSettlement": 0,
+    "outstandingMinorAfterSettlement": 0
+  },
+  "realFiveRunGate": {
+    "consecutiveCompletedRuns": 0,
+    "required": 5,
+    "counted": false,
+    "reason": "This verified real API flow used owner HTTP calls over SSH, not a complete browser-only demonstration. It is not counted toward the five browser-only runs."
+  },
+  "limits": [
+    "Five consecutive browser-only paid runs remain unverified; owner browser login has been requested.",
+    "This API acceptance is not counted as one of the five required UI demonstrations.",
+    "Formal mobile-device/accessibility audit is not claimed."
+  ],
+  "observations": [
+    {
+      "stage": "before-human-approval",
+      "providerStatus": "CREATED",
+      "providerOrderStatus": "PAYER_ACTION_REQUIRED",
+      "captureAttempts": 0,
+      "receipts": 0
+    },
+    {
+      "stage": "after-human-approval-and-server-capture",
+      "providerStatus": "COMPLETED",
+      "captureStatus": "COMPLETED",
+      "captureId": "89W32382PM698405E",
+      "verifiedAt": 1792737627497
+    },
+    {
+      "stage": "after-same-commit-redeploy",
+      "receiptUnchanged": true,
+      "captureAttempts": 1,
+      "receipts": 1,
+      "reconciliation": "PASS"
+    }
+  ],
+  "redeployment": {
+    "id": "dep-dbdg3fbncjis73a37g8g",
+    "status": "live",
+    "commit": "074a7892f95082ede5e203997a328b645c5086d9",
+    "finishedAt": "2026-10-23T06:42:45.913134Z",
+    "sameCaptureId": "89W32382PM698405E",
+    "captureReplayHttp": 200,
+    "taskCount": 1,
+    "modelRequests": 4,
+    "captureAttempts": 1,
+    "paymentConfirmedEvents": 1,
+    "chargeSettledEvents": 3,
+    "receiptCount": 1,
+    "availableMinor": 1500,
+    "reservedMinor": 0,
+    "outstandingMinor": 0,
+    "reconciliation": "PASS"
+  }
+}

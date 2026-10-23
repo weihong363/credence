@@ -1,6 +1,6 @@
 # P3 implementation and verification
 
-2026-10-23: owner authorized starting P3. P3.1 is implemented and locally tested. P3.2–P3.4 and the five-consecutive-live-run gate remain pending. P2 was committed/pushed separately as `9c57e46` before these changes.
+Current status (2026-10-23): P3.1–P3.3 and the bounded mission/result controls are implemented and deployed. Five consecutive browser-only real procurement/Sandbox settlements pass. Broader mobile/accessibility acceptance remains pending. Dated sections below preserve the status at each checkpoint. P2 was committed/pushed separately as `9c57e46` before these changes.
 
 ## P3.1 owner authentication
 
@@ -113,3 +113,41 @@ Owner requested completing acceptance before continuing. The next vertical slice
 Browser rehearsal starts from an empty in-memory account. Keyboard Return submits login; Space expands the start disclosure. After filling the pinned public mock repository and explicitly authorizing model/internal spending, one task completes with three accepted deliveries and a cited report, 750 outstanding and no payment. Task rows preserve focus during replacement; disclosures support Space and retain expansion across polling. At the observed 1265 CSS-pixel viewport, document scrollWidth equals clientWidth (no horizontal overflow). The available browser did not apply a zoom shortcut; no new mobile-device or formal WCAG audit is claimed. Earlier narrow-viewport observations remain limited to their dated slice. API/process tests cover session expiry/restart and financial failure/unknown recovery; those are distinct from a full assistive-technology audit.
 
 Render LLM variables were initially absent. The owner confirmed configuring them; a subsequent boolean-only SSH check confirmed all three are present. Before schema upgrade, an existing-disk backup `backups/pre-mission-schema-v8.sqlite` was created mode 0600 without exporting state or running a second payment authority. Cloud was still schema v7 with zero tasks at that checkpoint. Live task/payment acceptance follows deployment; five consecutive clean UI runs remain unverified until individually recorded, including each human buyer approval. No completed gate is inferred from these mocked tests.
+
+## Hosted real API acceptance — awaiting buyer approval
+
+Released/pushed `074a789` and deployed to the existing Render service as `dep-dbdfve1srm7s73bkc95g`, live at 2026-10-23T06:34:14Z (14:34 Asia/Shanghai). Schema v8 and enabled mission configuration were verified; account limit/available remained 1500 before execution. A fixed start key created one real full-review task for expressjs/cors at the previously verified pinned commit. The task completed using deepseek-v4-pro, four model requests, three accepted first-attempt deliveries (125/250/375), verified source anchors (1/3/7) and a three-finding cited final report. No mock transport was used in this hosted flow.
+
+Task `db6f7792-78ae-433f-80f9-b50a3c4e4ff5`; batch `3d256de7-f9e6-4f98-825c-d993a9260474`; order `5KC26856DG778392J`; gross USD 7.50. Start/freeze/order replay retained all IDs, four model calls, three charges and one payment attempt. Capture attempts and settlement receipts are zero. An independent authenticated PayPal GET matched the amount, receiver and batch, returning CREATED / PAYER_ACTION_REQUIRED. Human Sandbox Personal approval was requested; capture/finalization/settled replay remain pending. See [sanitized live evidence](p3-live-evidence.json).
+
+This verifies hosted real procurement and the owner API control path, **not** the five consecutive browser-only paid-run gate. It was started through owner HTTP calls over SSH and must not be counted as a complete no-console-intervention demonstration. Counter stays zero. No second task or replacement payment is started while approval is pending. Historical P0/P1/P2 evidence is unchanged.
+
+### Human-approved settlement and redeploy acceptance — passed
+
+The owner confirmed buyer approval. A fresh independent PayPal GET verified APPROVED; owner server Capture used expectedVersion 2 and the original batch/order, then independent GET confirmed COMPLETED with capture `89W32382PM698405E`, USD 7.50. The server recorded SETTLED and the matching immutable receipt. Capture/order replay retained one payment attempt, one Capture attempt, one PAYMENT_CONFIRMED event, three CHARGE_SETTLED events and one receipt. Available Credit returned to 1500; reserved/outstanding are zero; model requests remained four.
+
+For process/disk continuity, the exact same commit was manually redeployed (not the separate Render restart API): deployment `dep-dbdg3fbncjis73a37g8g` became live at 2026-10-23T06:42:45.913134Z. After redeploy, the original capture command replay returned HTTP 200 and the same capture ID. Read-only database reconciliation passed with one task, four model calls, one capture and the same balances/financial event counts. There was no automatic task rerun or second capture.
+
+This completes the first hosted real API procurement/settlement/redeploy slice. It does **not** complete the separately required five consecutive browser-only demonstrations: its initiation/control used owner HTTP calls over SSH. Counter remains zero. The online console was opened for the owner to log in without sharing OWNER_TOKEN with the assistant; subsequent runs must use UI start/settlement controls and individual human buyer approvals. No new run is started before that handoff.
+
+The live public login was also observed at a 368 CSS-pixel viewport: document clientWidth and scrollWidth both 368, no horizontal overflow and visible labeled password field/submit control. The empty login-page screenshot contains no credentials. Authenticated narrow-viewport pages remain part of the upcoming UI gate. The live tab was retained for owner login; the local mock rehearsal process was stopped.
+
+
+## Five consecutive hosted browser-only runs — 2026-10-23
+
+**5/5 complete** on application commit `074a789`, using the same persistent Render database. Each task reviewed `expressjs/cors` at `5317ebe670db2aaebc1d496eb5d33493deefb3ed`, accepted inventory/architecture/risk services for 125/250/375 minor units, produced a report citing those three accepted deliveries, froze its own USD 7.50 batch, and settled its own human-approved Sandbox order. All task starts and financial mutations used the authenticated console UI. Read-only SSH/database checks and fresh authenticated PayPal GETs supplemented UI evidence; no financial rows were edited and no developer-console financial commands were used.
+
+The five independent GETs returned order/capture COMPLETED, correct batch, USD 7.50 and the configured merchant. Every batch has one create attempt, one capture attempt, one receipt, one PAYMENT_CONFIRMED and three CHARGE_SETTLED events. Final account: limit/available 1500, reserved/outstanding zero. Full task/batch/order/capture IDs, receipt timestamps, delivery citations and anchor counts are in [sanitized UI evidence](p3-ui-live-evidence.json). The earlier API-only smoke is excluded from this count.
+
+Run 2 architecture delivery initially failed with zero anchors; its bounded correction passed with six anchors and produced only one accepted charge. Run 1 owner session expired while waiting for approval; the owner re-authenticated, and the same task/batch/order completed without rebilling. A duplicate account option after re-login was observed; both options identify the same account. This minor UI issue and broader mobile/assistive-technology acceptance remain open. These runs establish repeatability on one pinned repository, not general semantic-quality assurance or a formal accessibility audit. P4 has not started.
+
+This acceptance changed documentation/evidence only. Source checks previously passed: `pnpm check`, `pnpm test` (124/124), `pnpm test:production`. No new source-test claim is inferred from these live runs.
+
+
+## Re-login regression and responsive/keyboard follow-up — 2026-10-23
+
+Fixed `MissionForm.refresh()` to replace the account option list before loading a fresh session's accounts. Previously `clear()` reset the loaded flag while retaining the old options, so re-login appended duplicates. Local mock-only browser acceptance confirmed one option before logout and one after re-login without reloading the page. No financial logic changed.
+
+The isolated `settled` rehearsal was used, with fake credentials and no real model/PayPal transport. Keyboard Return submitted login; Space toggled the task-start disclosure and selected the completed mission. The focused mission button remained visible with its focus outline and `aria-pressed=true`. At the actual observed narrow viewport of 360 CSS pixels (375 requested; host-reported content width 360), document scrollWidth equalled clientWidth; the desktop observation was 1265/1265. The narrow screenshot showed wrapped task IDs, a single-column layout, readable report content and no horizontal overflow. Temporary viewport override was reset afterward.
+
+`pnpm check`, `pnpm test` (124/124), and `pnpm test:production` passed. The initial restricted test run failed in HTTP-listener tests; rerunning with local-listener permission passed. This is basic responsive/keyboard acceptance, not physical-device testing, screen-reader verification or WCAG certification. The one-line fix is local and not deployed; the five-run live payment evidence belongs to the unchanged prior deployment. No extra real task or payment was initiated for this follow-up.

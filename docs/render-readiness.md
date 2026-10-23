@@ -94,3 +94,19 @@ Owner requested committing and deploying the existing console before the next sl
 Public HTTPS checks returned console HTML 200 (login and finance shell), bundled JS 200, health 200, unauthenticated finance 401. Using normal SSH environment credentials privately, login returned 200, authenticated finance returned 200 and logout returned 200. The persisted account had limit/available 1500, reserved/outstanding zero, zero charges and zero batches. This validates console deployment and session/data boundaries; it is not an authenticated visual browser review or a live procurement/payment run. No model call, order or capture was initiated.
 
 P3.4 result/failure presentation and mock rehearsal changes are subsequent local work, not included in this deployed source. Their test evidence is recorded separately in P3 verification.
+
+## Controlled mission deployment and real procurement — 2026-10-23
+
+Owner-requested follow-through released `074a7892f95082ede5e203997a328b645c5086d9`; existing service deploy `dep-dbdfve1srm7s73bkc95g` reached live at 06:34:14Z. Schema migrated from 7 to 8 with the pre-migration backup retained on the original disk. SSH and authenticated mission-config/finance reads verified the exact commit, enabled model configuration, same account identity and initial 1500 availability. No cloud resource or policy adjustment was made.
+
+A real full-review task completed with three accepted charges totaling 750 and four DeepSeek requests. The resulting unique USD 7.50 Sandbox order awaits human buyer approval. Independent provider GET matched amount/receiver; no capture/receipt exists yet. Repeat owner start/freeze/order commands preserved identities and invocation counts. [Current evidence](p3-live-evidence.json) separates this API-level acceptance from the still-unverified browser-only five-run gate. Source is committed/deployed; these latest live evidence updates remain local until the next owner-authorized push.
+
+### Settlement and persistent-state follow-up
+
+The first real API flow is fully settled: human approval, server Capture and independent provider GET all passed with capture `89W32382PM698405E`. Exact Capture/order replay did not duplicate payment or ledger finalization. Available returned to 1500 with no reserved/outstanding balance.
+
+A same-commit manual redeploy `dep-dbdg3fbncjis73a37g8g` reached live at 2026-10-23T06:42:45Z. The original receipt, one capture/confirmation/receipt, three settled charges, four model calls and one task survived; read-only reconciliation passed and settled Capture replay remained HTTP 200. This is actual redeploy persistence evidence, not power-loss proof. The browser-only five-run gate remains pending, with the real console opened for owner login. Current live evidence/doc additions are local follow-up, not another source release.
+
+### Subsequent UI acceptance and local fix
+
+Five consecutive browser-only real missions and human-approved Sandbox settlements passed on `074a789`; see [UI evidence](p3-ui-live-evidence.json). Earlier pending statements above describe historical checkpoints. A subsequent local account-option duplication fix passes 124 tests and basic responsive/keyboard checks; it has not been deployed.

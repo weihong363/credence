@@ -1,0 +1,366 @@
+{
+  "phase": "P3 consecutive browser-only real Sandbox acceptance",
+  "applicationCommit": "074a7892f95082ede5e203997a328b645c5086d9",
+  "url": "https://credence-sandbox.onrender.com",
+  "requiredConsecutiveRuns": 5,
+  "consecutiveCompletedRuns": 5,
+  "status": "FIVE_CONSECUTIVE_BROWSER_RUNS_VERIFIED",
+  "mutationChannel": "Authenticated owner console UI only",
+  "repository": {
+    "owner": "expressjs",
+    "name": "cors",
+    "commitSha": "5317ebe670db2aaebc1d496eb5d33493deefb3ed"
+  },
+  "runs": [
+    {
+      "sequence": 1,
+      "status": "SETTLED",
+      "counted": true,
+      "taskId": "f972f73a-16a3-40e9-9f68-2fc957441a6d",
+      "taskStatus": "COMPLETED",
+      "acceptedCount": 3,
+      "spentMinor": 750,
+      "currency": "USD",
+      "recommendation": "ADOPT_WITH_CONDITIONS",
+      "services": [
+        {
+          "capabilityId": "repo.inventory",
+          "amountMinor": 125,
+          "deliveryAttempt": 1,
+          "evidenceAnchors": 1,
+          "deliveryId": "44fc9fe0-d740-41b0-a6c8-196d2c3a9b30",
+          "chargeId": "e06aff36-0c05-4337-a733-bdc582170253"
+        },
+        {
+          "capabilityId": "repo.architecture",
+          "amountMinor": 250,
+          "deliveryAttempt": 1,
+          "evidenceAnchors": 6,
+          "deliveryId": "35c981f1-0e55-48d5-92a8-a094acb2c571",
+          "chargeId": "41907c50-09b5-4e10-a133-102e0424dc86"
+        },
+        {
+          "capabilityId": "repo.risk-review",
+          "amountMinor": 375,
+          "deliveryAttempt": 1,
+          "evidenceAnchors": 5,
+          "deliveryId": "ffc4c940-3a46-46f7-9037-ebca46603e3f",
+          "chargeId": "82a87feb-ba82-46dc-aad4-0f223ff280e3"
+        }
+      ],
+      "batchId": "ab91d758-0dfb-4702-8711-505023b39718",
+      "batchVersion": 4,
+      "orderId": "1X363651M0129712P",
+      "observedProviderStatus": "COMPLETED",
+      "captureId": "0MY12440AU0407628",
+      "accountBeforePayment": {
+        "limitMinor": 1500,
+        "reservedMinor": 0,
+        "outstandingMinor": 750,
+        "availableMinor": 750
+      },
+      "observations": [
+        "Owner logged into the live console personally; credentials were not read by automation.",
+        "Task started through the form with explicit public-source/model-spending consent.",
+        "Console showed COMPLETED, three accepted services and three accepted-delivery report citations.",
+        "Exactly this task's three eligible charges were selected, frozen and associated with one Sandbox order through the UI.",
+        "Human approved the original order. After owner re-login, the UI showed independently verified APPROVED, then console Capture produced a verified COMPLETED receipt. Read-only SSH confirmed one create attempt, one capture attempt, one PAYMENT_CONFIRMED and three CHARGE_SETTLED events."
+      ],
+      "captureAttempts": 1,
+      "createAttempts": 1,
+      "paymentConfirmedEvents": 1,
+      "chargeSettledEvents": 3,
+      "accountAfterPayment": {
+        "limitMinor": 1500,
+        "reservedMinor": 0,
+        "outstandingMinor": 0,
+        "availableMinor": 1500
+      },
+      "verifiedAt": 1792745107109,
+      "independentPayPalGet": {
+        "status": "COMPLETED",
+        "orderStatus": "COMPLETED",
+        "captureStatus": "COMPLETED",
+        "captureIdMatches": true,
+        "amountMatches": true,
+        "receiverMatches": true,
+        "batchMatches": true
+      }
+    },
+    {
+      "sequence": 2,
+      "status": "SETTLED",
+      "counted": true,
+      "taskId": "b8c17974-594a-4a99-a567-d951b4c57b60",
+      "taskStatus": "COMPLETED",
+      "acceptedCount": 3,
+      "spentMinor": 750,
+      "currency": "USD",
+      "recommendation": "ADOPT_WITH_CONDITIONS",
+      "services": [
+        {
+          "capabilityId": "repo.inventory",
+          "amountMinor": 125,
+          "deliveryAttempt": 1,
+          "evidenceAnchors": 1,
+          "deliveryId": "5bfc0618-de78-4c46-b08f-d0f9cdb8a25b",
+          "chargeId": "98f8143e-baf0-45dc-8f9e-d13d22a116ea"
+        },
+        {
+          "capabilityId": "repo.architecture",
+          "amountMinor": 250,
+          "deliveryAttempt": 2,
+          "evidenceAnchors": 6,
+          "deliveryId": "48fd816f-32ab-4dfa-8b5f-c9e68c3278ab",
+          "chargeId": "b25ed053-8aec-4c30-be8b-c948632cbd3b"
+        },
+        {
+          "capabilityId": "repo.risk-review",
+          "amountMinor": 375,
+          "deliveryAttempt": 1,
+          "evidenceAnchors": 5,
+          "deliveryId": "292c4a09-346a-4b33-90f0-8931b6ebef74",
+          "chargeId": "9ae1a268-f27e-45d4-9299-3126ddbdfbd3"
+        }
+      ],
+      "batchId": "5887d4db-be4d-4ca3-b33b-10d98ccad536",
+      "batchVersion": 4,
+      "orderId": "0FP03196WH1505105",
+      "observedProviderStatus": "COMPLETED",
+      "captureId": "63931188PR0868042",
+      "observations": [
+        "All economic mutations used authenticated console UI.",
+        "Architecture delivery 1 failed with zero anchors; bounded correction delivery 2 passed with six anchors. Only one accepted architecture charge exists in the displayed bill.",
+        "Final task COMPLETED with three accepted-delivery citations. Buyer approval and capture remain pending.",
+        "After human buyer approval, console Capture settled the original order. Read-only SSH confirmed one create attempt, one capture attempt, one PAYMENT_CONFIRMED and three CHARGE_SETTLED events. Console showed available 1500, reserved and outstanding zero."
+      ],
+      "captureAttempts": 1,
+      "createAttempts": 1,
+      "paymentConfirmedEvents": 1,
+      "chargeSettledEvents": 3,
+      "accountAfterPayment": {
+        "limitMinor": 1500,
+        "reservedMinor": 0,
+        "outstandingMinor": 0,
+        "availableMinor": 1500
+      },
+      "verifiedAt": 1792745408478,
+      "independentPayPalGet": {
+        "status": "COMPLETED",
+        "orderStatus": "COMPLETED",
+        "captureStatus": "COMPLETED",
+        "captureIdMatches": true,
+        "amountMatches": true,
+        "receiverMatches": true,
+        "batchMatches": true
+      }
+    },
+    {
+      "sequence": 3,
+      "status": "SETTLED",
+      "counted": true,
+      "taskId": "53e33cef-b50c-4f8f-9fd0-1343cef6b6b3",
+      "taskStatus": "COMPLETED",
+      "acceptedCount": 3,
+      "spentMinor": 750,
+      "currency": "USD",
+      "recommendation": "ADOPT_WITH_CONDITIONS",
+      "services": [
+        {
+          "capabilityId": "repo.inventory",
+          "amountMinor": 125,
+          "deliveryAttempt": 1,
+          "evidenceAnchors": 1,
+          "deliveryId": "72a0d9fd-f8f4-41f3-bec0-8227f7351c69",
+          "chargeId": "560e63ae-1f53-46c2-a360-62735a30de84"
+        },
+        {
+          "capabilityId": "repo.architecture",
+          "amountMinor": 250,
+          "deliveryAttempt": 1,
+          "evidenceAnchors": 6,
+          "deliveryId": "e8891ef8-dcb3-49e8-abb9-36db059e8f70",
+          "chargeId": "586ccd0b-5d5a-46d1-b5ee-4481432c9604"
+        },
+        {
+          "capabilityId": "repo.risk-review",
+          "amountMinor": 375,
+          "deliveryAttempt": 1,
+          "evidenceAnchors": 6,
+          "deliveryId": "43ced539-1594-424c-b8f0-2b749abd520d",
+          "chargeId": "90ff6d34-56a7-45f0-8919-b0fab3585f62"
+        }
+      ],
+      "batchId": "2536dbe1-14bc-4f3d-aced-32e4a4cfe87c",
+      "captureId": "1PM20078007312847",
+      "observations": [
+        "Task start, charge selection, bill freeze and order request used console UI only.",
+        "All three deliveries passed on first attempt; final report cites all three accepted deliveries.",
+        "Human approved original order; console Capture produced a verified COMPLETED receipt. Read-only SSH confirmed one create, one capture, one PAYMENT_CONFIRMED and three CHARGE_SETTLED events."
+      ],
+      "batchVersion": 4,
+      "orderId": "45M60799AY2100529",
+      "observedProviderStatus": "COMPLETED",
+      "captureAttempts": 1,
+      "createAttempts": 1,
+      "paymentConfirmedEvents": 1,
+      "chargeSettledEvents": 3,
+      "accountAfterPayment": {
+        "limitMinor": 1500,
+        "reservedMinor": 0,
+        "outstandingMinor": 0,
+        "availableMinor": 1500
+      },
+      "verifiedAt": 1792745808002,
+      "independentPayPalGet": {
+        "status": "COMPLETED",
+        "orderStatus": "COMPLETED",
+        "captureStatus": "COMPLETED",
+        "captureIdMatches": true,
+        "amountMatches": true,
+        "receiverMatches": true,
+        "batchMatches": true
+      }
+    },
+    {
+      "sequence": 4,
+      "status": "SETTLED",
+      "counted": true,
+      "taskId": "0099b80c-533b-42d2-ab6c-1b6d8757ebb9",
+      "taskStatus": "COMPLETED",
+      "acceptedCount": 3,
+      "spentMinor": 750,
+      "currency": "USD",
+      "recommendation": "ADOPT_WITH_CONDITIONS",
+      "services": [
+        {
+          "capabilityId": "repo.inventory",
+          "amountMinor": 125,
+          "deliveryAttempt": 1,
+          "evidenceAnchors": 1,
+          "deliveryId": "347b35be-1697-45fa-90e0-dd5c458e57b2",
+          "chargeId": "4c82436e-8ab5-4b20-9db3-e91da711bb6f"
+        },
+        {
+          "capabilityId": "repo.architecture",
+          "amountMinor": 250,
+          "deliveryAttempt": 1,
+          "evidenceAnchors": 3,
+          "deliveryId": "dc470bb1-17fe-4c7e-9b3a-d1d72becf2ea",
+          "chargeId": "b47fd7bc-4a67-4802-9de3-2627afdadc24"
+        },
+        {
+          "capabilityId": "repo.risk-review",
+          "amountMinor": 375,
+          "deliveryAttempt": 1,
+          "evidenceAnchors": 4,
+          "deliveryId": "53eb4fe0-13c0-40ef-b629-d151f2ee3287",
+          "chargeId": "26ce46be-d7d7-4de4-8656-ba99388635a3"
+        }
+      ],
+      "batchId": "c6491650-30ae-4c08-8daf-cf2b56d843bf",
+      "captureId": "4C1531427F509245Y",
+      "observations": [
+        "All economic mutations used authenticated console UI.",
+        "Three deliveries passed on first attempt; completed final report cites all three accepted deliveries.",
+        "Human approved original order. Console Capture produced verified COMPLETED receipt; read-only SSH confirmed one create, one capture, one PAYMENT_CONFIRMED and three CHARGE_SETTLED events."
+      ],
+      "batchVersion": 4,
+      "orderId": "5DJ61432LE8598246",
+      "observedProviderStatus": "COMPLETED",
+      "captureAttempts": 1,
+      "createAttempts": 1,
+      "paymentConfirmedEvents": 1,
+      "chargeSettledEvents": 3,
+      "accountAfterPayment": {
+        "limitMinor": 1500,
+        "reservedMinor": 0,
+        "outstandingMinor": 0,
+        "availableMinor": 1500
+      },
+      "verifiedAt": 1792746445109,
+      "independentPayPalGet": {
+        "status": "COMPLETED",
+        "orderStatus": "COMPLETED",
+        "captureStatus": "COMPLETED",
+        "captureIdMatches": true,
+        "amountMatches": true,
+        "receiverMatches": true,
+        "batchMatches": true
+      }
+    },
+    {
+      "sequence": 5,
+      "status": "SETTLED",
+      "counted": true,
+      "taskId": "f6bcc6f0-eeb6-4ef3-a34e-16944f5e82ec",
+      "taskStatus": "COMPLETED",
+      "acceptedCount": 3,
+      "spentMinor": 750,
+      "currency": "USD",
+      "recommendation": "ADOPT_WITH_CONDITIONS",
+      "services": [
+        {
+          "capabilityId": "repo.inventory",
+          "amountMinor": 125,
+          "deliveryAttempt": 1,
+          "evidenceAnchors": 1,
+          "deliveryId": "c8cd4f58-f6c4-4724-8635-6abc201080a8",
+          "chargeId": "285e221f-a573-40b2-964d-72a54936b905"
+        },
+        {
+          "capabilityId": "repo.architecture",
+          "amountMinor": 250,
+          "deliveryAttempt": 1,
+          "evidenceAnchors": 6,
+          "deliveryId": "9dd79ed9-7234-4c2c-8b65-500a926d9eca",
+          "chargeId": "dfcb0ab3-6e7f-41e7-a013-650635a47d7e"
+        },
+        {
+          "capabilityId": "repo.risk-review",
+          "amountMinor": 375,
+          "deliveryAttempt": 1,
+          "evidenceAnchors": 6,
+          "deliveryId": "89ce1653-a563-48ba-9bcf-89b01a847aa8",
+          "chargeId": "dada8a43-23ad-4b39-a657-9a803bc0836c"
+        }
+      ],
+      "batchId": "c6bbfe98-9541-4192-91e4-92c13b4c83a9",
+      "captureId": "28X555525J1405455",
+      "observations": [
+        "All economic mutations used authenticated console UI.",
+        "All three deliveries passed on first attempt; final completed report cites all three accepted deliveries.",
+        "Human approval was confirmed via console Reconcile, followed by explicit console Capture and verified COMPLETED receipt."
+      ],
+      "batchVersion": 4,
+      "orderId": "86692261Y8034443R",
+      "observedProviderStatus": "COMPLETED",
+      "captureAttempts": 1,
+      "createAttempts": 1,
+      "paymentConfirmedEvents": 1,
+      "chargeSettledEvents": 3,
+      "accountAfterPayment": {
+        "limitMinor": 1500,
+        "reservedMinor": 0,
+        "outstandingMinor": 0,
+        "availableMinor": 1500
+      },
+      "verifiedAt": 1792746625973,
+      "independentPayPalGet": {
+        "status": "COMPLETED",
+        "orderStatus": "COMPLETED",
+        "captureStatus": "COMPLETED",
+        "captureIdMatches": true,
+        "amountMatches": true,
+        "receiverMatches": true,
+        "batchMatches": true
+      }
+    }
+  ],
+  "limitations": [
+    "All five tasks reviewed the same pinned public repository; this is repeatability evidence, not broad task-quality evaluation.",
+    "Read-only SSH/database and PayPal GET checks supplemented UI actions; no financial mutations used SSH or developer console.",
+    "Formal mobile-device and assistive-technology audits remain unverified.",
+    "One duplicate account option was observed after re-login; both options refer to the same account. No account or ledger duplication was inferred."
+  ]
+}
