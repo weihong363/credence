@@ -44,7 +44,7 @@ flowchart LR
 
 ## Stack
 
-Current: Node **20.19+**, TypeScript strict mode, ESM/NodeNext, native `node:http` and `fetch`, pnpm **10.33.4**, `tsx`, and `node:test`. SQLite uses pinned `better-sqlite3` 12.4.1, verified locally on Node 20.19.2; pnpm explicitly permits its native build script. No framework, AI SDK or frontend dependency is installed. The planned frontend uses Vite with vanilla TypeScript for the console; see [technical decisions](docs/spec.md). The existing Render service is live on P3.1 commit `9fec52c` as of 2026-10-23; public health, unauthenticated access rejection and session Origin enforcement passed cloud checks. Authenticated cloud sessions and ledger persistence remain unverified. See [cloud readiness](docs/render-readiness.md) and the [Render guide](docs/deployment-render.md).
+Current: Node **20.19+**, TypeScript strict mode, ESM/NodeNext, native `node:http` and `fetch`, pnpm **10.33.4**, `tsx`, and `node:test`. SQLite uses pinned `better-sqlite3` 12.4.1, verified locally on Node 20.19.2; pnpm explicitly permits its native build script. No framework, AI SDK or frontend dependency is installed. The planned frontend uses Vite with vanilla TypeScript for the console; see [technical decisions](docs/spec.md). The existing Render service is live on console commit `2db1769` as of 2026-10-23. Health, static assets, owner login/logout and finance read access passed cloud checks; the initialized account retained 1500 available Credit and zero obligations. Real cloud mission/payment acceptance remains pending. See [cloud readiness](docs/render-readiness.md) and the [Render guide](docs/deployment-render.md).
 
 ## Setup and historical P0 walkthrough
 
@@ -182,3 +182,17 @@ Run `pnpm build` then `pnpm dev`, and open the configured local origin (default 
 The local console now shows allowance, reserved/outstanding/available balances, the purchase cap, ledger pages and immutable batch allocations. Select eligible accepted charges to freeze a bill, create its Sandbox order, open the PayPal approval link, then reconcile. Capture is offered only after an authenticated provider inspection reports APPROVED; review the amount/batch/order and explicitly click Capture. Cancellation keeps obligations locked and is not a refund; resume/reconcile operate on the same batch. Unknown/pending results never offer replacement billing or automatic capture. The server remains authoritative for every amount, version, allocation and payment result.
 
 This slice is locally tested (115/115) and manually exercised using a simulated payment adapter only. It is not yet committed/deployed, does not add policy edits, and did not initiate a new real PayPal or model request. P3.4 mission/result/recovery experience and the five consecutive real-run gate remain pending.
+
+
+## P3.4 results and isolated rehearsal
+
+The next local slice displays validated final recommendations, source revisions, concise findings, accepted-delivery citations and limitations. It distinguishes OPEN tasks without a report, ACTION_REQUIRED with allowlisted reasons, and unavailable/unverifiable results. Task completion is separate from payment settlement. No browser mission-start or automatic retry/spending operation is introduced.
+
+```sh
+pnpm rehearse:console ready
+# Alternatives: empty, settled, declined, unknown, action-required
+```
+
+This command builds the console and starts an explicitly labeled **SIMULATED REHEARSAL** on http://localhost:3198 using an in-memory database, fake login token printed locally and mock-only source/model/payment ports. It does not load `.env`, reuse the real ledger or call PayPal/LLM APIs. Stop with Ctrl-C before selecting another scenario. Mock approvals, captures and reports never count as real acceptance. The harness is outside the production build. P3.4 browser task execution and the five consecutive real-run gate remain pending. The P3.4 source is not yet deployed.
+
+The P3.4 owner start form now accepts a public GitHub owner/repository and pinned 40-character commit. It requires explicit consent for model/source processing and bounded internal spending; defaults remain full-review, 1000-minor task budget, eight model calls and a five-minute deadline. Configure the existing server-only LLM variables before use. The browser stores only a pending public-source request ID/payload (never credentials) to recover lost start responses. Resume retains the same task/deadline/budget; it does not recreate a terminal task. Schema v8 preserves existing financial history. Local 124-test acceptance is separate from pending live/UI/PayPal gates; see ADR 0016.

@@ -62,14 +62,23 @@ export async function runMission(db:Database.Database,model:JsonModel|ModelFacto
   return await continueMission(db,context,typeof model==='function'?model(taskId):model,provider);
  }catch(error){return failMission(db,context,error);}
 }
-export async function resumeMission(db:Database.Database,factory:ModelFactory,taskId:string):Promise<MissionResult>{
+export async function resumeMission(db:Database.Database,factory:ModelFactory,taskId:string,fetcher:Fetcher=fetch,guard?:()=>void):Promise<MissionResult>{
+ if(!guard&&db.prepare('SELECT 1 FROM mission_leases WHERE task_id=? AND lease_until>?').get(taskId,Date.now()))throw new Error('MISSION_BUSY_WAIT_FOR_LEASE');
+ guard?.();
  reconcile(db);recover(db);
  const task=db.prepare('SELECT t.*,a.owner_id FROM tasks t JOIN accounts a ON a.id=t.account_id WHERE t.id=?').get(taskId) as {account_id:string;owner_id:string;status:string;result_json:string}|undefined;
  if(!task)throw new Error('TASK_NOT_FOUND');
  if(task.status!=='OPEN')return {taskId,profile:reviewProfile(db,taskId),status:task.status as MissionResult['status'],result:JSON.parse(task.result_json),acceptedDeliveryIds:accepted(db,taskId).map(row=>row.id)};
  if(db.prepare("SELECT 1 FROM invocations i JOIN purchases p ON p.id=i.purchase_id WHERE p.task_id=? AND i.state='RUNNING'").get(taskId))throw new Error('MISSION_BUSY_WAIT_FOR_LEASE');
  const context={taskId,ownerId:task.owner_id,accountId:task.account_id};
- try{return await continueMission(db,context,factory(taskId));}catch(error){return failMission(db,context,error);}
+ try{
+  guard?.();preflightReview(db,context);
+  if(!db.prepare('SELECT 1 FROM snapshots WHERE task_id=?').get(taskId)){
+   const input=JSON.parse((db.prepare('SELECT input_json FROM tasks WHERE id=?').get(taskId) as {input_json:string}).input_json);
+   const snapshot=await fetchSnapshot(input,fetcher);guard?.();persistSnapshot(db,taskId,snapshot);
+  }
+  return await continueMission(db,context,factory(taskId));
+ }catch(error){if(error instanceof Error&&error.message==='MISSION_LEASE_LOST')throw error;return failMission(db,context,error);}
 }
 async function continueMission(db:Database.Database,context:Context,model:JsonModel,provider:Provider=providers(model)):Promise<MissionResult>{
  const taskId=context.taskId;

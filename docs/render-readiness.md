@@ -86,3 +86,11 @@ After the owner updated the credential and confirmed deployment, Render reported
 | Reuse of revoked cookie | 401 |
 
 The test session was revoked; no credentials/cookies/CSRF values were emitted. A subsequent authenticated read confirmed the same initialized account `ba84e935-fafd-4369-8390-b2f63723ee65`, OPEN, limit/available 1500, reserved/outstanding 0 and zero charges. This verifies account continuity through this redeploy, not power-loss durability or financial recovery under load. The earlier failed login evidence is retained; its exact configuration mismatch was not independently established. No process environment probing, model request or payment occurred. This supersedes the earlier pending/failed login and account-persistence status for this limited acceptance scope. Browser UI, real mission execution and full payment/restart acceptance remain pending.
+
+## P3.2/P3.3 deployed — 2026-10-23
+
+Owner requested committing and deploying the existing console before the next slice. Commit `2db1769f3b7e556d8205646d17c2b2a39c808a9f` was pushed to main. One manual deployment reused the existing service/disk: `dep-dbddesgae00c73fq52q0`, **live** at 2026-10-23T03:42:22.381619Z. SSH confirmed the exact deployed commit. No resources, secrets or account policies were changed.
+
+Public HTTPS checks returned console HTML 200 (login and finance shell), bundled JS 200, health 200, unauthenticated finance 401. Using normal SSH environment credentials privately, login returned 200, authenticated finance returned 200 and logout returned 200. The persisted account had limit/available 1500, reserved/outstanding zero, zero charges and zero batches. This validates console deployment and session/data boundaries; it is not an authenticated visual browser review or a live procurement/payment run. No model call, order or capture was initiated.
+
+P3.4 result/failure presentation and mock rehearsal changes are subsequent local work, not included in this deployed source. Their test evidence is recorded separately in P3 verification.

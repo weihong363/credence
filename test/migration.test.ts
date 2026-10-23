@@ -25,7 +25,7 @@ test('version-one history survives migration exactly, replay and integrity trigg
  assert.deepEqual(db.prepare('SELECT seq,id,account_id,task_id,purchase_id,reservation_id,type,amount_minor,currency,dedupe_key,payload_hash,created_at FROM ledger_events').all(),history);
  assert.deepEqual(reserve(db,request),reservation);assert.equal(db.prepare('PRAGMA foreign_key_check').all().length,0);
  assert.throws(()=>db.exec('DELETE FROM ledger_events'),/APPEND_ONLY/);
- assert.equal(db.pragma('user_version',{simple:true}),7);
+ assert.equal(db.pragma('user_version',{simple:true}),8);
  }finally{db.close();rmSync(directory,{recursive:true,force:true});}
 });
 

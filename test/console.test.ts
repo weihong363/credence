@@ -39,6 +39,9 @@ test('console serves only built allowlisted assets, retains API auth and protect
   assert.equal((await activity.json()).purchases.length,3);
   assert.equal((await call(`/api/tasks/${task}/activity?unexpected=1`,{headers})).status,400);
   assert.equal((await call('/api/tasks/00000000-0000-0000-0000-000000000000/activity',{headers})).status,404);
+  assert.equal((await call(`/api/tasks/${task}/result`)).status,401);
+  const report=await call(`/api/tasks/${task}/result`,{headers});assert.equal(report.status,200);assert.equal((await report.json()).state,'COMPLETED');
+  assert.equal((await call(`/api/tasks/${task}/result?raw=true`,{headers})).status,400);
   assert.equal(f.calls.create,0);assert.equal(f.calls.capture,0);
  }finally{server.closeAllConnections();await new Promise<void>(r=>server.close(()=>r()));f.db.close();}
 });

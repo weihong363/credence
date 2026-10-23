@@ -16,7 +16,8 @@
     "dev:phase0": "node --env-file=.env --import tsx src/phase0-server.ts",
     "settlement": "node --env-file=.env --import tsx scripts/settlement.ts",
     "verify:phase2": "node --env-file=.env --import tsx scripts/verify-phase2.ts",
-    "build:console": "vite build"
+    "build:console": "vite build",
+    "rehearse:console": "pnpm build && node --import tsx scripts/console-rehearsal.ts"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^9.6.0",

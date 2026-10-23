@@ -18,3 +18,5 @@ These records select the planned architecture; they do not claim implementation.
 | [0012](0012-owner-session-read-foundation.md) | Process-local owner sessions, CSRF and explicit read projections | P3.1 local tests and compiled process acceptance |
 | [0013](0013-read-only-console.md) | Same-origin vanilla TypeScript activity console and bounded source-evidence projections | P3.2 local tests and mock browser acceptance |
 | [0014](0014-owner-financial-console.md) | Explicit owner financial UI over existing settlement authority | P3.3 offline and mock-browser acceptance |
+| [0015](0015-result-projection-and-rehearsal.md) | Validated result projections and isolated mock-only presentation rehearsal | First P3.4 slice locally tested; real execution gate pending |
+| [0016](0016-controlled-mission-entry.md) | Durable owner mission requests, lease-fenced explicit recovery and noncredential request journal | Locally tested; live acceptance recorded separately |

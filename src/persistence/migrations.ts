@@ -1,3 +1,4 @@
+import {missionSchema} from './mission-schema.js';
 import { paymentSchema } from './payment-schema.js';
 import { batchSchema } from './batch-schema.js';
 import { planningSchema } from './planning-schema.js';
@@ -51,4 +52,4 @@ CREATE TRIGGER ledger_no_update BEFORE UPDATE ON ledger_events BEGIN SELECT RAIS
 CREATE TRIGGER ledger_no_delete BEFORE DELETE ON ledger_events BEGIN SELECT RAISE(ABORT,'APPEND_ONLY'); END;
 CREATE TRIGGER audit_no_update BEFORE UPDATE ON economic_audit BEGIN SELECT RAISE(ABORT,'APPEND_ONLY'); END;
 CREATE TRIGGER audit_no_delete BEFORE DELETE ON economic_audit BEGIN SELECT RAISE(ABORT,'APPEND_ONLY'); END;
-` }, {version: 2, sql: procurementSchema}, {version: 3, sql: lifecycleSchema + immutableSchema}, {version: 4, sql: runtimeGuards}, {version: 5, sql: planningSchema}, {version: 6, sql: batchSchema}, {version: 7, sql: paymentSchema}];
+` }, {version: 2, sql: procurementSchema}, {version: 3, sql: lifecycleSchema + immutableSchema}, {version: 4, sql: runtimeGuards}, {version: 5, sql: planningSchema}, {version: 6, sql: batchSchema}, {version: 7, sql: paymentSchema}, {version: 8, sql: missionSchema}];

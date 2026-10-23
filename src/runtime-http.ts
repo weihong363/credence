@@ -1,3 +1,5 @@
+import {MissionControl} from './application/mission-control.js';
+import {missionRoute} from './web/mission-routes.js';
 import {consoleRoute} from './web/static.js';
 import {createServer,type IncomingMessage,type ServerResponse} from 'node:http';
 import {RequestError,readJson as body,sendJson as send} from './web/http.js';
@@ -20,7 +22,7 @@ function economy(db:Database.Database){
  charges:db.prepare(`SELECT c.id,c.account_id,c.task_id,c.purchase_id,c.delivery_id,c.amount_minor,c.currency,
  EXISTS(SELECT 1 FROM ledger_events WHERE charge_id=c.id AND type='CHARGE_REVERSED') reversed FROM charges c`).all()};
 }
-export function createRuntimeApp(config:Config,db:Database.Database,payments:Payments,sessions=new OwnerSessions(config.ownerToken,config.publicUrl.protocol==='https:')){
+export function createRuntimeApp(config:Config,db:Database.Database,payments:Payments,sessions=new OwnerSessions(config.ownerToken,config.publicUrl.protocol==='https:'),missions=new MissionControl(db,undefined)){
  const server=createServer(async(req,res)=>{
   res.setHeader('Cache-Control','no-store');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('X-Content-Type-Options','nosniff');
   res.setHeader('Content-Security-Policy',"default-src 'none'; frame-ancestors 'none'; form-action 'self'");
@@ -36,6 +38,7 @@ export function createRuntimeApp(config:Config,db:Database.Database,payments:Pay
    if(await sessionRoute(req,res,url,config,sessions,()=>owner(db)))return;
    const ownerId=authenticatedOwner(req,config,sessions,()=>owner(db));
    if(['/api/create','/api/capture','/api/settlement','/api/cancel','/api/resume','/api/verify','/return','/cancel'].includes(url.pathname)){send(res,{error:'P0_ARCHIVED_USE_BATCH_API'},410);return;}
+   if(await missionRoute(req,res,url,ownerId,missions))return;
    await route(req,res,url,config,db,payments,ownerId);
   }catch(error){
    const code=error instanceof Error&&/^[A-Z_]{1,80}$/.test(error.message)?error.message:'OPERATION_INCOMPLETE';
