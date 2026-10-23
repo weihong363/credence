@@ -56,3 +56,12 @@ P2's real payment evidence remains [unchanged](p2-live-evidence.json). No new pa
 ## Render source/deployment separation
 
 On 2026-10-23 the owner-created Render service was checked read-only: P2 commit 9c57e46 is live, public health is 200, unauthenticated API access is 401, and 1 GB disk configuration is present. Automatic deployment is off. This P3.1 commit/push does not deploy it. Cloud owner initialization, actual ledger persistence and P3 browser/session acceptance remain pending. See [readiness record](render-readiness.md).
+
+
+### Cloud deployment follow-up
+
+Owner-authorized manual deployment `dep-dbdcccbncjis739n0o50` became live on 2026-10-23 at 02:28:44Z, serving P3.1 commit `9fec52c` on the existing service. Public health returned 200; unauthenticated economy/session reads returned 401; missing/foreign Origin session POSTs returned 403. No authenticated login, cloud initialization, model task or payment was performed. Full cloud session and persistence acceptance remain pending; see [deployment evidence](render-readiness.md).
+
+### Explicit operator initialization follow-up (local only)
+
+Prepared `node dist/admin/initialize.js 1500` and `node dist/admin/verify-session.js`; see the Render guide. Initialization is an application transaction with safe replay, allowance conflict rejection, partial-state refusal and rollback tests. It does not create economic obligations. Local validation: `pnpm check`, `pnpm test` **108/108**, `pnpm test:production` and `git diff --check` pass. The first restricted test attempt failed only because local HTTP listeners were denied; rerunning with listener permission passed the complete suite. Cloud execution is pending Render Shell access and deployment of these commands; the live service still serves `9fec52c`.

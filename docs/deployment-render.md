@@ -1,4 +1,4 @@
-> Current status (2026-10-23): the owner-created credence-sandbox service is live on P2 commit 9c57e46. A read-only check confirmed public health, unauthenticated API rejection, one instance and the configured disk. P3.1 has not been cloud-deployed. See [readiness evidence and pending checks](render-readiness.md). The preparation record below is historical.
+> Current status (2026-10-23): the existing credence-sandbox service is live on P3.1 commit 9fec52c after an owner-authorized manual deployment. Public health, unauthenticated API/session rejection and session Origin enforcement passed. Authenticated cloud sessions and ledger persistence remain unverified. See [deployment evidence and pending checks](render-readiness.md). The preparation record below is historical.
 
 > P2 update (2026-10-22): default start now serves the SQLite batch API; the fixed-bill routes are archived. The configured DATA_DIR persistent disk stores credence.sqlite by default; optional CREDENCE_DB_PATH must also stay on persistent storage. P0 deployment walkthrough below is historical; follow docs/p2-verification.md for current endpoints. No Render resources were created or deployed during P2.
 
@@ -136,3 +136,38 @@ One paid `0.5c-512mb` Web Service plus 1 GB disk is the initial P0 capacity choi
 Local frozen-lockfile installation, TypeScript checks, backend build, 25 local tests, compiled-process smoke/restart checks and official JSON Schema validation passed during preparation. The default sandbox disallows loopback listeners, so HTTP/smoke tests were rerun with local-network permission; they still used fake credentials and mocked PayPal only. The CLI/platform validation and all real Render-hosted checks are not claimed complete. No dependency versions or lockfile changes were needed.
 
 Blueprint validation correction: Render Dashboard rejected maxShutdownDelaySeconds for a disk-backed service despite structural JSON Schema acceptance. The unsupported field was removed and the app drain cutoff reduced to 25 seconds. Dashboard/platform validation remains necessary; schema validation alone cannot check every cross-field restriction. Interrupted payment attempts retain their persisted IDs and must reconcile before retry.
+
+## Explicit P3 cloud initialization (prepared locally; not cloud verified)
+
+The server never auto-seeds an account. After the commit containing `src/admin/initialize.ts` and `src/admin/verify-session.ts` is deployed, open the **existing** credence-sandbox service → **Shell**. Run in its application directory:
+
+```sh
+/opt/render/project/nodes/node-20.19.2/bin/node dist/admin/initialize.js 1500
+/opt/render/project/nodes/node-20.19.2/bin/node dist/admin/verify-session.js
+```
+
+1500 is the owner's previously authorized internal Credit allowance (USD minor units), with a 400-unit purchase cap. It is not a payment or PayPal credit. The initializer resolves the same CREDENCE_DB_PATH or DATA_DIR/credence.sqlite as the server, requires an existing database, and atomically creates the demo owner, coordinator, providers and catalog. It creates no task, charge, order or payment. Exact replay returns the same identity without resetting balances or allowance; a different allowance, multiple accounts or partial preexisting database fails closed. Do not delete state to bypass a conflict.
+
+The session verifier reads OWNER_TOKEN from the server environment internally. It never prints credentials, cookies, CSRF tokens or response bodies. It verifies login, authenticated session/economy reads, CSRF rejection, logout and cookie revocation. Successful output is `SESSION_LOGIN_READ_CSRF_LOGOUT_PASS`. It performs no economic mutation or remote PayPal/model request. PUBLIC_URL or Render's RENDER_EXTERNAL_URL must identify the HTTPS service origin.
+
+No new HTTP bootstrap endpoint, environment variable, dependency, migration or startup side effect was added. The Render connector currently has no remote command execution capability; local SSH strict host verification failed because this host is not in known_hosts. No host check was bypassed and no cloud initialization/session success is claimed. Run the commands only after deploying their source revision. Actual database persistence across a subsequent restart remains a separate acceptance check.
+
+## Dedicated operator SSH access
+
+Prepared locally on 2026-10-23 using the official [Render SSH guide](https://render.com/docs/ssh). The existing paid Oregon service supports direct SSH. This is separate from Render MCP or GitHub authorization.
+
+- Private key: `~/.ssh/credence_render_ed25519` (mode 0600, local only; never upload).
+- Public key: `~/.ssh/credence_render_ed25519.pub`; add its full single line under Render **Account Settings → SSH Public Keys → Add SSH Public Key**, named `credence-render-codex`.
+- Isolated config: `~/.ssh/credence_render_config`; existing global SSH config and keys are untouched.
+- Isolated host trust: `~/.ssh/credence_render_known_hosts`. Scanned Ed25519 host key was compared with the official Oregon fingerprint `SHA256:KkZPgnApmttFYSkdJsCi7B01sgZPMI6kY53MDbbanGM` before saving. Strict checking remains enabled.
+
+```sh
+pbcopy < ~/.ssh/credence_render_ed25519.pub
+ssh -F ~/.ssh/credence_render_config credence-render
+# Read-only connection check:
+ssh -F ~/.ssh/credence_render_config credence-render 'pwd'
+```
+
+The dedicated key has no passphrase to allow authorized noninteractive Codex operations; file permissions restrict the private key. The config disables agent forwarding and agent identities. Account SSH authorization can reach other services permitted to that account; the local alias targets only the existing Credence service and does not make the uploaded key service-scoped. Delete the public key from Render and the dedicated local key when access is no longer needed. No API key, PayPal credential or application environment change is needed. Connect to the running service rather than an ephemeral shell for operations requiring its persistent disk. SSH setup alone does not authorize deployment, initialization or financial mutations.
+
+SSH connectivity was verified after owner public-key authorization. The SSH shell defaults to Node 24.22.1, while the running application uses `/opt/render/project/nodes/node-20.19.2/bin/node`; use that Node 20 executable for admin commands to match the native SQLite binding.

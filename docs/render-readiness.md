@@ -1,4 +1,4 @@
-# Render read-only readiness check
+# Render readiness and deployment evidence
 
 Checked 2026-10-23, approximately 10:22 Asia/Shanghai. Owner authorized a read-only cloud check followed by committing/pushing P3.1. No Render service, disk, environment variable, deploy or payment was created/changed by this check.
 
@@ -41,3 +41,21 @@ The platform service/deploy data and direct public HTTP checks establish that P2
 5. After initialization and UI acceptance, verify persistent state through an approved cloud restart and run the real multi-service/Sandbox gate with human approval for every payment.
 
 P3.1 local validation before push: pnpm check; pnpm test (105/105); pnpm test:production (including build and compiled session/CSRF/restart checks); git diff --check. Historical P0/P1/P2 payment evidence remains unchanged.
+
+## P3.1 manual deployment verification
+
+On 2026-10-23 the owner authorized the next deployment step. The existing service in My Workspace was reused; no service, disk or secret configuration was created or changed. Remote main was confirmed at `9fec52cbc46f30f53ce8b98bf1e5d320dcd61a50` before triggering one deployment with the build cache retained.
+
+- Deploy: `dep-dbdcccbncjis739n0o50`; source commit `9fec52cbc46f30f53ce8b98bf1e5d320dcd61a50`.
+- Render status: **live**; finished 2026-10-23T02:28:44.931112Z (10:28:44 Asia/Shanghai).
+- Public `GET /health`: 200, `status: ok`, `paymentEnvironment: sandbox`.
+- Unauthenticated `GET /api/economy` and `GET /api/session`: 401, `OWNER_AUTH_REQUIRED`.
+- `POST /api/session` with missing Origin or foreign Origin: 403, `ORIGIN_FORBIDDEN`; no credentials were supplied.
+- Every checked response included `Cache-Control: no-store`.
+- Error-log query from deployment start through 02:29:19Z returned no entries; this is limited to that query window.
+
+This supersedes the baseline's statement that P3.1 was not deployed and completes ordered step 1 above. It verifies deployment and public security boundaries, not authenticated login, cloud account initialization, database continuity, real model execution or Sandbox settlement. No account, model task or payment was initiated. The disk-backed service has no zero-downtime guarantee; actual state persistence still requires a separately approved acceptance check. Automatic deployment remains configured off.
+
+## Initialization preparation follow-up
+
+Explicit operator initialization and credential-safe session verification commands are now prepared locally; see the final section of [the Render guide](deployment-render.md). Local 108-test suite, type check and production smoke pass. They have not been committed/deployed or run against the hosted database. The connector exposes no remote shell, and strict SSH host checking found no trusted host record; no SSH trust setting was changed. Therefore cloud initialization, authenticated login and actual ledger continuity remain unverified. P3.2 implementation has not started in this slice.
