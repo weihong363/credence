@@ -1,8 +1,10 @@
+> Current status (2026-10-23): the owner-created credence-sandbox service is live on P2 commit 9c57e46. A read-only check confirmed public health, unauthenticated API rejection, one instance and the configured disk. P3.1 has not been cloud-deployed. See [readiness evidence and pending checks](render-readiness.md). The preparation record below is historical.
+
 > P2 update (2026-10-22): default start now serves the SQLite batch API; the fixed-bill routes are archived. The configured DATA_DIR persistent disk stores credence.sqlite by default; optional CREDENCE_DB_PATH must also stay on persistent storage. P0 deployment walkthrough below is historical; follow docs/p2-verification.md for current endpoints. No Render resources were created or deployed during P2.
 
 # Render deployment preparation
 
-Status: **configuration prepared; not deployed**. No Render account, workspace, GitHub connection, service, disk or credit balance was inspected or changed. No cloud resource was created and no deploy was triggered. Approval is required before applying the Blueprint. Current code is the **P0 Sandbox API**, not the planned full Agent Runtime or console.
+Historical preparation status (2026-10-21): **configuration prepared; not deployed at that time**. No Render account, workspace, GitHub connection, service, disk or credit balance was inspected or changed. No cloud resource was created and no deploy was triggered. Approval is required before applying the Blueprint. Current code is the **P0 Sandbox API**, not the planned full Agent Runtime or console.
 
 This preparation uses the official [Render deployment](https://render.com/docs/web-services), [Blueprint](https://render.com/docs/blueprint-spec), [environment](https://render.com/docs/configure-environment-variables), [platform variable](https://render.com/docs/environment-variables), [compute plan](https://render.com/docs/compute-plans), and [persistent disk](https://render.com/docs/disks) conventions, reviewed 2026-10-21. Markdown endpoints were unsupported by the web reader, so the HTML references were read instead.
 

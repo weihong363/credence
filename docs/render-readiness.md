@@ -1,0 +1,43 @@
+# Render read-only readiness check
+
+Checked 2026-10-23, approximately 10:22 Asia/Shanghai. Owner authorized a read-only cloud check followed by committing/pushing P3.1. No Render service, disk, environment variable, deploy or payment was created/changed by this check.
+
+## Verified cloud baseline
+
+| Item | Observation |
+| --- | --- |
+| Workspace | My Workspace; existing owner-selected workspace |
+| Service | credence-sandbox, srv-dbdc704s728c73be7ie0 |
+| URL | https://credence-sandbox.onrender.com |
+| Repository / branch | weihong363/credence, main |
+| Live deploy | dep-dbdc70ks728c73be7jh0, status live, source commit 9c57e467394f4053302074deae08055c77ed25ae (P2) |
+| Compute | One 0.5c-512mb instance, Oregon; not suspended |
+| Port / health configuration | Open TCP port 10000; healthCheckPath /health |
+| Persistent disk configuration | 1 GB, mounted at /var/data/credence |
+| Automatic deploy / previews | Off; this source push does not trigger a service deployment |
+| Public GET /health | HTTP 200, status ok, paymentEnvironment sandbox |
+| Unauthenticated GET /api/economy | HTTP 401, OWNER_AUTH_REQUIRED |
+| Unauthenticated GET / | HTTP 401, expected for the current API-only service |
+| Error-log query | No entries in the connector's returned error-log window; this is not a guarantee of error-free operation |
+| Memory sample | 24,514,560 bytes (about 23.4 MiB) against a 512 MiB limit; one idle sample only |
+| CPU usage | No samples returned; no capacity conclusion drawn |
+
+The platform service/deploy data and direct public HTTP checks establish that P2 is serving requests. They do not establish that P3.1 is deployed. No authenticated owner request, Sandbox OAuth/payment request, new model request or state mutation was used for this check.
+
+## Not yet verified
+
+- Secret values and their correct PayPal merchant/app pairing were not retrieved. A successful boot indicates that the startup-required configuration passed application validation; it does not prove credentials can authenticate with PayPal.
+- LLM credential presence/correctness was not inspected. Real mission execution is not part of the public health check.
+- Cloud Owner/Agent/account/catalog initialization and the contents of the cloud ledger were not read. The current server does not auto-seed them.
+- Disk attachment and mount are confirmed in platform configuration. Actual database placement, backup procedure and persistence across a cloud restart/redeploy remain unverified.
+- Cloud P3 session/CSRF, browser UI and the five consecutive real-run gate remain unverified. P3.1 is locally tested and included in the next source commit only.
+
+## Next ordered steps
+
+1. Owner approval to deploy the reviewed P3.1 source commit to the existing service; do not create another Blueprint/service. Keep manual deploys enabled.
+2. Introduce explicit one-time cloud initialization with an owner-approved allowance and no automatic purchases/payments. Do not copy the local active or historical payment database into another payment authority.
+3. Configure LLM secrets only on the server before real mission execution; never return values through the console/API/logs.
+4. Build P3.2 task/activity/evidence UI using the existing same-origin session and read API foundation, then P3.3 owner financial controls and P3.4 result/error recovery.
+5. After initialization and UI acceptance, verify persistent state through an approved cloud restart and run the real multi-service/Sandbox gate with human approval for every payment.
+
+P3.1 local validation before push: pnpm check; pnpm test (105/105); pnpm test:production (including build and compiled session/CSRF/restart checks); git diff --check. Historical P0/P1/P2 payment evidence remains unchanged.

@@ -47,16 +47,33 @@ async function main(): Promise<void> {
     });
     req.on('error', reject); req.on('timeout', () => req.destroy(new Error('Request timed out'))); req.end();
   });
+  const browserCall=(path:string,method='GET',headers:Record<string,string>={},body?:unknown)=>new Promise<{status:number;cookie:string;data:Record<string,unknown>}>((done,reject)=>{
+    const req=request({host:'127.0.0.1',port,path,method,timeout:5000,headers:{Host:'credence-smoke.example','Content-Type':'application/json',...headers}},response=>{
+      let text='';response.setEncoding('utf8');response.on('data',chunk=>{text+=chunk;});
+      response.on('end',()=>{try{done({status:response.statusCode!,cookie:response.headers['set-cookie']?.[0]??'',data:JSON.parse(text)});}catch(error){reject(error);}});
+    });
+    req.on('error',reject);req.on('timeout',()=>req.destroy(new Error('Request timed out')));req.end(body===undefined?undefined:JSON.stringify(body));
+  });
+  const origin='https://credence-smoke.example';
   try {
     child = await boot(env);
     assert.equal((await call('/health'))?.status,'ok');
     assert.equal((await call('/api/economy'))?.accounts?.[0].id,identity.accountId);
     assert.equal((await call('/api/create','POST',410))?.error,'P0_ARCHIVED_USE_BATCH_API');
+    const login=await browserCall('/api/session','POST',{Origin:origin},{ownerToken:owner});assert.equal(login.status,200);
+    assert.match(login.cookie,/^__Host-credence_session=/);assert.match(login.cookie,/HttpOnly; SameSite=Strict; Max-Age=3600; Secure/);
+    const cookie=login.cookie.split(';')[0];
+    assert.equal((await browserCall('/api/tasks','GET',{Cookie:cookie})).status,200);
+    assert.equal((await browserCall('/api/session/logout','POST',{Cookie:cookie,Origin:origin})).status,403);
+
     await stop(child);child=undefined;
     child=await boot(env);
     assert.equal((await call('/api/economy'))?.accounts?.[0].id,identity.accountId);
+    assert.equal((await browserCall('/api/tasks','GET',{Cookie:cookie})).status,401);
+    const nextLogin=await browserCall('/api/session','POST',{Origin:origin},{ownerToken:owner});assert.equal(nextLogin.status,200);
+    assert.equal((await browserCall('/api/session/logout','POST',{Cookie:nextLogin.cookie.split(';')[0],Origin:origin,'X-CSRF-Token':String(nextLogin.data.csrfToken)})).status,200);
     await stop(child);child=undefined;
-    console.log('Production smoke passed: compiled server, assigned port, health, archived P0 route, persistent SQLite account, graceful restart; no PayPal calls.');
+    console.log('Production smoke passed: compiled server, assigned port, health, archived P0 route, persistent SQLite account, session/CSRF and restart revocation; no PayPal calls.');
   } finally {
     if (child && child.exitCode === null) { const exited = once(child, 'exit'); child.kill('SIGKILL'); await exited; }
     rmSync(dir, { recursive: true, force: true });

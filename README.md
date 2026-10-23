@@ -10,7 +10,7 @@ Repository: [weihong363/credence](https://github.com/weihong363/credence) (priva
 
 ## What works today
 
-**P0 PayPal Sandbox** and the **P1 local economic core** are implemented. P1 tests and the real same-task three-service DeepSeek procurement/report gate pass; one architecture correction was verified within five model calls. P2 dynamic settlement is implemented; current live acceptance is in [P2 evidence](docs/p2-live-evidence.json). The console remains P3.
+**P0 PayPal Sandbox** and the **P1 local economic core** are implemented. P1 tests and the real same-task three-service DeepSeek procurement/report gate pass; one architecture correction was verified within five model calls. P2 dynamic settlement is implemented; current live acceptance is in [P2 evidence](docs/p2-live-evidence.json). P3.1 session/CSRF and read APIs are locally tested; the console remains P3.2.
 
 | Capability | Current status |
 | --- | --- |
@@ -44,7 +44,7 @@ flowchart LR
 
 ## Stack
 
-Current: Node **20.19+**, TypeScript strict mode, ESM/NodeNext, native `node:http` and `fetch`, pnpm **10.33.4**, `tsx`, and `node:test`. SQLite uses pinned `better-sqlite3` 12.4.1, verified locally on Node 20.19.2; pnpm explicitly permits its native build script. No framework, AI SDK or frontend dependency is installed. The planned frontend uses Vite with vanilla TypeScript for the console; see [technical decisions](docs/spec.md). Render deployment files are prepared, but no hosted resource or deployment has been created. See the [Render guide](docs/deployment-render.md).
+Current: Node **20.19+**, TypeScript strict mode, ESM/NodeNext, native `node:http` and `fetch`, pnpm **10.33.4**, `tsx`, and `node:test`. SQLite uses pinned `better-sqlite3` 12.4.1, verified locally on Node 20.19.2; pnpm explicitly permits its native build script. No framework, AI SDK or frontend dependency is installed. The planned frontend uses Vite with vanilla TypeScript for the console; see [technical decisions](docs/spec.md). The owner-created Render service is live on the P2 commit; health/auth boundaries and disk configuration were checked read-only on 2026-10-23. P3.1 is not yet cloud-deployed. See [cloud readiness](docs/render-readiness.md) and the [Render guide](docs/deployment-render.md).
 
 ## Setup and historical P0 walkthrough
 
@@ -115,7 +115,7 @@ No provider receives a separate payment in this single-merchant experiment. No l
 
 **No license file exists yet.** Source publication, an owner-selected open-source license, and repository/video URLs are P4 tasks; this repository must not be represented as submission-ready or licensed open source today. Review the [official competition rules](https://paypalaihackathon.devpost.com/rules) before publication. Do not publish credentials for reproducibility: reviewers configure their own Sandbox app and AI key.
 
-## Render preparation (not deployed)
+## Render deployment status
 
 [Deployment guide](docs/deployment-render.md) maps every environment variable and manual approval step. `render.yaml` declares one native Node Web Service plus a 1 GB persistent disk; no Dockerfile, Static Site, PostgreSQL or LLM configuration is required for the P2 settlement API. Its SQLite database must remain on the configured persistent disk. Set the three Sandbox PayPal credentials manually; Render generates OWNER_TOKEN and supplies PORT/RENDER_EXTERNAL_URL. The Blueprint sets HOST, DATA_DIR and Sandbox-only PAYPAL_BASE_URL. PUBLIC_URL normally stays unset on Render. `.env.render.example` contains no secrets.
 
@@ -139,7 +139,7 @@ pnpm mission expressjs cors 5317ebe670db2aaebc1d496eb5d33493deefb3ed
 pnpm economy status
 ```
 
-The source check makes only public GitHub requests. The mission makes real model requests, starts a new task and may create accepted internal obligations within the 1,000-unit allowance; it never calls PayPal. Source is pinned and persisted in SQLite; providers never execute repository code. Only verified accepted deliveries become charges, and the final report cites those deliveries. Failure retains accepted charges and releases unfinished holds. Do not delete state to reset spending. Public deployment remains deferred.
+The source check makes only public GitHub requests. The mission makes real model requests, starts a new task and may create accepted internal obligations within the 1,000-unit allowance; it never calls PayPal. Source is pinned and persisted in SQLite; providers never execute repository code. Only verified accepted deliveries become charges, and the final report cites those deliveries. Failure retains accepted charges and releases unfinished holds. Do not delete state to reset spending. Cloud P1 mission execution remains unverified; the existing Render service currently serves the P2 API.
 
 `pnpm economy recover`, `pnpm economy cancel PURCHASE_UUID` and `pnpm economy resume TASK_UUID` support local operation. Resume an interrupted task rather than starting it again; original deadlines, invocation IDs and the eight-call budget are preserved. A completed-task resume returns its saved report. The full-review live gate passes; see [current evidence](docs/p1-full-review-live-evidence.json). At P1 acceptance, the original ledger remained at 1,000 outstanding / zero available; the independent verification ledger had limit 1,500, outstanding 750 and available 750. P1 itself made no payment. P2 has since settled those 750 units; see the current P2 evidence. No frontend or procurement HTTP API is added in P1.
 
@@ -159,4 +159,10 @@ CREDENCE_DB_PATH=.data/p1-full-review-verification.sqlite PORT=3001 PUBLIC_URL=h
 # Each network mutation needs its batch ID and owner request key; see the guide before use.
 ```
 
-The existing `.env` is server-only. `CREDENCE_DB_PATH` optionally selects the economic SQLite database; by default the server uses DATA_DIR/credence.sqlite. Never run a backup as a second active payment database. No frontend, Render deployment or new model call is needed for this P2 gate. P3/P4 remain unimplemented.
+The existing `.env` is server-only. `CREDENCE_DB_PATH` optionally selects the economic SQLite database; by default the server uses DATA_DIR/credence.sqlite. Never run a backup as a second active payment database. No frontend, Render deployment or new model call is needed for this P2 gate. P3.1 session/read foundation is locally tested; P3.2–P4 remain pending.
+
+## P3.1 session and read API foundation
+
+P2 was pushed as `9c57e46`. Browser authentication now exchanges an owner-supplied token via same-origin `POST /api/session` for a one-hour HttpOnly session; cookie mutations need exact Origin plus X-CSRF-Token. Logout, expiry, re-login rotation and restart revoke old cookies. CLI Bearer access remains available. There is no login page or console yet.
+
+New owner read APIs expose task summaries, committed audit events and account ledger using bounded afterSeq pagination. Raw model/provider inputs/outputs, free-form audit reasons, callback secrets and payment request keys are omitted. See [P3 verification and contracts](docs/p3-verification.md). P3.1 passes 105 local tests plus the compiled session/restart smoke; P3.2 starts the mission/activity and evidence UI. The five consecutive real-run gate remains pending. No new PayPal/model request, database migration, dependency or cloud deployment was needed for this slice.

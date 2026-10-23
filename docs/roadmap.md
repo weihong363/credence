@@ -84,7 +84,9 @@ Gate guarantees: no rejected deliveries in payable batches; no allowance restore
 
 ## P3 — Product Experience and Demonstration
 
-- [ ] P3.1 (0.5 day): same-origin session/CSRF auth, sanitized read APIs and monotonic event polling; no owner/PayPal credential in JS storage.
+Owner authorized starting P3 on 2026-10-23. P3.1 passes local acceptance; the console and five-run live gate remain pending.
+
+- [x] P3.1: same-origin one-hour session/CSRF, logout/restart revocation, sanitized task/audit/ledger reads and monotonic cursor API; 105 offline tests and compiled session smoke pass. [Verification](p3-verification.md). Console polling UI remains P3.2.
 - [ ] P3.2 (1 day): mission and agent activity, quote/purchase reasoning summaries, reservation/execution/delivery transitions, evidence inspection; avoid a graph editor.
 - [ ] P3.3 (0.75 day): limit/reserved/outstanding/available policy view and ledger/batch breakdown with owner PayPal approval/capture/reconcile controls.
 - [ ] P3.4 (0.75–1.5 days): final result and honest failure states, English copy, accessibility, loading/error recovery and controlled run harness.

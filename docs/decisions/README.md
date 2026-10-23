@@ -15,3 +15,4 @@ These records select the planned architecture; they do not claim implementation.
 | [0009](0009-bounded-review-plans.md) | One durable plan, explicit review profiles, reserved synthesis capacity | Local tests and owner-authorized full-review live gate pass |
 | [0010](0010-frozen-batch-foundation.md) | Frozen whole-charge batching before payment integration, one existing journal | P2.1 local verification |
 | [0011](0011-durable-sandbox-settlement.md) | Durable owner-approved payment intent, authoritative GET and atomic finalization | P2 local tests; live status in P2 evidence |
+| [0012](0012-owner-session-read-foundation.md) | Process-local owner sessions, CSRF and explicit read projections | P3.1 local tests and compiled process acceptance |

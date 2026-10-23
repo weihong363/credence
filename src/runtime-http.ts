@@ -1,5 +1,8 @@
 import {createServer,type IncomingMessage,type ServerResponse} from 'node:http';
-import {timingSafeEqual} from 'node:crypto';
+import {RequestError,readJson as body,sendJson as send} from './web/http.js';
+import {OwnerSessions} from './web/sessions.js';
+import {sessionRoute,authenticatedOwner} from './web/session-routes.js';
+import {readRoute} from './web/read-routes.js';
 import type Database from 'better-sqlite3';
 import type {Config} from './config.js';
 import {object,text} from './domain/json.js';
@@ -7,24 +10,16 @@ import {freezeBatch} from './application/batches.js';
 import {Payments} from './application/payments.js';
 import {paymentHint} from './application/payment-callbacks.js';
 import type {PaymentAction} from './application/payment-records.js';
-const equal=(left:string,right:string):boolean=>{const a=Buffer.from(left),b=Buffer.from(right);return a.length===b.length&&timingSafeEqual(a,b);};
 function owner(db:Database.Database):string{
  const rows=db.prepare('SELECT DISTINCT owner_id FROM accounts').all() as {owner_id:string}[];
  if(rows.length!==1)throw new Error('SINGLE_OWNER_REQUIRED');return rows[0].owner_id;
 }
-async function body(req:IncomingMessage):Promise<unknown>{
- if(req.headers['content-type']!=='application/json')throw new Error('JSON_REQUIRED');
- let bytes=0;const chunks:Buffer[]=[];
- for await(const chunk of req){bytes+=Buffer.byteLength(chunk);if(bytes>8192)throw new Error('BODY_TOO_LARGE');chunks.push(Buffer.from(chunk));}
- try{return JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{throw new Error('INVALID_JSON');}
-}
-function send(res:ServerResponse,data:unknown,status=200):void{res.writeHead(status,{'Content-Type':'application/json'});res.end(JSON.stringify(data));}
 function economy(db:Database.Database){
  return {accounts:db.prepare('SELECT id,limit_minor,reserved_minor,outstanding_minor,limit_minor-reserved_minor-outstanding_minor available_minor,status FROM accounts').all(),
  charges:db.prepare(`SELECT c.id,c.account_id,c.task_id,c.purchase_id,c.delivery_id,c.amount_minor,c.currency,
  EXISTS(SELECT 1 FROM ledger_events WHERE charge_id=c.id AND type='CHARGE_REVERSED') reversed FROM charges c`).all()};
 }
-export function createRuntimeApp(config:Config,db:Database.Database,payments:Payments){
+export function createRuntimeApp(config:Config,db:Database.Database,payments:Payments,sessions=new OwnerSessions(config.ownerToken,config.publicUrl.protocol==='https:')){
  const server=createServer(async(req,res)=>{
   res.setHeader('Cache-Control','no-store');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('X-Content-Type-Options','nosniff');
   res.setHeader('Content-Security-Policy',"default-src 'none'; frame-ancestors 'none'; form-action 'self'");
@@ -36,20 +31,21 @@ export function createRuntimeApp(config:Config,db:Database.Database,payments:Pay
     paymentHint(db,url.searchParams.get('batch')??'',url.searchParams.get('state')??'',url.searchParams.get('token')??'',url.pathname.endsWith('cancel')?'cancel':'return');
     res.writeHead(200,{'Content-Type':'text/plain; charset=utf-8'}).end('Buyer return recorded. Payment is not proven by this redirect. The owner must request capture or reconciliation.');return;
    }
-   if(!equal(req.headers.authorization??'',`Bearer ${config.ownerToken}`)){send(res,{error:'OWNER_AUTH_REQUIRED'},401);return;}
+   if(await sessionRoute(req,res,url,config,sessions,()=>owner(db)))return;
+   const ownerId=authenticatedOwner(req,config,sessions,()=>owner(db));
    if(['/api/create','/api/capture','/api/settlement','/api/cancel','/api/resume','/api/verify','/return','/cancel'].includes(url.pathname)){send(res,{error:'P0_ARCHIVED_USE_BATCH_API'},410);return;}
-   await route(req,res,url,config,db,payments);
+   await route(req,res,url,config,db,payments,ownerId);
   }catch(error){
    const code=error instanceof Error&&/^[A-Z_]{1,80}$/.test(error.message)?error.message:'OPERATION_INCOMPLETE';
-   if(!res.headersSent)send(res,{error:code},code.endsWith('FORBIDDEN')?403:409);else res.end();
+   if(!res.headersSent)send(res,{error:code},error instanceof RequestError?error.status:code.endsWith('FORBIDDEN')?403:code.endsWith('NOT_FOUND')?404:409);else res.end();
   }
  });
  server.requestTimeout=15000;server.headersTimeout=10000;
  return server;
 }
-async function route(req:IncomingMessage,res:ServerResponse,url:URL,config:Config,db:Database.Database,payments:Payments):Promise<void>{
+async function route(req:IncomingMessage,res:ServerResponse,url:URL,config:Config,db:Database.Database,payments:Payments,ownerId:string):Promise<void>{
  if(req.method==='GET'&&url.pathname==='/api/economy'){send(res,economy(db));return;}
- const ownerId=owner(db);
+ if(req.method==='GET'&&readRoute(res,url,db,ownerId))return;
  if(req.method==='GET'&&url.pathname==='/api/batches'){
   const ids=db.prepare('SELECT id FROM batches WHERE owner_id=? ORDER BY frozen_at').all(ownerId) as {id:string}[];
   send(res,ids.map(({id})=>payments.view(ownerId,id)));return;
