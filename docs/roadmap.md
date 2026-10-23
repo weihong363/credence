@@ -87,8 +87,8 @@ Gate guarantees: no rejected deliveries in payable batches; no allowance restore
 Owner authorized starting P3 on 2026-10-23. P3.1 passes local acceptance; the console and five-run live gate remain pending.
 
 - [x] P3.1: same-origin one-hour session/CSRF, logout/restart revocation, sanitized task/audit/ledger reads and monotonic cursor API; 105 offline tests and compiled session smoke pass. [Verification](p3-verification.md). Console polling UI remains P3.2.
-- [ ] P3.2 (1 day): mission and agent activity, quote/purchase reasoning summaries, reservation/execution/delivery transitions, evidence inspection; avoid a graph editor.
-- [ ] P3.3 (0.75 day): limit/reserved/outstanding/available policy view and ledger/batch breakdown with owner PayPal approval/capture/reconcile controls.
+- [x] P3.2: read-only same-origin login console, mission/agent activity, saved purchase reasons and quoted prices, reservation/execution/delivery state, verified source-anchor inspection. 110 offline tests and mock-only browser acceptance pass; cloud UI and real mission/browser gates remain unverified. No task-start or payment controls in this slice.
+- [x] P3.3: account allowance/purchase-cap view, paged ledger with allocation-to-batch lineage, accepted-charge selection/freeze, batch breakdown and explicit owner order/approval-link/capture/reconcile/cancel/resume controls. 115 offline tests and mock-only browser capture/ledger acceptance pass; no new live payment or cloud UI deployment.
 - [ ] P3.4 (0.75–1.5 days): final result and honest failure states, English copy, accessibility, loading/error recovery and controlled run harness.
 - [ ] Gate: **five consecutive complete missions** with three real accepted purchases each, separate batches, real AI work and real Sandbox payments; same persistent DB, no manual financial edits or developer-console intervention. Human Sandbox approval remains part of each run. Record task/batch IDs, source revisions, totals, order/capture IDs, timestamps and negative/corrected-delivery observations.
 

@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Credence · Agent activity</title><script type="module" src="/main.ts"></script></head>
+<body><header><a href="/" class="brand">credence<span> / economy console</span></a><span class="environment">PAYPAL SANDBOX</span></header>
+<main><div class="intro"><p class="eyebrow">BOUNDED AUTONOMY. VISIBLE ACCOUNTABILITY.</p><h1>Every capability has a trail.</h1><p>Follow agent purchases from reservation to verified delivery.</p></div>
+<p id="notice" role="status" aria-live="polite"></p>
+<section id="login-panel" class="panel narrow"><h2>Owner access</h2><p>Use this deployment’s owner token. It is exchanged for a secure session and never saved in browser storage.</p><form id="login"><label for="token">Owner token</label><input id="token" type="password" autocomplete="off" required maxlength="1024"><button type="submit">Open console →</button></form></section>
+<section id="workspace" hidden><div class="toolbar"><div><p class="eyebrow">MISSION OBSERVATORY</p><h2>Procurement activity</h2></div><div><button id="refresh" type="button">Refresh</button><button id="logout" type="button" class="secondary">Sign out</button></div></div>
+<div class="columns"><aside class="panel"><h2>Missions</h2><div id="tasks"></div><button id="more" hidden type="button">Load more missions</button></aside><section class="panel"><div id="detail"><p>Select a mission to inspect its activity.</p></div></section></div>
+<section class="panel activity"><div id="finance"></div><div id="ledger"></div></section>
+<section class="panel activity"><h2>Committed activity</h2><p>Accounting and purchase events only. Current mission status is read separately; missing history is never inferred.</p><ol id="events"></ol></section></section>
+<footer>Internal Credit is a bounded allowance. Human approval is required for PayPal Sandbox settlement.</footer></main></body></html>

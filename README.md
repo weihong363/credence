@@ -22,7 +22,7 @@ Repository: [weihong363/credence](https://github.com/weihong363/credence) (priva
 | Credit account reservation foundation | P1.1 locally tested: SQLite atomic holds, replay, rollback and competing processes; internal interface only |
 | Registry, quotes, procurement, execution and delivery checks | P1 local CLI and real DeepSeek minimum gate verified. P0 fixture `verified: true` is not service evidence |
 | Append-only ledger, audit and accepted charges | Atomic reserve/release/acceptance and reconciliation locally tested; P2 whole-charge batch and settlement transactions locally tested |
-| Agent Economy Console | Planned P3; current server has no application UI |
+| Agent Economy Console | P3.2 read-only login/activity/evidence UI locally tested; cloud UI pending |
 | AUTHORIZE, payouts, split payments, real lending | Deferred or out of scope |
 
 Evidence is historical, dated 2026-10-21; documentation checks do not imply a new live payment. See the [compatibility report](docs/paypal-sandbox-compatibility.md), [settlement evidence](docs/phase0-settlement-evidence.json), and [negative-test evidence](docs/phase0-negative-evidence.json). A negative-test response is injected by Sandbox, not a genuine buyer funding failure. Power-loss durability, real capture-time network loss, and independent Activity-page inspection are not established.
@@ -119,7 +119,7 @@ No provider receives a separate payment in this single-merchant experiment. No l
 
 [Deployment guide](docs/deployment-render.md) maps every environment variable and manual approval step. `render.yaml` declares one native Node Web Service plus a 1 GB persistent disk; no Dockerfile, Static Site, PostgreSQL or LLM configuration is required for the P2 settlement API. Its SQLite database must remain on the configured persistent disk. Set the three Sandbox PayPal credentials manually; Render generates OWNER_TOKEN and supplies PORT/RENDER_EXTERNAL_URL. The Blueprint sets HOST, DATA_DIR and Sandbox-only PAYPAL_BASE_URL. PUBLIC_URL normally stays unset on Render. `.env.render.example` contains no secrets.
 
-Run `pnpm check`, `pnpm build`, `pnpm test` and `pnpm test:production` before release. Public `/health` exposes only readiness and Sandbox mode; all settlement operations remain owner-protected and same-origin. The application has no frontend bundle or homepage. Review state continuity of the selected economic ledger before any hosted payment; never start an independent backup as another payment authority. Configuration must be reviewed, committed and pushed before Render can read it; no cloud resource/deploy is authorized by preparation alone.
+Run `pnpm check`, `pnpm build`, `pnpm test` and `pnpm test:production` before release. Public `/health` exposes only readiness and Sandbox mode; all settlement operations remain owner-protected and same-origin. The P3.2 build includes a same-origin login/activity/evidence console at `/`; economic APIs remain authenticated. Review state continuity of the selected economic ledger before any hosted payment; never start an independent backup as another payment authority. Configuration must be reviewed, committed and pushed before Render can read it; no cloud resource/deploy is authorized by preparation alone.
 
 ## P1 local economic core
 
@@ -168,3 +168,17 @@ P2 was pushed as `9c57e46`. Browser authentication now exchanges an owner-suppli
 New owner read APIs expose task summaries, committed audit events and account ledger using bounded afterSeq pagination. Raw model/provider inputs/outputs, free-form audit reasons, callback secrets and payment request keys are omitted. See [P3 verification and contracts](docs/p3-verification.md). P3.1 passes 105 local tests plus the compiled session/restart smoke; P3.2 starts the mission/activity and evidence UI. The five consecutive real-run gate remains pending. No new PayPal/model request, database migration, dependency or cloud deployment was needed for this slice.
 
 Explicit cloud bootstrap is prepared as `node dist/admin/initialize.js 1500`, followed by `node dist/admin/verify-session.js` inside the existing service's Render Shell **after deploying these commands**. Neither command initiates procurement or payment. See the [operator initialization guide](docs/deployment-render.md#explicit-p3-cloud-initialization-prepared-locally-not-cloud-verified). These commands are locally tested, not yet deployed or cloud verified.
+
+
+## P3.2 local console
+
+Run `pnpm build` then `pnpm dev`, and open the configured local origin (default http://localhost:3000). Enter the local server's OWNER_TOKEN in the login form; do not use the Render credential on a different deployment. The console shows existing tasks, saved purchase reasons, agent/reservation/delivery status, committed audit events and validated source anchors. A new database has no missions; no sample activity is silently seeded. Existing local CLI missions can be inspected without invoking a new model request. This console has no start-mission or payment buttons yet.
+
+`pnpm build:console` builds only browser assets; `pnpm build` builds both components. `pnpm test` builds console assets before running the Node suite. Vite is a pinned development dependency only; no extra Render service is needed. The read-only console is locally tested with mocked browser data and is not yet deployed; [P3 evidence and manual checks](docs/p3-verification.md) distinguish it from the live P3.1 API.
+
+
+## P3.3 local financial controls
+
+The local console now shows allowance, reserved/outstanding/available balances, the purchase cap, ledger pages and immutable batch allocations. Select eligible accepted charges to freeze a bill, create its Sandbox order, open the PayPal approval link, then reconcile. Capture is offered only after an authenticated provider inspection reports APPROVED; review the amount/batch/order and explicitly click Capture. Cancellation keeps obligations locked and is not a refund; resume/reconcile operate on the same batch. Unknown/pending results never offer replacement billing or automatic capture. The server remains authoritative for every amount, version, allocation and payment result.
+
+This slice is locally tested (115/115) and manually exercised using a simulated payment adapter only. It is not yet committed/deployed, does not add policy edits, and did not initiate a new real PayPal or model request. P3.4 mission/result/recovery experience and the five consecutive real-run gate remain pending.

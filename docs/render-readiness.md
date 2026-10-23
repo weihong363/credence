@@ -59,3 +59,30 @@ This supersedes the baseline's statement that P3.1 was not deployed and complete
 ## Initialization preparation follow-up
 
 Explicit operator initialization and credential-safe session verification commands are now prepared locally; see the final section of [the Render guide](deployment-render.md). Local 108-test suite, type check and production smoke pass. They have not been committed/deployed or run against the hosted database. The connector exposes no remote shell, and strict SSH host checking found no trusted host record; no SSH trust setting was changed. Therefore cloud initialization, authenticated login and actual ledger continuity remain unverified. P3.2 implementation has not started in this slice.
+
+## Cloud initialization execution — 2026-10-23
+
+Owner authorized committing/pushing, deploying and executing the prepared initialization/session checks. Commit `fc229382b062348ab577b754d9a72308a94e5451` was pushed to main. Existing service deployment `dep-dbdcmvcs728c73bfqr5g` reached **live** at 2026-10-23T02:51:29.129422Z. SSH confirmed that source revision and Node 20.19.2 was used explicitly.
+
+Before initialization, the resolved database was confirmed under `/var/data/credence/`, with zero accounts, charges and batches. `initialize.js 1500` succeeded twice with the same identity: owner `adf725b1-367e-4340-9a7a-8cdbdbcf341c`, account `ba84e935-fafd-4369-8390-b2f63723ee65`. This proves initialization replay in the running cloud instance; it does not prove persistence across a later restart. No procurement/model/payment operation was invoked.
+
+**Session acceptance failed:** the verifier exited 1; a separate sanitized HTTP check returned public health 200 and login 401 `OWNER_AUTH_REQUIRED` when using the SSH environment's OWNER_TOKEN. Correct configuration parity between SSH and the running server has not been established. No token was printed, changed or rotated. Automatic approval review rejected reading the running process environment for a boolean-only credential comparison because that would probe secrets from a nonstandard source. That diagnostic was not executed or bypassed. A subsequent read-only database count check was interrupted by the remote SSH host and yielded no new evidence. Full login/CSRF/logout acceptance remains blocked pending an approved diagnostic or owner-side configuration review.
+
+### Session recheck after owner requested renewed acceptance
+
+Public `/health` again returned 200; login using the normal SSH environment again returned 401 `OWNER_AUTH_REQUIRED`. The token variable is present and has no outer whitespace; no value was output. A direct loopback attempt returned 403 `ORIGIN_FORBIDDEN`, so it does not establish credential parity. Render's deployment history still shows `dep-dbdcmvcs728c73bfqr5g` as the latest live deployment, with no later deployment recorded. A saved environment change taking effect in the running application has therefore not been verified. Session/CSRF/logout acceptance remains incomplete; no process environment was inspected and no credential was changed.
+
+## Session and post-redeploy persistence acceptance — passed
+
+After the owner updated the credential and confirmed deployment, Render reported manual deploy `dep-dbdcrp4s728c73bgabgg` **live**, source `fc229382b062348ab577b754d9a72308a94e5451`, finished 2026-10-23T03:02:23.420478Z. Using only the normal SSH environment credential and Node 20.19.2, the public HTTPS checks passed:
+
+| Check | HTTP result |
+| --- | --- |
+| Health | 200 |
+| Owner login | 200 |
+| Cookie-authenticated session, economy and task reads | 200 each |
+| Logout without CSRF token | 403 |
+| Logout with CSRF token | 200 |
+| Reuse of revoked cookie | 401 |
+
+The test session was revoked; no credentials/cookies/CSRF values were emitted. A subsequent authenticated read confirmed the same initialized account `ba84e935-fafd-4369-8390-b2f63723ee65`, OPEN, limit/available 1500, reserved/outstanding 0 and zero charges. This verifies account continuity through this redeploy, not power-loss durability or financial recovery under load. The earlier failed login evidence is retained; its exact configuration mismatch was not independently established. No process environment probing, model request or payment occurred. This supersedes the earlier pending/failed login and account-persistence status for this limited acceptance scope. Browser UI, real mission execution and full payment/restart acceptance remain pending.

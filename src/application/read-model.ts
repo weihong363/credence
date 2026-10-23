@@ -82,7 +82,7 @@ export function readLedger(db:Database.Database,ownerId:string,accountId:string,
    FROM accounts WHERE id=? AND owner_id=?`).get(accountId,ownerId) as Record<string,unknown>|undefined;
   if(!account)throw new Error('ACCOUNT_NOT_FOUND');
   const rows=db.prepare(`SELECT seq,id,task_id taskId,purchase_id purchaseId,reservation_id reservationId,type,amount_minor amountMinor,currency,
-   allocation_id allocationId,charge_id chargeId,batch_id batchId,created_at createdAt FROM ledger_events WHERE account_id=? AND seq>? ORDER BY seq LIMIT ?`)
+   allocation_id allocationId,charge_id chargeId,COALESCE(batch_id,(SELECT batch_id FROM allocations WHERE id=ledger_events.allocation_id)) batchId,created_at createdAt FROM ledger_events WHERE account_id=? AND seq>? ORDER BY seq LIMIT ?`)
    .all(accountId,page.afterSeq,page.limit+1) as LedgerEntry[];
   return {account,entries:pageOf(rows,page,row=>row.seq)};
  }).deferred();

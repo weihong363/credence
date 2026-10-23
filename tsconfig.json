@@ -10,6 +10,8 @@
   "include": [
     "src",
     "test",
-    "scripts"
+    "scripts",
+    "console",
+    "vite.config.ts"
   ]
 }

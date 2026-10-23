@@ -16,3 +16,5 @@ These records select the planned architecture; they do not claim implementation.
 | [0010](0010-frozen-batch-foundation.md) | Frozen whole-charge batching before payment integration, one existing journal | P2.1 local verification |
 | [0011](0011-durable-sandbox-settlement.md) | Durable owner-approved payment intent, authoritative GET and atomic finalization | P2 local tests; live status in P2 evidence |
 | [0012](0012-owner-session-read-foundation.md) | Process-local owner sessions, CSRF and explicit read projections | P3.1 local tests and compiled process acceptance |
+| [0013](0013-read-only-console.md) | Same-origin vanilla TypeScript activity console and bounded source-evidence projections | P3.2 local tests and mock browser acceptance |
+| [0014](0014-owner-financial-console.md) | Explicit owner financial UI over existing settlement authority | P3.3 offline and mock-browser acceptance |

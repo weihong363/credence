@@ -1,0 +1,9 @@
+# ADR 0013: same-origin read-only activity and evidence console
+
+Accepted 2026-10-23 for owner-authorized P3.2.
+
+Implement the specified vanilla TypeScript/CSS console with pinned build-only Vite 6.4.5 on the existing Node 20 stack. Serve built HTML/JS/CSS from the same native HTTP service. No framework, runtime SDK, external CDN, graph editor or new cloud resource is introduced. Browser type imports never create runtime links to persistence/payment modules. Disable Vite env-file loading and public-directory copying; build no source maps. A static-route allowlist and CSP permit same-origin scripts/styles/fetch only. API routes retain their existing authentication/CSRF boundary.
+
+Add one application-owned, owner-scoped read transaction for current purchase, saved plan reason and delivery evidence projections. Never return raw provider/model payloads or financial intent keys. Evidence shown for PASS attempts must match the immutable hashed source snapshot's artifact, path, line bounds and exact anchor. Bound output by existing proposal/attempt limits and a 30-anchor/4000-character-per-anchor display cap. Omitted/unavailable evidence is explicit. No read updates a financial row, calls a model, or invokes payment transport.
+
+The UI renders untrusted strings as text and uses existing session cookies and memory-only CSRF. Password fields clear after each attempt. Stable event cursors advance only on successful reads; periodic task reads supply current status where historical audit transitions are absent. Keep 300 events in memory and retain expanded evidence while contents are unchanged. Empty state is not a fake example mission. Mission execution, result synthesis display and payment/policy controls remain later slices. Tests use temporary SQLite and mocked providers/payment transport; browser rehearsal is not a real mission/payment gate.

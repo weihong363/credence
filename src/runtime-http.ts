@@ -1,3 +1,4 @@
+import {consoleRoute} from './web/static.js';
 import {createServer,type IncomingMessage,type ServerResponse} from 'node:http';
 import {RequestError,readJson as body,sendJson as send} from './web/http.js';
 import {OwnerSessions} from './web/sessions.js';
@@ -27,6 +28,7 @@ export function createRuntimeApp(config:Config,db:Database.Database,payments:Pay
    const url=new URL(req.url??'/',config.publicUrl);
    if(req.method==='GET'&&url.pathname==='/health'){send(res,{status:'ok',paymentEnvironment:'sandbox'});return;}
    if(req.headers.host!==config.publicUrl.host||url.origin!==config.publicUrl.origin||(req.headers.origin!==undefined&&req.headers.origin!==config.publicUrl.origin)){send(res,{error:'ORIGIN_FORBIDDEN'},403);return;}
+   if(consoleRoute(req,res,url))return;
    if(req.method==='GET'&&['/payments/return','/payments/cancel'].includes(url.pathname)){
     paymentHint(db,url.searchParams.get('batch')??'',url.searchParams.get('state')??'',url.searchParams.get('token')??'',url.pathname.endsWith('cancel')?'cancel':'return');
     res.writeHead(200,{'Content-Type':'text/plain; charset=utf-8'}).end('Buyer return recorded. Payment is not proven by this redirect. The owner must request capture or reconciliation.');return;
