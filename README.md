@@ -2,7 +2,7 @@
 
 **Let agents trade capabilities, not credentials.**
 
-Credence is a planned AI Agent Economic Runtime: agents purchase capabilities within an owner's bounded internal allowance, verify deliveries, accumulate accepted service charges, and ask the owner to settle one aggregate bill. Deterministic application code controls spending and accounting; agents never receive payment credentials.
+Credence is an AI Agent Economic Runtime prototype: agents purchase capabilities within an owner's bounded internal allowance, verify deliveries, accumulate accepted service charges, and ask the owner to settle one aggregate bill. Deterministic application code controls spending and accounting; agents never receive payment credentials.
 
 The motivation is to give agents useful economic autonomy while making every decision, reservation, delivery, and payment accountable. Internal Credit is an accounting allowance, not lending or PayPal-provided financing. The hackathon target is the PayPal AI Hackathon 2026; Alipay adaptation is a future possibility only.
 
@@ -10,7 +10,7 @@ Repository: [weihong363/credence](https://github.com/weihong363/credence) (priva
 
 ## What works today
 
-**P0 PayPal Sandbox** and the **P1 local economic core** are implemented. P1 tests and the real same-task three-service DeepSeek procurement/report gate pass; one architecture correction was verified within five model calls. Dynamic PayPal settlement and the console remain planned.
+**P0 PayPal Sandbox** and the **P1 local economic core** are implemented. P1 tests and the real same-task three-service DeepSeek procurement/report gate pass; one architecture correction was verified within five model calls. P2 dynamic settlement is implemented; current live acceptance is in [P2 evidence](docs/p2-live-evidence.json). The console remains P3.
 
 | Capability | Current status |
 | --- | --- |
@@ -21,7 +21,7 @@ Repository: [weihong363/credence](https://github.com/weihong363/credence) (priva
 | Negative testing | Live Sandbox injected HTTP 422; local tests cover decline, cancellation, timeout and retry |
 | Credit account reservation foundation | P1.1 locally tested: SQLite atomic holds, replay, rollback and competing processes; internal interface only |
 | Registry, quotes, procurement, execution and delivery checks | P1 local CLI and real DeepSeek minimum gate verified. P0 fixture `verified: true` is not service evidence |
-| Append-only ledger, audit and accepted charges | Atomic reserve/release/acceptance and reconciliation locally tested; dynamic batches remain P2 |
+| Append-only ledger, audit and accepted charges | Atomic reserve/release/acceptance and reconciliation locally tested; P2 whole-charge batch and settlement transactions locally tested |
 | Agent Economy Console | Planned P3; current server has no application UI |
 | AUTHORIZE, payouts, split payments, real lending | Deferred or out of scope |
 
@@ -29,7 +29,7 @@ Evidence is historical, dated 2026-10-21; documentation checks do not imply a ne
 
 ## Architecture
 
-Today: the P0 Node HTTP server uses a fixed settlement/store and PayPal Sandbox. A separate P1 CLI implements registry, coordinator, policy/reservations, providers, delivery checks and a transactional SQLite ledger; a real risk-review task completed. P2 will connect real accepted charges to aggregate settlement. Only the payment module holds PayPal secrets.
+Today: the default Node HTTP server settles real accepted-charge batches from SQLite through the PayPal Sandbox adapter. The historical P0 server is an explicit isolated regression path. A separate P1 CLI implements registry, coordinator, policy/reservations, providers, delivery checks and a transactional SQLite ledger; a real risk-review task completed. P2 connects real accepted charges to owner-approved aggregate settlement. Only the payment module holds PayPal secrets.
 
 ```mermaid
 flowchart LR
@@ -46,7 +46,7 @@ flowchart LR
 
 Current: Node **20.19+**, TypeScript strict mode, ESM/NodeNext, native `node:http` and `fetch`, pnpm **10.33.4**, `tsx`, and `node:test`. SQLite uses pinned `better-sqlite3` 12.4.1, verified locally on Node 20.19.2; pnpm explicitly permits its native build script. No framework, AI SDK or frontend dependency is installed. The planned frontend uses Vite with vanilla TypeScript for the console; see [technical decisions](docs/spec.md). Render deployment files are prepared, but no hosted resource or deployment has been created. See the [Render guide](docs/deployment-render.md).
 
-## Quick start: current P0
+## Setup and historical P0 walkthrough
 
 ```sh
 pnpm install --frozen-lockfile
@@ -68,10 +68,10 @@ The development command loads `.env` natively. Existing shell variables take pre
 ```sh
 pnpm check
 pnpm test
-pnpm dev
+pnpm dev:phase0 # historical fixed-bill regression only
 ```
 
-Local development defaults to `127.0.0.1:3000`; hosted binding reads HOST and PORT. The current package name remains `a2a-paypal-spike`; its scripts are authoritative. `pnpm build` emits backend JavaScript to dist; `pnpm start` runs it using environment configuration. There is no lint, migration or frontend command yet.
+The P0 walkthrough above is historical; default `pnpm dev` now uses the P2 batch API below. Local development defaults to `127.0.0.1:3000`; hosted binding reads HOST and PORT. The current package name remains `a2a-paypal-spike`; its scripts are authoritative. `pnpm build` emits backend JavaScript to dist; `pnpm start` runs the SQLite P2 server using environment configuration; `pnpm dev:phase0` explicitly starts the historical fixed-bill server. There is no lint, migration or frontend command yet.
 
 ## Sandbox setup and walkthrough
 
@@ -117,9 +117,9 @@ No provider receives a separate payment in this single-merchant experiment. No l
 
 ## Render preparation (not deployed)
 
-[Deployment guide](docs/deployment-render.md) maps every environment variable and manual approval step. `render.yaml` declares one native Node Web Service plus a 1 GB persistent disk; no Dockerfile, Static Site, PostgreSQL or LLM configuration is required for the current P0 API. Set the three Sandbox PayPal credentials manually; Render generates OWNER_TOKEN and supplies PORT/RENDER_EXTERNAL_URL. The Blueprint sets HOST, DATA_DIR and Sandbox-only PAYPAL_BASE_URL. PUBLIC_URL normally stays unset on Render. `.env.render.example` contains no secrets.
+[Deployment guide](docs/deployment-render.md) maps every environment variable and manual approval step. `render.yaml` declares one native Node Web Service plus a 1 GB persistent disk; no Dockerfile, Static Site, PostgreSQL or LLM configuration is required for the P2 settlement API. Its SQLite database must remain on the configured persistent disk. Set the three Sandbox PayPal credentials manually; Render generates OWNER_TOKEN and supplies PORT/RENDER_EXTERNAL_URL. The Blueprint sets HOST, DATA_DIR and Sandbox-only PAYPAL_BASE_URL. PUBLIC_URL normally stays unset on Render. `.env.render.example` contains no secrets.
 
-Run `pnpm check`, `pnpm build`, `pnpm test` and `pnpm test:production` before release. Public `/health` exposes only readiness and Sandbox mode; all settlement operations remain owner-protected and same-origin. The application has no frontend bundle or homepage. Review state continuity of the single fixed bill before any hosted payment. Configuration must be reviewed, committed and pushed before Render can read it; no cloud resource/deploy is authorized by preparation alone.
+Run `pnpm check`, `pnpm build`, `pnpm test` and `pnpm test:production` before release. Public `/health` exposes only readiness and Sandbox mode; all settlement operations remain owner-protected and same-origin. The application has no frontend bundle or homepage. Review state continuity of the selected economic ledger before any hosted payment; never start an independent backup as another payment authority. Configuration must be reviewed, committed and pushed before Render can read it; no cloud resource/deploy is authorized by preparation alone.
 
 ## P1 local economic core
 
@@ -141,10 +141,22 @@ pnpm economy status
 
 The source check makes only public GitHub requests. The mission makes real model requests, starts a new task and may create accepted internal obligations within the 1,000-unit allowance; it never calls PayPal. Source is pinned and persisted in SQLite; providers never execute repository code. Only verified accepted deliveries become charges, and the final report cites those deliveries. Failure retains accepted charges and releases unfinished holds. Do not delete state to reset spending. Public deployment remains deferred.
 
-`pnpm economy recover`, `pnpm economy cancel PURCHASE_UUID` and `pnpm economy resume TASK_UUID` support local operation. Resume an interrupted task rather than starting it again; original deadlines, invocation IDs and the eight-call budget are preserved. A completed-task resume returns its saved report. The full-review live gate passes; see [current evidence](docs/p1-full-review-live-evidence.json). The original ledger remains at 1,000 outstanding / zero available; the authorized independent verification ledger has limit 1,500, outstanding 750 and available 750. No PayPal payment occurred. No frontend or procurement HTTP API is added in P1.
+`pnpm economy recover`, `pnpm economy cancel PURCHASE_UUID` and `pnpm economy resume TASK_UUID` support local operation. Resume an interrupted task rather than starting it again; original deadlines, invocation IDs and the eight-call budget are preserved. A completed-task resume returns its saved report. The full-review live gate passes; see [current evidence](docs/p1-full-review-live-evidence.json). At P1 acceptance, the original ledger remained at 1,000 outstanding / zero available; the independent verification ledger had limit 1,500, outstanding 750 and available 750. P1 itself made no payment. P2 has since settled those 750 units; see the current P2 evidence. No frontend or procurement HTTP API is added in P1.
 
 ## Full-review completion follow-up
 
 `pnpm mission` now explicitly requests `full-review`: inventory, architecture and independent risk must all be accepted on the same task, and the final report must cite all three deliveries. New missions use one persisted registry-backed plan; restart reuses that plan. Limited programmatic objectives use `scoped`, which is also shown in result/status metadata.
 
-Production-code tests with mocked HTTP now complete in 4 requests normally, 6 with both provider corrections, or 8 with both corrections and both HTTP retries. Synthesis retains one reserved request. The full 66-test suite and production smoke pass. [Current implementation and open live gate](docs/p1-three-service-follow-up.md) records one real full-review success after explicit 1,500-unit allowance authorization, plus retained historical single-service evidence. The original exhausted allowance is unchanged.
+Production-code tests with mocked HTTP now complete in 4 requests normally, 6 with both provider corrections, or 8 with both corrections and both HTTP retries. Synthesis retains one reserved request. The original P1 acceptance passed 66 tests and the production smoke; current P2 validation is in its verification guide. [Full-review implementation and live gate](docs/p1-three-service-follow-up.md) records one real full-review success after explicit 1,500-unit allowance authorization, plus retained historical single-service evidence. The original exhausted allowance is unchanged.
+
+## P2 aggregate Sandbox settlement
+
+Owner-authorized P2 implements immutable batching, durable order/capture keys, cancellation/resume, authoritative GET verification, atomic finalization and crash recovery. Follow [P2 verification](docs/p2-verification.md) for local commands, API contracts, evidence and remaining limits. Default `/api/create` and other fixed-bill routes return HTTP 410; use the batch API. The historical P0 JSON ledger/evidence is not converted into real charges.
+
+```sh
+CREDENCE_DB_PATH=.data/p1-full-review-verification.sqlite PORT=3001 PUBLIC_URL=http://localhost:3001 pnpm dev
+# A local owner can use pnpm settlement status|order|capture|cancel|resume|reconcile|recover|reverse.
+# Each network mutation needs its batch ID and owner request key; see the guide before use.
+```
+
+The existing `.env` is server-only. `CREDENCE_DB_PATH` optionally selects the economic SQLite database; by default the server uses DATA_DIR/credence.sqlite. Never run a backup as a second active payment database. No frontend, Render deployment or new model call is needed for this P2 gate. P3/P4 remain unimplemented.

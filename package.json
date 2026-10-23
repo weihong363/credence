@@ -12,7 +12,10 @@
     "test:production": "pnpm build && node --import tsx scripts/smoke-production.ts",
     "mission": "node --env-file=.env --import tsx scripts/run-mission.ts",
     "economy": "node --env-file=.env --import tsx scripts/economy.ts",
-    "verify:source": "node --import tsx scripts/verify-source.ts"
+    "verify:source": "node --import tsx scripts/verify-source.ts",
+    "dev:phase0": "node --env-file=.env --import tsx src/phase0-server.ts",
+    "settlement": "node --env-file=.env --import tsx scripts/settlement.ts",
+    "verify:phase2": "node --env-file=.env --import tsx scripts/verify-phase2.ts"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^9.6.0",

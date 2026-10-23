@@ -1,6 +1,6 @@
 # Economic accounting and settlement specification
 
-Status: planned P1/P2 authority, 2026-10-21. Current P0 behavior and its narrower guarantees remain documented in the [compatibility report](paypal-sandbox-compatibility.md). Schema and contracts: [spec](spec.md). P1 implements reserve/release/accepted-charge accounting and reconciliation with local SQLite tests (ADR 0008). The minimum real AI procurement/report gate passes; dynamic settlement is P2 and not implemented.
+Status: planned P1/P2 authority, 2026-10-21. Current P0 behavior and its narrower guarantees remain documented in the [compatibility report](paypal-sandbox-compatibility.md). Schema and contracts: [spec](spec.md). P1 implements reserve/release/accepted-charge accounting and reconciliation with local SQLite tests (ADR 0008). The minimum real AI procurement/report gate passes; P2.1–P2.4 batch freezing, durable Sandbox payment lifecycle, finalization, reversal and recovery are implemented and locally tested. The current P2.5 live result is recorded separately. See [P2 verification](p2-verification.md).
 
 ## Definitions and money
 
@@ -131,3 +131,11 @@ One merchant-of-record Sandbox account receives the gross aggregate test payment
 New mission planning/profile and model-budget reservation follow ADR 0009. A plan is permission to attempt individually checked quotes, not a charge or a promise of settlement. A full-review failure retains already accepted charges, releases unfinished holds, and never resets task/model spending on restart. Final synthesis capacity does not restore Credit or imply a payable delivery. No P2 settlement behavior is added by this change.
 
 Owner-authorized allowance updates use a policy transaction, not a charge/settlement event. The application validates owner, checked USD minor units, existing reserved/outstanding amounts and the per-purchase bound; limit mutation and audit commit together. The explicitly authorized 1,500-unit independent verification account does not alter or settle the original account.
+
+## Implemented P2 boundaries (2026-10-22)
+
+Migration 7 and ADR 0011 implement FROZEN/AWAITING_APPROVAL/CAPTURING/PAYMENT_PENDING/UNKNOWN/CANCELLED/ACTION_REQUIRED/SETTLED and LOCKED→SETTLED allocations. RELEASED/allocation compensation remains a target contract, not an exposed operation. Unknown or cancelled allocations stay locked. Whole unallocated unpaid charges can be reversed with an owner reason; repeated identical correction is a no-op, conflicting reason fails. Safe release requires a later explicit implementation; there is no UI or inferred remote void.
+
+Three logical create/capture intents, each using the transport's maximum three network attempts, are allowed within five hours of the operation's first intent. Long Retry-After yields a durable next_attempt_at; worker inspection never issues a POST. After a crash the lease expires after three minutes, then GET recovery can finalize. Owner-triggered capture always inspects first. Cancel cannot revoke a POST whose intent already committed. Resume compares cancellation version and cannot be replayed to clear a later cancellation.
+
+The server polls known unpaid orders at startup/every 30 seconds, retaining sanitized observations and no raw payer data. Completed receipt fields never change. Reconcile remains available after settlement to append later refund/dispute/mismatch observations; it does not re-open liabilities or restore allowance again. Refunds must be handled by the owner in Sandbox with manual investigation of those observations; no refund or rebilling API exists.

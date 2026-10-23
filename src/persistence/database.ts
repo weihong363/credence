@@ -4,7 +4,8 @@ import { migrations } from './migrations.js';
 export function openDatabase(path: string): Database.Database {
   const db = new Database(path);
   try {
-    db.pragma('foreign_keys = ON');
+    // SQLite table rebuilds require FK enforcement disabled outside the migration transaction.
+    db.pragma('foreign_keys = OFF');
     db.pragma('busy_timeout = 5000');
     db.pragma('journal_mode = WAL');
     db.pragma('synchronous = FULL');
@@ -15,7 +16,9 @@ export function openDatabase(path: string): Database.Database {
         db.exec(migration.sql);
         db.pragma(`user_version = ${migration.version}`);
       }
+      if (db.prepare('PRAGMA foreign_key_check').all().length) throw new Error('MIGRATION_FOREIGN_KEY_MISMATCH');
     }).immediate();
+    db.pragma('foreign_keys = ON');
     return db;
   } catch (error) {
     db.close();

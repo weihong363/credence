@@ -1,3 +1,5 @@
+> P2 update (2026-10-22): default start now serves the SQLite batch API; the fixed-bill routes are archived. The configured DATA_DIR persistent disk stores credence.sqlite by default; optional CREDENCE_DB_PATH must also stay on persistent storage. P0 deployment walkthrough below is historical; follow docs/p2-verification.md for current endpoints. No Render resources were created or deployed during P2.
+
 # Render deployment preparation
 
 Status: **configuration prepared; not deployed**. No Render account, workspace, GitHub connection, service, disk or credit balance was inspected or changed. No cloud resource was created and no deploy was triggered. Approval is required before applying the Blueprint. Current code is the **P0 Sandbox API**, not the planned full Agent Runtime or console.

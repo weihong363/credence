@@ -7,7 +7,7 @@ export interface Order {
 }
 export interface Money { currency_code: string; value: string }
 export class ApiError extends Error {
-  constructor(public status: number, public issues: string[] = []) { super(`PayPal HTTP ${status}`); }
+  constructor(public status: number, public issues: string[] = [], public retryAfterMs = 0) { super(`PayPal HTTP ${status}`); }
 }
 export interface Gateway {
   create(key: string, body: unknown): Promise<Order>;
@@ -23,7 +23,7 @@ export class PayPal implements Gateway {
   private async access(): Promise<string> {
     if (Date.now() < this.expires) return this.token;
     const response = await this.transport(`${this.baseUrl}/v1/oauth2/token`, {
-      method: 'POST', signal: AbortSignal.timeout(15000),
+      method: 'POST', redirect: 'error', signal: AbortSignal.timeout(15000),
       headers: { Authorization: `Basic ${Buffer.from(`${this.client}:${this.secret}`).toString('base64')}`,
         'Content-Type': 'application/x-www-form-urlencoded' }, body: 'grant_type=client_credentials' });
     if (!response.ok) throw new ApiError(response.status);
@@ -36,7 +36,7 @@ export class PayPal implements Gateway {
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
         const response = await this.transport(`${this.baseUrl}${path}`, {
-          method, signal: AbortSignal.timeout(15000), headers: {
+          method, redirect: 'error', signal: AbortSignal.timeout(15000), headers: {
             Authorization: `Bearer ${await this.access()}`, 'Content-Type': 'application/json',
             Prefer: 'return=representation', ...(key ? { 'PayPal-Request-Id': key } : {}) },
           ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
@@ -44,13 +44,14 @@ export class PayPal implements Gateway {
         if (!response.ok) {
           const data = await response.json().catch(() => ({})) as { details?: { issue?: string }[] };
           const issues = (data.details ?? []).map(d => d.issue ?? '').filter(v => /^[A-Z_]{1,100}$/.test(v));
-          throw new ApiError(response.status, issues);
+          const delay = retryAfter(response.headers.get('retry-after'));
+          throw new ApiError(response.status, issues, delay);
         }
         return await response.json() as Order;
       } catch (error) {
         const retry = !(error instanceof ApiError) || error.status === 401 || error.status === 429 || error.status >= 500;
-        if (!retry || attempt === 2) throw error;
-        await new Promise(resolve => setTimeout(resolve, 250 * 2 ** attempt));
+        if (!retry || attempt === 2 || (error instanceof ApiError && error.retryAfterMs > 30000)) throw error;
+        await new Promise(resolve => setTimeout(resolve, Math.max(250 * 2 ** attempt, error instanceof ApiError ? error.retryAfterMs : 0)));
       }
     }
     throw new Error('Unreachable');
@@ -60,4 +61,10 @@ export class PayPal implements Gateway {
   capture(id: string, key: string): Promise<Order> {
     return this.request(`/v2/checkout/orders/${encodeURIComponent(id)}/capture`, 'POST', key, {});
   }
+}
+
+export function retryAfter(value: string|null, now=Date.now()): number {
+  if (!value) return 0;
+  const milliseconds = /^\d+$/.test(value) ? Number(value)*1000 : Date.parse(value)-now;
+  return Number.isFinite(milliseconds) ? Math.min(86400000, Math.max(0,milliseconds)) : 0;
 }

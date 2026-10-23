@@ -1,0 +1,126 @@
+{
+  "recordedAt": "2026-10-22T08:44:40.655Z",
+  "phase": "P2",
+  "status": "LIVE_VERIFIED",
+  "database": ".data/p1-full-review-verification.sqlite",
+  "batch": {
+    "id": "b83897ec-f208-47a1-8e41-e9f38c0566ae",
+    "owner_id": "e23f08f8-62ba-4257-becd-7b5b79bd360a",
+    "account_id": "71977bd8-9c31-4b71-b2e4-e600ca470888",
+    "currency": "USD",
+    "merchant_config_id": "TKUNFMFLDUW5C",
+    "total_minor": 750,
+    "allocation_hash": "79aa1aeee536211f955b74cef5836201898dfdb33da19208995a06f75949ab78",
+    "state": "SETTLED",
+    "frozen_at": 1792657975145,
+    "cancel_latched": 0,
+    "version": 4
+  },
+  "charges": [
+    {
+      "id": "5cfe83f3-88bb-4395-9ebe-e673776a12f9",
+      "task_id": "6a131fa3-6968-40a6-9896-441b7f22d22e",
+      "purchase_id": "7724cbd1-67c7-4bc0-ac6f-3404066bceb5",
+      "delivery_id": "5ec80f33-2684-4537-b73c-a3d837869d2b",
+      "amount_minor": 125,
+      "capability_id": "repo.inventory",
+      "verification": "PASS"
+    },
+    {
+      "id": "5880d013-f0eb-4a77-9353-431a5ee33a6f",
+      "task_id": "6a131fa3-6968-40a6-9896-441b7f22d22e",
+      "purchase_id": "bd2c4e0a-a9c9-4726-b9be-d0e008ce777c",
+      "delivery_id": "e6b183e8-a486-48a0-aae2-64f0787cd2ec",
+      "amount_minor": 250,
+      "capability_id": "repo.architecture",
+      "verification": "PASS"
+    },
+    {
+      "id": "5c7c2dfc-a4d3-4e1a-ad0b-5f3e867c54ff",
+      "task_id": "6a131fa3-6968-40a6-9896-441b7f22d22e",
+      "purchase_id": "91623b7f-5675-40b0-9c37-025f13a513ff",
+      "delivery_id": "34406ef3-400f-4786-aa78-1e970b2a3c88",
+      "amount_minor": 375,
+      "capability_id": "repo.risk-review",
+      "verification": "PASS"
+    }
+  ],
+  "allocations": [
+    {
+      "id": "4a34fe9f-8929-4657-8ebc-eeeae84dcaf8",
+      "charge_id": "5880d013-f0eb-4a77-9353-431a5ee33a6f",
+      "amount_minor": 250,
+      "state": "SETTLED"
+    },
+    {
+      "id": "4a595bd7-5514-4286-bc59-74cb18043d07",
+      "charge_id": "5c7c2dfc-a4d3-4e1a-ad0b-5f3e867c54ff",
+      "amount_minor": 375,
+      "state": "SETTLED"
+    },
+    {
+      "id": "73598c96-5f2a-4cf1-bf5d-b211337f6bac",
+      "charge_id": "5cfe83f3-88bb-4395-9ebe-e673776a12f9",
+      "amount_minor": 125,
+      "state": "SETTLED"
+    }
+  ],
+  "receipt": {
+    "batch_id": "b83897ec-f208-47a1-8e41-e9f38c0566ae",
+    "attempt_id": "0230c7b1-11e9-4c0a-9917-8385598a5a19",
+    "order_id": "9PU44438P3941414W",
+    "capture_id": "44G16685B65499710",
+    "total_minor": 750,
+    "currency": "USD",
+    "observation_id": "ff5e205f-6568-4a9c-86b2-c0cf3f9f2061",
+    "verified_at": 1792658169023
+  },
+  "authoritativeObservation": {
+    "orderId": "9PU44438P3941414W",
+    "status": "COMPLETED",
+    "orderStatus": "COMPLETED",
+    "batchId": "b83897ec-f208-47a1-8e41-e9f38c0566ae",
+    "invoiceId": "b83897ec-f208-47a1-8e41-e9f38c0566ae",
+    "merchantId": "TKUNFMFLDUW5C",
+    "minor": 750,
+    "currency": "USD",
+    "capture": {
+      "id": "44G16685B65499710",
+      "status": "COMPLETED",
+      "minor": 750,
+      "currency": "USD"
+    }
+  },
+  "account": {
+    "id": "71977bd8-9c31-4b71-b2e4-e600ca470888",
+    "limit_minor": 1500,
+    "reserved_minor": 0,
+    "outstanding_minor": 0,
+    "available_minor": 1500
+  },
+  "modelRequests": [
+    {
+      "task_id": "6a131fa3-6968-40a6-9896-441b7f22d22e",
+      "count": 5
+    }
+  ],
+  "checks": {
+    "independentAuthenticatedGet": true,
+    "reconciliation": "PASS",
+    "repeatedReceiptUnchanged": true,
+    "financialEventCountsUnchanged": true,
+    "serverRestartReceiptAndEventsUnchanged": true,
+    "originalLedgerAndP0BytesUnchanged": true
+  },
+  "financialEventCounts": [
+    {
+      "type": "CHARGE_SETTLED",
+      "count": 3
+    },
+    {
+      "type": "PAYMENT_CONFIRMED",
+      "count": 1
+    }
+  ],
+  "remaining": []
+}

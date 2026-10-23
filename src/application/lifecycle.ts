@@ -1,3 +1,5 @@
+import {reconcilePayments} from './payment-integrity.js';
+import {reconcileBatches} from './batches.js';
 import { randomUUID } from 'node:crypto';
 import type Database from 'better-sqlite3';
 import { hash } from '../domain/json.js';
@@ -70,17 +72,19 @@ export function reconcile(db: Database.Database): void {
  db.transaction(()=>{
   if(db.prepare('PRAGMA foreign_key_check').all().length)throw new Error('FOREIGN_KEY_MISMATCH');
   if(db.prepare('SELECT 1 FROM reservations r LEFT JOIN purchases p ON p.id=r.purchase_id WHERE p.id IS NULL LIMIT 1').get())throw new Error('ORPHAN_RESERVATION');
+  reconcileBatches(db);
+  reconcilePayments(db);
   const accounts=db.prepare('SELECT id,reserved_minor,outstanding_minor FROM accounts').all() as {id:string;reserved_minor:number;outstanding_minor:number}[];
   for(const account of accounts){
     const totals=db.prepare(`SELECT COALESCE(sum(CASE type WHEN 'CREDIT_RESERVED' THEN amount_minor WHEN 'CREDIT_RELEASED' THEN -amount_minor WHEN 'SERVICE_CHARGED' THEN -amount_minor END),0) reserved,
-      COALESCE(sum(CASE WHEN type='SERVICE_CHARGED' THEN amount_minor ELSE 0 END),0) outstanding FROM ledger_events WHERE account_id=?`).get(account.id) as {reserved:number;outstanding:number};
+      COALESCE(sum(CASE WHEN type='SERVICE_CHARGED' THEN amount_minor WHEN type IN('CHARGE_SETTLED','CHARGE_REVERSED') THEN -amount_minor ELSE 0 END),0) outstanding FROM ledger_events WHERE account_id=?`).get(account.id) as {reserved:number;outstanding:number};
     const held=db.prepare("SELECT COALESCE(sum(amount_minor),0) amount FROM reservations WHERE account_id=? AND state='HELD'").get(account.id) as {amount:number};
-    const charged=db.prepare('SELECT COALESCE(sum(amount_minor),0) amount FROM charges WHERE account_id=?').get(account.id) as {amount:number};
+    const charged=db.prepare(`SELECT COALESCE(sum(c.amount_minor),0) amount FROM charges c WHERE c.account_id=? AND NOT EXISTS(SELECT 1 FROM ledger_events l WHERE l.charge_id=c.id AND l.type='CHARGE_REVERSED') AND NOT EXISTS(SELECT 1 FROM allocations a WHERE a.charge_id=c.id AND a.state='SETTLED')`).get(account.id) as {amount:number};
     if(totals.reserved!==account.reserved_minor || held.amount!==totals.reserved || totals.outstanding!==account.outstanding_minor || charged.amount!==totals.outstanding)throw new Error('RECONCILIATION_MISMATCH');
   }
   const tasks=db.prepare('SELECT id,spent_minor FROM tasks').all() as {id:string;spent_minor:number}[];
   for(const task of tasks){
-    const spent=db.prepare("SELECT COALESCE(sum(CASE type WHEN 'CREDIT_RESERVED' THEN amount_minor WHEN 'CREDIT_RELEASED' THEN -amount_minor ELSE 0 END),0) amount FROM ledger_events WHERE task_id=?").get(task.id) as {amount:number};
+    const spent=db.prepare("SELECT COALESCE(sum(CASE type WHEN 'CREDIT_RESERVED' THEN amount_minor WHEN 'CREDIT_RELEASED' THEN -amount_minor WHEN 'CHARGE_REVERSED' THEN -amount_minor ELSE 0 END),0) amount FROM ledger_events WHERE task_id=?").get(task.id) as {amount:number};
     if(spent.amount!==task.spent_minor)throw new Error('TASK_RECONCILIATION_MISMATCH');
   }
  }).deferred();

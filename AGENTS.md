@@ -12,7 +12,7 @@ Prefer TypeScript, ESM, explicit public types, functional patterns, native APIs 
 
 ## Modules and trust
 
-Current modules include src/server.ts, src/config.ts, src/http.ts, src/settlement.ts and src/paypal.ts. The planned module map is in docs/spec.md; do not pretend those directories exist. Preserve the verified P0 transport and evidence. New economic modules must not import raw PayPal types. Only application services own financial transactions; providers and LLM tools may not write the ledger or invoke capture. Keep future HTTP handlers thin. SQLite transactions contain no remote API or LLM calls.
+Current modules include src/server.ts, src/runtime-http.ts, src/application, src/persistence and src/payments. Historical P0 remains in src/phase0-server.ts, src/http.ts and src/settlement.ts; src/paypal.ts is the reused transport. The planned module map is in docs/spec.md; do not pretend those directories exist. Preserve the verified P0 transport and evidence. New economic modules must not import raw PayPal types. Only application services own financial transactions; providers and LLM tools may not write the ledger or invoke capture. Keep future HTTP handlers thin. SQLite transactions contain no remote API or LLM calls.
 
 No microservices, Kubernetes, blockchain, generalized plugin framework or compatibility facade without a concrete requirement. P1's SQLite repository and append-only ledger are justified by reservation correctness. P0 remains an isolated spike until the documented P2 cutover; it must never process the same obligations as the new runtime.
 
@@ -21,7 +21,10 @@ No microservices, Kubernetes, blockchain, generalized plugin framework or compat
 - `pnpm install --frozen-lockfile`
 - `pnpm check`: TypeScript no-emit validation.
 - `pnpm test`: Node tests through tsx; no credentials required.
-- `pnpm dev`: local P0 server; loads `.env` and requires valid configuration.
+- `pnpm dev`: local P2 SQLite settlement server; loads `.env` and requires valid configuration.
+- `pnpm dev:phase0`: explicit isolated historical P0 server.
+- `pnpm settlement`: local owner batch/payment status, order/capture/cancel/resume/reconcile/recover and unallocated-charge reversal.
+- `pnpm verify:phase2 BATCH_ID`: opt-in independent Sandbox GET and settled-only replay verification; requires explicit CREDENCE_DB_PATH.
 - `pnpm verify:phase0`: live read/repeat verification, requires settled local bill and running server.
 - `pnpm verify:phase0 --negative`: official Sandbox decline injection against the completed order.
 

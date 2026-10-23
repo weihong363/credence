@@ -144,3 +144,20 @@ Live negative-test evidence was recorded at **16:34:28 Asia/Shanghai**. The exis
 The earlier cancellation latch was observed live and prevented capture until explicit owner confirmation; a new end-to-end browser cancellation session was not repeated. Genuine funding failure, real capture-time network loss, and visual inspection of buyer/receiver Activity remain distinct unverified operational checks. They are not represented as passed by the negative-test injection. Phase 0 closure does not implement or begin the full Agent Runtime.
 
 Deployment follow-up: the recorded P0 evidence above predates the configurable hosted origin/port/data directory. See [Render deployment preparation](deployment-render.md) for current configuration and separate unverified hosted acceptance. Historical transaction amounts, IDs, statuses and evidence files remain unchanged; no new live payment was made for deployment preparation.
+
+## P2 runtime extension — 2026-10-22
+
+The P0 observations above remain historical fixture evidence. P2 now separately connects three real accepted P1 service purchases to one immutable SQLite batch and a human-approved Sandbox payment. See [P2 evidence](p2-live-evidence.json), [verification](p2-verification.md) and [ADR 0011](decisions/0011-durable-sandbox-settlement.md).
+
+Actual batch `b83897ec-f208-47a1-8e41-e9f38c0566ae`, order `9PU44438P3941414W`, capture `44G16685B65499710`: gross USD 7.50, independently GET-verified COMPLETED. Repeated owner requests and a real server restart retain one receipt, one payment confirmation and three settled allocations. The verification account's outstanding falls from 750 to zero; its 1,500-unit internal allowance is available again. Task lifetime spending remains 750. Original P0 JSON/receipt and the separate original exhausted P1 ledger remain unchanged.
+
+| Capability | Supplier and evidence |
+| --- | --- |
+| OAuth, buyer approval, order/capture IDs and authoritative payment status | Native PayPal Sandbox, live P2 verified |
+| Request-ID replay | PayPal supports bounded retention; Credence persists stable keys/input and adds a five-hour cutoff plus logical retry limits |
+| Internal Credit, service verification, aggregate bill and charge allocation | Credence application/SQLite, not a PayPal credit product |
+| Once-only local finalization, immutable receipt and balance restoration | Credence transaction, uniqueness and reconciliation; live happy path/restart verified, injected failure/race/crash cases tested locally |
+| Cancel latch, explicit resume and delayed/duplicate return hints | Credence state machine; not a PayPal refund or order void |
+| Whole unpaid unallocated-charge correction | Credence reversal event; not a provider refund |
+
+No claim of native PayPal agent credit, lending, marketplace payouts, off-session charging or distributed exactly-once processing is added. P2 does not live-test genuine funding decline, packet loss during capture, refund correctness or five consecutive demonstrations. Optional AUTHORIZE and webhook ingestion remain deferred.

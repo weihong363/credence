@@ -1,3 +1,5 @@
+import {openDatabase} from '../src/persistence/database.js';
+import {seedDemo} from '../src/registry/catalog.js';
 import assert from 'node:assert/strict';
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { once } from 'node:events';
@@ -32,28 +34,29 @@ async function main(): Promise<void> {
     PORT: String(port), RENDER_EXTERNAL_URL: 'https://credence-smoke.example', DATA_DIR: dir,
     PAYPAL_CLIENT_ID: 'fake-client', PAYPAL_CLIENT_SECRET: 'fake-secret',
     PAYPAL_MERCHANT_ID: 'FAKE', OWNER_TOKEN: owner };
+  const db=openDatabase(resolve(dir,'credence.sqlite'));const identity=seedDemo(db);db.close();
   let child: ChildProcessWithoutNullStreams | undefined;
-  const call = (path: string, method = 'GET') => new Promise<{ state?: string; status?: string } | null>((done, reject) => {
+  const call = (path: string, method = 'GET', expectedStatus=200) => new Promise<{ state?: string; status?: string; accounts?: {id:string}[]; error?:string } | null>((done, reject) => {
     // Native HTTP preserves the virtual Host when testing Render's TLS-proxy arrangement locally.
     const req = request({ host: '127.0.0.1', port, path, method, timeout: 5000,
       headers: { Host: 'credence-smoke.example', Authorization: `Bearer ${owner}` } }, response => {
       let body = ''; response.setEncoding('utf8'); response.on('data', chunk => { body += chunk; });
       response.on('end', () => {
-        try { assert.equal(response.statusCode, 200); done(JSON.parse(body)); } catch (error) { reject(error); }
+        try { assert.equal(response.statusCode, expectedStatus); done(JSON.parse(body)); } catch (error) { reject(error); }
       });
     });
     req.on('error', reject); req.on('timeout', () => req.destroy(new Error('Request timed out'))); req.end();
   });
   try {
     child = await boot(env);
-    assert.equal((await call('/health'))?.status, 'ok'); assert.equal(await call('/api/settlement'), null);
-    assert.equal((await call('/api/cancel', 'POST'))?.state, 'CANCELLED');
-    await stop(child); child = undefined; assert.equal(existsSync(`${dir}/process.lock`), false);
-    child = await boot(env);
-    assert.equal((await call('/api/settlement'))?.state, 'CANCELLED');
-    assert.equal((await call('/api/capture', 'POST'))?.state, 'CANCELLED');
-    await stop(child); child = undefined; assert.equal(existsSync(`${dir}/process.lock`), false);
-    console.log('Production smoke passed: compiled server, assigned port, health, persistent state, graceful restart; no PayPal calls.');
+    assert.equal((await call('/health'))?.status,'ok');
+    assert.equal((await call('/api/economy'))?.accounts?.[0].id,identity.accountId);
+    assert.equal((await call('/api/create','POST',410))?.error,'P0_ARCHIVED_USE_BATCH_API');
+    await stop(child);child=undefined;
+    child=await boot(env);
+    assert.equal((await call('/api/economy'))?.accounts?.[0].id,identity.accountId);
+    await stop(child);child=undefined;
+    console.log('Production smoke passed: compiled server, assigned port, health, archived P0 route, persistent SQLite account, graceful restart; no PayPal calls.');
   } finally {
     if (child && child.exitCode === null) { const exited = once(child, 'exit'); child.kill('SIGKILL'); await exited; }
     rmSync(dir, { recursive: true, force: true });

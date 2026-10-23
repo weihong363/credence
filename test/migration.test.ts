@@ -22,10 +22,10 @@ test('version-one history survives migration exactly, replay and integrity trigg
  old.exec('UPDATE accounts SET reserved_minor=70; UPDATE tasks SET spent_minor=70');
  const history=old.prepare('SELECT * FROM ledger_events').all();old.close();
  const db=openDatabase(path);try{
- assert.deepEqual(db.prepare('SELECT * FROM ledger_events').all(),history);
+ assert.deepEqual(db.prepare('SELECT seq,id,account_id,task_id,purchase_id,reservation_id,type,amount_minor,currency,dedupe_key,payload_hash,created_at FROM ledger_events').all(),history);
  assert.deepEqual(reserve(db,request),reservation);assert.equal(db.prepare('PRAGMA foreign_key_check').all().length,0);
  assert.throws(()=>db.exec('DELETE FROM ledger_events'),/APPEND_ONLY/);
- assert.equal(db.pragma('user_version',{simple:true}),5);
+ assert.equal(db.pragma('user_version',{simple:true}),7);
  }finally{db.close();rmSync(directory,{recursive:true,force:true});}
 });
 

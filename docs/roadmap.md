@@ -1,6 +1,6 @@
 # Credence execution roadmap
 
-Authority: [spec](spec.md), [settlement](settlement.md), [product](product.md). Status audited 2026-10-21. **Owner authorized P1 implementation. P1 local core and minimum real DeepSeek gate pass; the same-task three-service gate also passes; the five-run demonstration remains P3. Cloud creation/deployment is not authorized.** Dates below are planning windows, not completed work or promises. Effort assumes one developer with AI assistance and excludes waiting for owner/payment approvals.
+Authority: [spec](spec.md), [settlement](settlement.md), [product](product.md). Status audited 2026-10-21. **Owner authorized P1 and P2 implementation; both acceptance gates pass. P1 local core and minimum real DeepSeek gate pass; the same-task three-service gate also passes; the five-run demonstration remains P3. Cloud creation/deployment is not authorized.** Dates below are planning windows, not completed work or promises. Effort assumes one developer with AI assistance and excludes waiting for owner/payment approvals.
 
 ## Verified baseline and gaps
 
@@ -74,11 +74,11 @@ See [focused analysis and exit criteria](p1-three-service-follow-up.md). Current
 | P2.4 | Atomic finalization, balance restoration, recovery jobs, pre-payment corrections and manual refund policy | 0.75–1 day | P2.3 | One confirmation/allocation settlement after retries/crash; projection replay matches; no rebilling unknown outcomes |
 | P2.5 | Real multi-service Sandbox acceptance and report | 0.75–1 day | P2.4, owner Personal-buyer participation | Three actual accepted services → one frozen batch → one real completed payment, same IDs after repeated requests/restart |
 
-- [ ] P2.1 dynamic batching.
-- [ ] P2.2 adapter wrapper and documented P0 cutover.
-- [ ] P2.3 approval/capture lifecycle and authoritative reconciliation.
-- [ ] P2.4 ledger finalization, corrections/recovery and negative tests.
-- [ ] P2.5 live gate with evidence and owner-visible obligations.
+- [x] P2.1 dynamic batching — immutable whole-charge allocations, owner replay, concurrency/rollback/restart and migration tests; [local verification](p2-verification.md). No dynamic payment yet.
+- [x] P2.2 provider-neutral adapter and default-server P0 cutover; explicit historical regression command.
+- [x] P2.3 durable intent/keys, owner API, single-use callback hints, cancellation/resume, leases and independent GET verification.
+- [x] P2.4 atomic receipt/events/balances, read-only recovery, whole unallocated-charge reversal and concurrency/crash/rollback negative tests. Safe allocation release and refund automation remain deferred.
+- [x] P2.5 live three-service USD 7.50 gate: batch b83897ec-f208-47a1-8e41-e9f38c0566ae, order 9PU44438P3941414W, capture 44G16685B65499710; independent GET, owner API replay, graceful server restart and balance reconciliation pass. [Evidence](p2-live-evidence.json).
 
 Gate guarantees: no rejected deliveries in payable batches; no allowance restored before verified capture; one allocation/charge confirmation; frozen totals and USD formatting; no secret exposure; single merchant, no independent provider payout claim. Test UNKNOWN on lost create/capture, pending status, stale retries, wrong merchant/amount, duplicate/delayed event hints, cancellation race and failed commit after remote success. Default CI remains offline/mocked. Webhooks, refund API and AUTHORIZE stay deferred; documented polling/reconciliation is sufficient.
 

@@ -1,12 +1,13 @@
 # Authoritative implementation specification
 
-Version 1, 2026-10-21. **P1 local CLI core implemented; minimum live AI gate passed. P2–P4 planned.** Current behavior is inventoried below. [Product](product.md) defines scope, [settlement](settlement.md) defines financial invariants and payment recovery, [roadmap](roadmap.md) defines ordered work, and [ADRs](decisions/README.md) record decisions. If documents conflict, stop and resolve them before a financial change; do not silently choose a rule.
+Version 1, 2026-10-21. **P1 local CLI core implemented; minimum live AI gate passed. P2.1–P2.4 implemented and locally tested; P2.5 live status is recorded in p2-live-evidence.json. P3–P4 remain planned.** Current behavior is inventoried below. [Product](product.md) defines scope, [settlement](settlement.md) defines financial invariants and payment recovery, [roadmap](roadmap.md) defines ordered work, and [ADRs](decisions/README.md) record decisions. If documents conflict, stop and resolve them before a financial change; do not silently choose a rule.
 
 ## 1. Current repository audit
 
 | Surface | Observed implementation | Boundary |
 | --- | --- | --- |
-| src/server.ts / src/config.ts / src/http.ts | Native Node HTTP, owner Bearer token, configurable HOST/PORT/DATA_DIR, HTTPS origin validation, health, state-bound return/cancel routes | No sessions, frontend, request body parser, multi-owner routing or webhook endpoint |
+| src/server.ts / src/runtime-http.ts / src/config.ts | Native Node owner batch API, bounded JSON body, version/idempotency checks, validated callback hints, SQLite recovery and configured HOST/PORT/DATA_DIR | No sessions, frontend, multi-owner routing or webhook endpoint |
+| src/phase0-server.ts / src/http.ts | Explicit historical P0 regression server | Isolated fixed-bill JSON ledger; default runtime endpoints return 410 |
 | src/paypal.ts | Sandbox-only OAuth, Orders create/get/capture, token cache, three-attempt transport retry, sanitized issue codes | `Gateway` and `Order` expose PayPal shapes; not a provider-neutral economic interface |
 | src/settlement.ts | Fixed three-charge bill, 1,000-unit fixture bound, one JSON snapshot, exclusive process lock, terminal receipt, explicit resume | No dynamic purchases, atomic credit accounts, append-only ledger, database, multiple batches or real service verification |
 | scripts/verify-phase0.ts | Checks real order/charge association, repeats local requests, official negative header probe | Requires an already-settled local bill; negative probe targets the completed order, not a new real funding decline |
@@ -296,3 +297,17 @@ Migration 5 preserves historical scoped tasks and all prior ledger/request histo
 ## Owner-authorized verification allowance
 
 On 2026-10-22 the owner explicitly authorized a separate live review and limit 1,500. `setAccountLimit` and the local `economy limit` command apply owner checks, monetary/obligation/per-purchase bounds, same-value replay and transactional audit. Neither model nor providers receive this operation. Test coverage includes denial, replay and audit-failure rollback. Current full-review evidence is in `docs/p1-full-review-live-evidence.json`; this is bounded internal Credit, not PayPal funds.
+
+## P2.1 implementation boundary
+
+`src/application/batches.ts` owns local whole-charge freezing and batch reconciliation. Schema version 6 adds immutable FROZEN batches, LOCKED allocations and owner-scoped batch replay records; `ledger_events` retains P1 history and adds SETTLEMENT_ALLOCATED with an allocation reference. `economic_audit.batch_id` ties the owner freeze action to the batch. Migration 7 extends this foundation with payment states, final allocation settlement, durable payment intent and whole unallocated-charge reversals. Allocation release remains deferred. Merchant identity comes from trusted server configuration, not request data. No procurement tool exposes batching. See [verification](p2-verification.md) and [ADR 0010](decisions/0010-frozen-batch-foundation.md).
+
+## P2 implemented payment contracts
+
+The default `src/server.ts` now opens the selected SQLite economic ledger, reconciles it, and serves `src/runtime-http.ts`. `src/phase0-server.ts` plus `pnpm dev:phase0` preserve explicit P0 regression; default fixed-bill APIs are HTTP 410. `src/payments/port.ts` contains provider-neutral types; only `paypal-adapter.ts` imports raw Orders types. No SDK/dependency was added.
+
+Actual owner endpoints (narrower than the planned P3 surface): GET `/api/economy`, GET/POST `/api/batches`, GET `/api/batches/:id`, and POST `/api/batches/:id/{order,capture,cancel,resume,reconcile}`. Every owner call requires Bearer OWNER_TOKEN, exact Host and any supplied Origin. No browser cookie/session exists yet. POST JSON is capped at 8 KiB; unknown fields are rejected. All POSTs require Idempotency-Key. Freeze accepts exactly `{accountId,chargeIds}`. Capture/cancel/resume accept exactly `{expectedVersion}`; order/reconcile accept `{}`. New stale commands fail; an exact old command can replay current state. HTTP 202 means unresolved/pending, never successful payment. Single-owner identity is resolved from persisted accounts, not an agent-supplied actor ID.
+
+GET `/payments/return` and `/payments/cancel` are state/order-bound one-time hints. They return explanatory text and schedule independent polling; they cannot capture or clear cancellation. Callback duplicate/delayed events cannot duplicate financial effects. Unsigned webhooks are not implemented. Owner API views omit provider request keys, exact stored create input, callback secrets/hashes, OAuth and owner credentials.
+
+Schema 7 adds payment_attempts, payment_observations, settlement_receipts and settlement_commands, expands batch/allocation state checks and adds PAYMENT_CONFIRMED, CHARGE_SETTLED and CHARGE_REVERSED to the existing journal. Attempt keys/input/first timestamps and receipt values are immutable; lease/checkpoint/state projections have guarded updates. Settlement confirmation uses the first allocation for required legacy task/purchase/reservation columns and references the full batch; per-allocation events retain each charge's lineage. No confirmation balance delta is applied twice. See [ADR 0011](decisions/0011-durable-sandbox-settlement.md) and [P2 verification](p2-verification.md).
