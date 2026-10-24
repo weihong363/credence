@@ -110,3 +110,11 @@ A same-commit manual redeploy `dep-dbdg3fbncjis73a37g8g` reached live at 2026-10
 ### Subsequent UI acceptance and local fix
 
 Five consecutive browser-only real missions and human-approved Sandbox settlements passed on `074a789`; see [UI evidence](p3-ui-live-evidence.json). Earlier pending statements above describe historical checkpoints. A subsequent local account-option duplication fix passes 124 tests and basic responsive/keyboard checks; it has not been deployed.
+
+## P3 acceptance evidence and re-login fix deployed — 2026-10-24
+
+Commit `4dad92b489b8466784fdaea822e2b0a47f04606b` was pushed to the existing private repository and deployed to the existing service in My Workspace. Deploy `dep-dbe2pr3rjlhs738rd7t0` reached live at 2026-10-24T03:59:24.901081Z (11:59:24 Asia/Shanghai). No resources or environment variables changed.
+
+Public health and console returned 200; unauthenticated finance returned 401. The server-side session verifier passed login/read/CSRF rejection/logout/revocation without exposing credentials. Read-only SQLite checks confirmed all five UI-run Capture IDs unchanged, with exactly one create attempt and one capture attempt per batch. Six tasks and 25 model calls remain recorded (the earlier API smoke plus five UI runs). No new task or payment was initiated.
+
+The account-option fix is now deployed; browser re-login regression was verified locally before release. Authenticated visual confirmation on this deployment still requires owner re-login after deployment revocation. Physical-device and screen-reader acceptance remain unverified.
