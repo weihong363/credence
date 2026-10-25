@@ -56,7 +56,7 @@ TypeScript, Node.js, SQLite/better-sqlite3, Vite, DeepSeek, PayPal Sandbox OAuth
 ## Links and reviewer access
 
 - Hosted console: https://credence-sandbox.onrender.com/ (owner authentication required).
-- Repository: https://github.com/weihong363/credence (currently private; not submission-ready).
+- Repository: https://github.com/weihong363/credence (public; Apache-2.0).
 - Demo video: pending recording and public YouTube upload.
 - Open-source license: Apache License 2.0; copyright 2026 Ironion.
-- Reviewer access: Render demo plus GitHub local run instructions in [reviewer guide](reviewer-guide.md). Hosted console requires owner authentication; unauthenticated interactive demo access remains unresolved. Local live reproduction uses reviewer-owned Sandbox/LLM credentials. Never publish the deployment OWNER_TOKEN or developer API secrets.
+- Reviewer access: Render demo plus GitHub local run instructions in [reviewer guide](reviewer-guide.md). The /judge/ entry uses isolated registration-free sessions with a finite 80-call budget; first real three-service execution passed, while guest payment verification still awaits human buyer approval. Local live reproduction uses reviewer-owned Sandbox/LLM credentials. Never publish the deployment OWNER_TOKEN or developer API secrets.

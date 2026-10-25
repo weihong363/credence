@@ -1,6 +1,6 @@
 # P4 preparation and release checklist
 
-Local preparation authorized 2026-10-25. No external publication, repository visibility change, video upload or submission has occurred.
+Local preparation authorized 2026-10-25. Repository public visibility is owner-authorized and now verified; video upload and submission have not occurred.
 
 ## Rules checked
 
@@ -26,7 +26,7 @@ Local preparation authorized 2026-10-25. No external publication, repository vis
 
 ## Owner release gates
 
-- [ ] Review concrete sanitized repository and approve public visibility; Apache-2.0 selection is already authorized.
+- [x] Owner authorized public visibility after screening; existing GitHub repository is public and Apache-2.0 detection passes.
 - [ ] Review finished video and approve public YouTube upload.
 - [ ] Review final Devpost fields, working links and access instructions before submitting.
 - [ ] Confirm build/access availability through judging; current rules list judging ending December 15, 2026 at 08:00 Pacific Time.

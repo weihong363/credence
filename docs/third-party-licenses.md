@@ -7,3 +7,5 @@ Installed package metadata review found: better-sqlite3, Vite, tsx and most tran
 The console uses CSS and system-font fallbacks; no external font download is required. PayPal/GitHub repository data and any captured third-party branding in video/screenshots remain subject to their owners' rights and terms. Do not treat the project's license as permission for sponsor logos, copyrighted audio or source-repository content. No music/image asset license grant is inferred. Final video/assets and any bundled third-party notices need review before publication.
 
 Official license text was fetched from https://www.apache.org/licenses/LICENSE-2.0.txt and compared byte-for-byte locally. The appendix remains unchanged; project-specific attribution is separate in COPYRIGHT. GitHub's actual license detection remains unverified until the file is pushed and the repository can be inspected through its authorized/public API.
+
+Follow-up: repository is now public and the GitHub LICENSE API reports Apache-2.0 for root LICENSE (verified 2026-10-25).

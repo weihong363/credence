@@ -1,6 +1,6 @@
 # Judge access
 
-Updated 2026-10-25. Isolated judge implementation is locally tested; deployment and live guest acceptance must be recorded before declaring the primary path ready.
+Updated 2026-10-25. Isolated judge implementation is deployed. First anonymous real task completed all three services in five model calls; its payment still awaits human approval/Capture verification. See [live evidence](p4-judge-live-evidence.json).
 
 ## Primary: hosted Render demo
 

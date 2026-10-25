@@ -6,11 +6,11 @@ Credence is an AI Agent Economic Runtime prototype: agents purchase capabilities
 
 The motivation is to give agents useful economic autonomy while making every decision, reservation, delivery, and payment accountable. Internal Credit is an accounting allowance, not lending or PayPal-provided financing. The hackathon target is the PayPal AI Hackathon 2026; Alipay adaptation is a future possibility only.
 
-Repository: [weihong363/credence](https://github.com/weihong363/credence) (private; public release pending). Console screenshot: **[SCREENSHOT — pending]**. Demo video: **[YOUTUBE_URL — pending]**.
+Repository: [weihong363/credence](https://github.com/weihong363/credence) (public; Apache-2.0). Console screenshot: **[SCREENSHOT — pending]**. Demo video: **[YOUTUBE_URL — pending]**.
 
 ## Try Credence
 
-[Open the Render demo](https://credence-sandbox.onrender.com/). The owner console requires owner access. The isolated [judge entry](https://credence-sandbox.onrender.com/judge/) is implemented and awaiting deployment/live acceptance. Do not distribute OWNER_TOKEN. For a safe local alternative, follow the [judge access guide](docs/judge-access.md), including Docker Compose and explicitly simulated rehearsal options.
+[Open the Render demo](https://credence-sandbox.onrender.com/). The owner console requires owner access. The isolated [judge entry](https://credence-sandbox.onrender.com/judge/) is deployed with an 80-call lifetime envelope; its first real task passed all three services, and guest payment acceptance awaits human buyer approval. Do not distribute OWNER_TOKEN. For a safe local alternative, follow the [judge access guide](docs/judge-access.md), including Docker Compose and explicitly simulated rehearsal options.
 
 ## What works today
 
@@ -207,4 +207,4 @@ Hosted API acceptance is now **settled and redeploy-verified**: order `5KC26856D
 
 ## Reviewer access
 
-The submission plan is a [Render demo](https://credence-sandbox.onrender.com/) plus public GitHub source and local run instructions. The owner console requires owner authentication. The isolated judge entry uses anonymous scoped sessions when enabled; deployment/live acceptance is recorded separately. Do not publish OWNER_TOKEN. For local reproduction, use the [local reviewer guide](docs/reviewer-guide.md) with your own credentials or the explicitly simulated rehearsal. Public GitHub and YouTube publication are still pending.
+The submission plan is a [Render demo](https://credence-sandbox.onrender.com/) plus public GitHub source and local run instructions. The owner console requires owner authentication. The isolated judge entry uses anonymous scoped sessions when enabled; deployment and partial live acceptance are recorded in [judge evidence](docs/p4-judge-live-evidence.json). Do not publish OWNER_TOKEN. For local reproduction, use the [local reviewer guide](docs/reviewer-guide.md) with your own credentials or the explicitly simulated rehearsal. GitHub is public and GitHub detects Apache-2.0. YouTube recording/upload remains pending.
