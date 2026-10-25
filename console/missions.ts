@@ -1,7 +1,7 @@
 import {api,ApiError} from './api.js';
 import type {TaskSummary} from '../src/application/read-model.js';
 interface Draft {key:string;accountId:string;repository:{owner:string;name:string;commitSha:string}}
-const journal='credence.pendingMission';
+const journal=typeof location!=='undefined'&&location.pathname.startsWith('/judge')?'credence.judge.pendingMission':'credence.pendingMission';
 export class MissionForm {
  private epoch=0;private busy=false;private checked=false;private loaded=false;
  constructor(private csrf:()=>string,private selected:(task:TaskSummary)=>void,private notice:(text:string)=>void,private error:(error:unknown)=>void){

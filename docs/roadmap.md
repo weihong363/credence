@@ -89,19 +89,22 @@ Owner authorized starting P3 on 2026-10-23. The hosted console and five consecut
 - [x] P3.1: same-origin one-hour session/CSRF, logout/restart revocation, sanitized task/audit/ledger reads and monotonic cursor API; 105 offline tests and compiled session smoke pass. [Verification](p3-verification.md). Console polling UI remains P3.2.
 - [x] P3.2: read-only same-origin login console, mission/agent activity, saved purchase reasons and quoted prices, reservation/execution/delivery state, verified source-anchor inspection. 110 offline tests and mock-only browser acceptance pass; cloud UI and real mission/browser gates remain unverified. No task-start or payment controls in this slice.
 - [x] P3.3: account allowance/purchase-cap view, paged ledger with allocation-to-batch lineage, accepted-charge selection/freeze, batch breakdown and explicit owner order/approval-link/capture/reconcile/cancel/resume controls. 115 offline tests and mock-only browser capture/ledger acceptance pass; no new live payment or cloud UI deployment.
-- [ ] P3.4: final result and honest failure states, English copy, accessibility, loading/error recovery and controlled run harness. Result/read/rehearsal and owner task start/recovery locally pass 124 offline tests and mock browser checks; five real controlled-run acceptances pass; broader device/accessibility checks remain pending.
+- [x] P3.4: final result and honest failure states, English copy, accessibility, loading/error recovery and controlled run harness. Result/read/rehearsal and owner task start/recovery locally pass 124 offline tests and mock browser checks; five real controlled-run acceptances pass; physical-device and screen-reader checks explicitly deferred by owner on 2026-10-25; these environments remain unverified.
   - [x] Validated final report/citations, explicit pending/failed/unavailable states, session-expiry focus/loading/error feedback, six-scenario isolated mock rehearsal command.
   - [x] Owner task-start and explicit same-task recovery controls; durable replay, lease fencing, bounded model execution and v7 history-preserving migration locally verified.
   - [x] Hosted real task API acceptance: three services accepted, four DeepSeek calls, unique USD 7.50 order and independent provider GET; subsequently approved and captured as recorded below.
   - [x] Hosted API payment completed: human approval, one server Capture, independent COMPLETED verification, settled replay and same-commit redeploy persistence all pass.
   - [x] Five browser-only consecutive real procurement/Sandbox settlement runs; [evidence](p3-ui-live-evidence.json).
   - [x] Basic responsive/keyboard acceptance: local mock desktop 1265px and narrow 360px without horizontal overflow; keyboard login, disclosure and mission selection; re-login option duplication fixed locally.
-  - [ ] Broader physical-device/assistive-technology acceptance; [manual checklist](p3-device-accessibility-checklist.md), not yet executed; no formal accessibility audit claimed.
+  - [x] Owner-reported Chrome simulated acceptance: six viewport sizes, landscape, login replay, keyboard and 200% zoom all passed on 2026-10-25; browser version/OS not supplied.
+  - Deferred by owner (2026-10-25): physical-device and actual screen-reader acceptance. Remains unverified; [checklist](p3-device-accessibility-checklist.md).
 - [x] Gate: **five consecutive complete missions** with three real accepted purchases each, separate batches, real AI work and real Sandbox payments; same persistent DB, no manual financial edits or developer-console intervention. Human Sandbox approval remains part of each run. Record task/batch IDs, source revisions, totals, order/capture IDs, timestamps and negative/corrected-delivery observations.
 
 A fixture-only UI replay may support rehearsal but cannot count among the five real runs. Failed run resets the consecutive counter after fixing the cause; preserve all prior audit history. The local reproduction path remains mandatory. Per the sponsor strategy, prioritize a Render public demo in P3/P4 after hosted security and persistent-state acceptance; hosting is not a substitute for the five-run gate.
 
 ## P4 — Hackathon Submission
+
+Owner authorized local P4 materials preparation on 2026-10-25. [Submission draft](submission-draft.md) and [release checklist](p4-release-checklist.md) are working materials, not published or submitted.
 
 - [ ] P4.1 (0.5 day): choose/apply open-source license with owner attribution; sanitize repository; publish public source only with owner authorization; verify no `.env`, DB, artifacts, tokens or private payer/source data in files/history. Public URL must be real, not placeholder.
 - [ ] P4.2 (0.5 day): fresh-machine install/test/demo rehearsal using reviewer's own Sandbox/AI configuration; complete architecture/setup/real-versus-simulated README. Confirm dependency/native SQLite installation works.
@@ -177,3 +180,11 @@ Local automated evidence: integer USD bounds/formatting, WAL/FULL/foreign-key co
 ## P1 implementation evidence (current)
 
 See [P1 verification](p1-verification.md) and [ADR 0008](decisions/0008-p1-local-procurement.md). Registry/quote policy, durable execution, source snapshots, bounded model adapter, correction/verification, reserve/release/accepted-charge transactions and cited mission synthesis are implemented. Native model transport and complete procurement are tested offline with explicit mocks; final suite 56/56 passes, type/build/production smoke checks pass. GitHub source inventory is live verified; DeepSeek minimum live procurement/report is also verified. `pnpm mission`, `pnpm economy` and `pnpm verify:source` are implemented commands. No P2 payment integration, Render resource or frontend was added.
+
+### P4 judge-access preparation — 2026-10-25
+
+Apache-2.0 text and Git-history-supported attribution prepared; initial dependency review, Compose configuration, local/Sandbox guides and Try Credence entry added. [Judge access](judge-access.md) explicitly remains blocked on anonymous session isolation, durable global quotas, payment authority tests and hosted verification. Public GitHub API returned 404; license detection/public visibility and Docker runtime verification remain unconfirmed. No owner authentication was removed, new paid resources created or cloud deployment triggered.
+
+### Judge access implementation follow-up — 2026-10-25
+
+Local isolated /judge access now includes cookie/CSRF boundaries, per-guest SQLite state, fixed source, one task/session and persistent lifetime 80-call admission envelope. Four new tests cover scope, restart capacity, task replay and lost-capture recovery. 128/128 tests and production smoke pass. Docker image build and fake-credential initialization/restart passed after starting the local engine. Deployment and actual guest Sandbox payment verification are separate pending gates.

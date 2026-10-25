@@ -8,6 +8,10 @@ The motivation is to give agents useful economic autonomy while making every dec
 
 Repository: [weihong363/credence](https://github.com/weihong363/credence) (private; public release pending). Console screenshot: **[SCREENSHOT — pending]**. Demo video: **[YOUTUBE_URL — pending]**.
 
+## Try Credence
+
+[Open the Render demo](https://credence-sandbox.onrender.com/). The owner console requires owner access. The isolated [judge entry](https://credence-sandbox.onrender.com/judge/) is implemented and awaiting deployment/live acceptance. Do not distribute OWNER_TOKEN. For a safe local alternative, follow the [judge access guide](docs/judge-access.md), including Docker Compose and explicitly simulated rehearsal options.
+
 ## What works today
 
 **P0 PayPal Sandbox** and the **P1 local economic core** are implemented. P1 tests and the real same-task three-service DeepSeek procurement/report gate pass; one architecture correction was verified within five model calls. P2 dynamic settlement is implemented; current live acceptance is in [P2 evidence](docs/p2-live-evidence.json). P3 owner sessions, task execution, delivery/report views and settlement controls are hosted. Five consecutive browser-only real three-service missions and human-approved Sandbox settlements pass; [live UI evidence](docs/p3-ui-live-evidence.json). Broader mobile/accessibility acceptance remains pending.
@@ -33,7 +37,7 @@ Today: the default Node HTTP server settles real accepted-charge batches from SQ
 
 ```mermaid
 flowchart LR
-  Owner[Human owner] --> Console[Planned economy console]
+  Owner[Human owner] --> Console[Owner economy console]
   Console --> Core[Local P1 economic core]
   Core --> Providers[Local provider agents and LLM adapter]
   Core --> DB[SQLite ledger]
@@ -44,7 +48,7 @@ flowchart LR
 
 ## Stack
 
-Current: Node **20.19+**, TypeScript strict mode, ESM/NodeNext, native `node:http` and `fetch`, pnpm **10.33.4**, `tsx`, and `node:test`. SQLite uses pinned `better-sqlite3` 12.4.1, verified locally on Node 20.19.2; pnpm explicitly permits its native build script. No framework, AI SDK or frontend dependency is installed. The planned frontend uses Vite with vanilla TypeScript for the console; see [technical decisions](docs/spec.md). The existing Render service is live on console commit `2db1769` as of 2026-10-23. Health, static assets, owner login/logout and finance read access passed cloud checks; the initialized account retained 1500 available Credit and zero obligations. Real cloud mission/payment acceptance remains pending. See [cloud readiness](docs/render-readiness.md) and the [Render guide](docs/deployment-render.md).
+Current: Node **20.19+**, TypeScript strict mode, ESM/NodeNext, native `node:http` and `fetch`, pnpm **10.33.4**, `tsx`, and `node:test`. SQLite uses pinned `better-sqlite3` 12.4.1, verified locally on Node 20.19.2; pnpm explicitly permits its native build script. No framework, AI SDK or frontend dependency is installed. The frontend uses Vite with vanilla TypeScript for the console; see [technical decisions](docs/spec.md). The existing Render service is live on console commit `2db1769` as of 2026-10-23. Health, static assets, owner login/logout and finance read access passed cloud checks; the initialized account retained 1500 available Credit and zero obligations. Real cloud mission/payment acceptance remains pending. See [cloud readiness](docs/render-readiness.md) and the [Render guide](docs/deployment-render.md).
 
 ## Setup and historical P0 walkthrough
 
@@ -113,7 +117,7 @@ No provider receives a separate payment in this single-merchant experiment. No l
 
 ## License and submission readiness
 
-**No license file exists yet.** Source publication, an owner-selected open-source license, and repository/video URLs are P4 tasks; this repository must not be represented as submission-ready or licensed open source today. Review the [official competition rules](https://paypalaihackathon.devpost.com/rules) before publication. Do not publish credentials for reproducibility: reviewers configure their own Sandbox app and AI key.
+Licensed under the [Apache License 2.0](LICENSE), selected by the owner on 2026-10-25. Copyright 2026 Ironion. Third-party dependencies retain their own licenses. Repository publication and video upload remain pending; licensed source is not a claim that submission is complete. Review the [official competition rules](https://paypalaihackathon.devpost.com/rules) before publication. Do not publish credentials for reproducibility: reviewers configure their own Sandbox app and AI key.
 
 ## Render deployment status
 
@@ -200,3 +204,7 @@ The P3.4 owner start form now accepts a public GitHub owner/repository and pinne
 Current hosted source is `074a789`: real owner API task execution completed one three-service review in four DeepSeek calls. Its unique USD 7.50 order was subsequently approved, captured and independently verified. See [P3 live evidence](docs/p3-live-evidence.json). This API-driven run does not count toward the browser-only five-run gate.
 
 Hosted API acceptance is now **settled and redeploy-verified**: order `5KC26856DG778392J`, capture `89W32382PM698405E`, USD 7.50; four model calls, one capture/receipt, three settled charges, 1500 available after settlement. Same-commit redeploy preserved the ledger and exact receipt. The subsequent browser-only gate passed 5/5; see [UI evidence](docs/p3-ui-live-evidence.json).
+
+## Reviewer access
+
+The submission plan is a [Render demo](https://credence-sandbox.onrender.com/) plus public GitHub source and local run instructions. The owner console requires owner authentication. The isolated judge entry uses anonymous scoped sessions when enabled; deployment/live acceptance is recorded separately. Do not publish OWNER_TOKEN. For local reproduction, use the [local reviewer guide](docs/reviewer-guide.md) with your own credentials or the explicitly simulated rehearsal. Public GitHub and YouTube publication are still pending.

@@ -1,0 +1,24 @@
+services:
+  credence:
+    build: .
+    env_file: .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: "3000"
+      PUBLIC_URL: http://localhost:3000
+      DATA_DIR: /app/data
+      CREDENCE_DB_PATH: /app/data/credence.sqlite
+      PAYPAL_BASE_URL: https://api-m.sandbox.paypal.com
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - credence-data:/app/data
+    init: true
+    stop_grace_period: 30s
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+volumes:
+  credence-data:

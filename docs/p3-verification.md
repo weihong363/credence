@@ -151,3 +151,12 @@ Fixed `MissionForm.refresh()` to replace the account option list before loading 
 The isolated `settled` rehearsal was used, with fake credentials and no real model/PayPal transport. Keyboard Return submitted login; Space toggled the task-start disclosure and selected the completed mission. The focused mission button remained visible with its focus outline and `aria-pressed=true`. At the actual observed narrow viewport of 360 CSS pixels (375 requested; host-reported content width 360), document scrollWidth equalled clientWidth; the desktop observation was 1265/1265. The narrow screenshot showed wrapped task IDs, a single-column layout, readable report content and no horizontal overflow. Temporary viewport override was reset afterward.
 
 `pnpm check`, `pnpm test` (124/124), and `pnpm test:production` passed. The initial restricted test run failed in HTTP-listener tests; rerunning with local-listener permission passed. This is basic responsive/keyboard acceptance, not physical-device testing, screen-reader verification or WCAG certification. The one-line fix is local and not deployed; the five-run live payment evidence belongs to the unchanged prior deployment. No extra real task or payment was initiated for this follow-up.
+
+
+## Owner-reported Chrome compatibility acceptance — 2026-10-25
+
+Owner confirmed all items in the Chinese Chrome emulation checklist passed: six portrait sizes and landscape, existing task/report/evidence and settled-payment views, account selection, logout/re-login/refresh, keyboard controls, focus stability and 200% zoom. See [scope and limitations](p3-device-accessibility-checklist.md#owner-reported-chrome-acceptance--2026-10-25). Chrome version and host OS were not provided; results are owner-reported. Physical-device and actual screen-reader checks remain unverified. No implementation change, new payment, deployment or P4 activity followed from this report.
+
+## P3 phase closure — 2026-10-25
+
+Owner accepted deferral of physical-device and screen-reader testing and authorized P4 materials preparation. P3 closes with five real browser-only settlements, local automated checks, and owner-reported Chrome compatibility acceptance. Deferred environments remain unverified. No new payment is needed to close this phase.

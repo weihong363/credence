@@ -1,6 +1,6 @@
 # P3 physical-device and screen-reader acceptance
 
-Prepared 2026-10-25. **Not yet executed.** Browser viewport and keyboard checks in [P3 verification](p3-verification.md) do not establish physical-device or screen-reader acceptance. This is a focused MVP check, not WCAG certification.
+Prepared 2026-10-25. **Owner-reported Chrome emulation checks passed; physical-device and screen-reader checks remain unexecuted.** Browser viewport and keyboard checks in [P3 verification](p3-verification.md) do not establish physical-device or screen-reader acceptance. This is a focused MVP check, not WCAG certification.
 
 ## Setup
 
@@ -39,3 +39,18 @@ Use the normal device accessibility controls to enable the screen reader. Record
 | Actual screen reader | Not provided | NOT TESTED | Requires VoiceOver or equivalent |
 
 Keep P3.4 unchecked until required checks pass or the owner explicitly accepts a documented deferral. Reproduce and fix failures before rerunning the affected checks. Preserve the five settled live-run records unchanged.
+
+
+## Owner-reported Chrome acceptance — 2026-10-25
+
+The owner reported “全部通过” in response to the Chinese Chrome checklist. Recorded as owner-reported manual acceptance, not independently observed automation. Chrome version and host OS were not supplied.
+
+- PASS: simulated portrait viewports 375×667, 390×844, 412×915, 430×932, 768×1024 and desktop 1280×800; corresponding landscape checks.
+- PASS: no clipping/overlap/horizontal overflow; login and form readability; one account option; existing completed tasks, three accepted services, report/evidence disclosures, account amounts, settled allocations and Order/Capture IDs; ledger scrolling.
+- PASS: logout/re-login on the same page and refresh/session restoration, without duplicate account options.
+- PASS: Tab/Shift+Tab navigation, visible focus, Enter login, keyboard task/disclosure controls, polling focus stability and 200% browser zoom.
+- NOT TESTED: physical phones, actual mobile browser engines and actual screen readers. Emulation does not verify these environments. No new payment evidence is inferred.
+
+## Owner phase decision — 2026-10-25
+
+Owner explicitly deferred physical-device and actual screen-reader testing and authorized P4 materials preparation. P3 is accepted within the verified browser scope; deferred environments remain NOT TESTED. This is not a claim of device compatibility or accessibility certification.

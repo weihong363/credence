@@ -16,6 +16,16 @@ function node<K extends keyof HTMLElementTagNameMap>(tag:K,text='',className='')
 function notice(text:string):void{if(el('notice').textContent!==text)el('notice').textContent=text;}
 const missions=new MissionForm(()=>csrf,task=>{selected=task.id;detailFingerprint='';void refresh();},notice,error);
 const finance=new FinanceConsole(()=>csrf,notice,error);
+const judgeMode=location.pathname.startsWith('/judge');
+if(judgeMode){
+ el('login').hidden=true;
+ el('login-panel').querySelector('h2')!.textContent='Judge access';
+ el('login-panel').querySelector('p')!.textContent='No registration or owner token is required. This creates a separate persistent demo account; keep this browser session to access its results.';
+ const button=node('button','Start isolated judge session · real AI / Sandbox');button.type='button';
+ el('login-panel').append(node('p','One real review per session; 80 model calls maximum across this demo configuration. Internal Credit is accounting only. PayPal buyer login and human approval remain required. Public session capacity is finite.'),button);
+ button.onclick=async()=>{button.disabled=true;try{const grant=await api<{csrfToken:string}>('/api/session',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});csrf=grant.csrfToken;await signedIn();}catch(e){error(e);}finally{button.disabled=false;}};
+ for(const [id,value] of [['repo-owner','expressjs'],['repo-name','cors'],['repo-commit','5317ebe670db2aaebc1d496eb5d33493deefb3ed']]){const input=el<HTMLInputElement>(id);input.value=value;input.readOnly=true;}
+}
 function signedOut():void{
  finance.clear();missions.clear();
  generation++;csrf='';selected='';listFingerprint='';detailFingerprint='';eventFingerprint='';tasks=[];events=[];taskCursor=0;eventCursor=0;clearTimeout(timer);

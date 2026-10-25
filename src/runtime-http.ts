@@ -22,7 +22,7 @@ function economy(db:Database.Database){
  charges:db.prepare(`SELECT c.id,c.account_id,c.task_id,c.purchase_id,c.delivery_id,c.amount_minor,c.currency,
  EXISTS(SELECT 1 FROM ledger_events WHERE charge_id=c.id AND type='CHARGE_REVERSED') reversed FROM charges c`).all()};
 }
-export function createRuntimeApp(config:Config,db:Database.Database,payments:Payments,sessions=new OwnerSessions(config.ownerToken,config.publicUrl.protocol==='https:'),missions=new MissionControl(db,undefined)){
+export function createRuntimeApp(config:Config,db:Database.Database,payments:Payments,sessions=new OwnerSessions(config.ownerToken,config.publicUrl.protocol==='https:'),missions=new MissionControl(db,undefined),publicRoute?:(req:IncomingMessage,res:ServerResponse,url:URL)=>Promise<boolean>){
  const server=createServer(async(req,res)=>{
   res.setHeader('Cache-Control','no-store');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('X-Content-Type-Options','nosniff');
   res.setHeader('Content-Security-Policy',"default-src 'none'; frame-ancestors 'none'; form-action 'self'");
@@ -30,6 +30,7 @@ export function createRuntimeApp(config:Config,db:Database.Database,payments:Pay
    const url=new URL(req.url??'/',config.publicUrl);
    if(req.method==='GET'&&url.pathname==='/health'){send(res,{status:'ok',paymentEnvironment:'sandbox'});return;}
    if(req.headers.host!==config.publicUrl.host||url.origin!==config.publicUrl.origin||(req.headers.origin!==undefined&&req.headers.origin!==config.publicUrl.origin)){send(res,{error:'ORIGIN_FORBIDDEN'},403);return;}
+   if(publicRoute&&await publicRoute(req,res,url))return;
    if(consoleRoute(req,res,url))return;
    if(req.method==='GET'&&['/payments/return','/payments/cancel'].includes(url.pathname)){
     paymentHint(db,url.searchParams.get('batch')??'',url.searchParams.get('state')??'',url.searchParams.get('token')??'',url.pathname.endsWith('cancel')?'cancel':'return');
