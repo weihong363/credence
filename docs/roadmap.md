@@ -96,7 +96,7 @@ Owner authorized starting P3 on 2026-10-23. The hosted console and five consecut
   - [x] Hosted API payment completed: human approval, one server Capture, independent COMPLETED verification, settled replay and same-commit redeploy persistence all pass.
   - [x] Five browser-only consecutive real procurement/Sandbox settlement runs; [evidence](p3-ui-live-evidence.json).
   - [x] Basic responsive/keyboard acceptance: local mock desktop 1265px and narrow 360px without horizontal overflow; keyboard login, disclosure and mission selection; re-login option duplication fixed locally.
-  - [ ] Broader physical-device/assistive-technology acceptance; no formal accessibility audit claimed.
+  - [ ] Broader physical-device/assistive-technology acceptance; [manual checklist](p3-device-accessibility-checklist.md), not yet executed; no formal accessibility audit claimed.
 - [x] Gate: **five consecutive complete missions** with three real accepted purchases each, separate batches, real AI work and real Sandbox payments; same persistent DB, no manual financial edits or developer-console intervention. Human Sandbox approval remains part of each run. Record task/batch IDs, source revisions, totals, order/capture IDs, timestamps and negative/corrected-delivery observations.
 
 A fixture-only UI replay may support rehearsal but cannot count among the five real runs. Failed run resets the consecutive counter after fixing the cause; preserve all prior audit history. The local reproduction path remains mandatory. Per the sponsor strategy, prioritize a Render public demo in P3/P4 after hosted security and persistent-state acceptance; hosting is not a substitute for the five-run gate.

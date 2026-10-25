@@ -118,3 +118,7 @@ Commit `4dad92b489b8466784fdaea822e2b0a47f04606b` was pushed to the existing pri
 Public health and console returned 200; unauthenticated finance returned 401. The server-side session verifier passed login/read/CSRF rejection/logout/revocation without exposing credentials. Read-only SQLite checks confirmed all five UI-run Capture IDs unchanged, with exactly one create attempt and one capture attempt per batch. Six tasks and 25 model calls remain recorded (the earlier API smoke plus five UI runs). No new task or payment was initiated.
 
 The account-option fix is now deployed; browser re-login regression was verified locally before release. Authenticated visual confirmation on this deployment still requires owner re-login after deployment revocation. Physical-device and screen-reader acceptance remain unverified.
+
+### Authenticated browser follow-up — 2026-10-24
+
+Owner logged in personally. The tab initially retained two identical account options from its previously loaded document. Reload restored the authenticated session and loaded `/assets/index-BeRDEzZL.js`; the start form then contained exactly one account option. All six verified receipts remained visible (API smoke plus five counted UI runs), with available 1500 and reserved/outstanding zero. This confirms the deployed fresh-document UI; local same-document logout/re-login regression was already verified separately. No token was read, task submitted or payment initiated.
