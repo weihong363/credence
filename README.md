@@ -10,7 +10,7 @@ Repository: [weihong363/credence](https://github.com/weihong363/credence) (publi
 
 ## Try Credence
 
-[Open the Render demo](https://credence-sandbox.onrender.com/). The owner console requires owner access. The isolated [judge entry](https://credence-sandbox.onrender.com/judge/) is deployed with an 80-call lifetime envelope; its first real task passed all three services, and guest payment acceptance awaits human buyer approval. Do not distribute OWNER_TOKEN. For a safe local alternative, follow the [judge access guide](docs/judge-access.md), including Docker Compose and explicitly simulated rehearsal options.
+[Open the Render demo](https://credence-sandbox.onrender.com/). The owner console requires owner access. The isolated [judge entry](https://credence-sandbox.onrender.com/judge/) is deployed with an 80-call lifetime envelope; its first real task passed all three services, and its human-approved USD 7.50 Sandbox settlement passed independent COMPLETED verification. Do not distribute OWNER_TOKEN. For a safe local alternative, follow the [judge access guide](docs/judge-access.md), including Docker Compose and explicitly simulated rehearsal options.
 
 ## What works today
 

@@ -1,5 +1,5 @@
 {
-  "status": "REAL_PROCUREMENT_VERIFIED_AWAITING_HUMAN_SANDBOX_APPROVAL",
+  "status": "REAL_GUEST_PROCUREMENT_AND_SANDBOX_SETTLEMENT_VERIFIED",
   "applicationCommit": "3608d7f861d488acac5c1084499f896b6cbc059c",
   "deployId": "dep-dbf18q8n74is73b6ph40",
   "deployedAt": "2026-10-25T14:39:09.820256Z",
@@ -29,12 +29,32 @@
   "amountMinor": 750,
   "currency": "USD",
   "orderId": "5A158418YC357172R",
-  "observedStatus": "CREATED",
-  "captureId": null,
-  "captureVerified": false,
+  "observedStatus": "COMPLETED",
+  "captureId": "10F203781R1847057",
+  "captureVerified": true,
   "limitations": [
-    "Human PayPal buyer approval, Capture and independent completed-payment verification remain pending.",
-    "Future hosting/LLM funding coverage remains unverified.",
+    "Funding through judging confirmed by owner; balances and future uptime are not independently guaranteed.",
     "Video recording/upload not complete."
-  ]
+  ],
+  "verifiedAt": 1792939639721,
+  "createAttempts": 1,
+  "captureAttempts": 1,
+  "paymentConfirmedEvents": 1,
+  "chargeSettledEvents": 3,
+  "availableMinor": 1500,
+  "reservedMinor": 0,
+  "outstandingMinor": 0,
+  "independentPayPalGet": {
+    "orderStatus": "COMPLETED",
+    "captureStatus": "COMPLETED",
+    "amountMatches": true,
+    "batchMatches": true,
+    "merchantMatches": true,
+    "captureMatches": true
+  },
+  "funding": {
+    "status": "OWNER_CONFIRMED_SUFFICIENT",
+    "until": "2026-12-15",
+    "independentlyInspected": false
+  }
 }

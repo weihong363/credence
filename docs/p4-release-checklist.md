@@ -18,7 +18,7 @@ Local preparation authorized 2026-10-25. Repository public visibility is owner-a
 - [x] Owner selected Apache License 2.0; official license text added at repository root, attribution: 2026 Ironion.
 - [x] Initial targeted local-ref history screening completed; [scope/results](p4-verification.md). No detected credentials in selected patterns; exhaustive pre-publication review remains required.
 - [x] Clean-directory install/check/124 tests/production smoke passed on the same host; native SQLite loads. Fresh-machine/cross-platform and reviewer-owned-credential live checks remain pending.
-- [ ] Complete reviewer instructions: working build, access procedure, required configuration, no developer personal credentials. Hosted owner console alone is insufficient for unauthenticated judges.
+- [x] Isolated /judge entry and local reviewer instructions prepared; real anonymous procurement and human-approved Sandbox settlement independently verified. No developer owner credential is distributed.
 - [ ] Capture screenshots from real existing history, hiding credentials and payer identity. Do not present mocks as live evidence.
 - [ ] Record English video below three minutes. Existing-history walkthrough must be labeled; new real procurement/payment recording requires operator authorization.
 - [ ] Check all source/assets/music rights and acknowledgments.
@@ -29,6 +29,6 @@ Local preparation authorized 2026-10-25. Repository public visibility is owner-a
 - [x] Owner authorized public visibility after screening; existing GitHub repository is public and Apache-2.0 detection passes.
 - [ ] Review finished video and approve public YouTube upload.
 - [ ] Review final Devpost fields, working links and access instructions before submitting.
-- [ ] Confirm build/access availability through judging; current rules list judging ending December 15, 2026 at 08:00 Pacific Time.
+- [x] Owner confirmed sufficient Render/DeepSeek funding through judging ending December 15, 2026; future uptime remains an operational responsibility, not a verified guarantee.
 
 Keep P4 roadmap checkboxes incomplete until their deliverables and acceptance actually pass. Drafting materials is not submission completion.

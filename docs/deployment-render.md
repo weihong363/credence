@@ -185,3 +185,9 @@ The existing paid service and persistent disk remain the deployment target; no n
 ### Isolated judge mode
 
 Owner authorized JUDGE_MAX_MODEL_CALLS=80 on 2026-10-25. This optional server-only setting enables /judge/ and stores its immutable admission policy plus guest ledgers under DATA_DIR/judge on the same persistent disk. Ten lifetime sessions reserve eight calls each; logout, restart and expiry do not refund slots. Leave unset to disable new guest HTTP access; never remove the registry to refill it. Do not set production PayPal URLs or distribute OWNER_TOKEN. No additional paid services are required. See ADR 0017 and judge-access.md.
+
+### Real isolated judge payment and funding follow-up — 2026-10-25
+
+Human approved order 5A158418YC357172R. The anonymous scoped console captured USD 7.50 and displayed receipt 10F203781R1847057. Fresh authenticated PayPal GET confirmed order/capture COMPLETED, matching capture ID, batch, amount and merchant. Read-only isolated ledger checks show one create, one capture, one PAYMENT_CONFIRMED and three CHARGE_SETTLED events; available returned to 1500 with zero reserved/outstanding. No simulated success was used. Full evidence: docs/p4-judge-live-evidence.json (repository-relative from root).
+
+Owner confirmed Render/DeepSeek funding is sufficient for the authorized 80-call testing envelope through December 15, 2026. This is owner-reported coverage, not independently inspected balances or a guarantee of uptime. Public video recording/upload remains outstanding.

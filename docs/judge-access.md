@@ -1,6 +1,6 @@
 # Judge access
 
-Updated 2026-10-25. Isolated judge implementation is deployed. First anonymous real task completed all three services in five model calls; its payment still awaits human approval/Capture verification. See [live evidence](p4-judge-live-evidence.json).
+Updated 2026-10-25. Isolated judge implementation is deployed. First anonymous real task completed all three services in five model calls; its human-approved USD 7.50 payment is captured and independently verified COMPLETED. See [live evidence](p4-judge-live-evidence.json).
 
 ## Primary: hosted Render demo
 
